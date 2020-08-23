@@ -1,7 +1,17 @@
 from MVDD import MVDD
+import networkx as nx
+from networkx.drawing.nx_pydot import *
+
+#this is what will eventually be run... it will take in params and return a score and a graph
+def runProtocol(params, to, be, determined):
+    #do stuff
+    graph = None
+    score = 5
+
+    return graph, score #will be displayed on webpage
 
 
-def run():
+def josieTest():
     features = []
     mvd = MVDD(features)
 
@@ -12,12 +22,16 @@ def run():
        'MPAP', 'CPI', 'PP', 'PPP', 'PAPP', 'VR', 'RAT', 'PPRatio', 'Age',
        'EjF']
 
-    dot = mvd.generateRandomGraph(nodes=hemo, maxBranches=3)
-    mvd.saveToFile(graph=dot, filename='test')
+    # dot = mvd.generateRandomGraph(nodes=hemo, maxBranches=3)
+    # mvd.saveToFile(graph=dot, filename='test')
+    # mvd.saveDotFile(dot, 'test')
 
+    dot = read_dot('test.dot')
+
+    mvd.traverseGraph(dot)
 
 def main():
-    run()
+    josieTest()
 
 
 if __name__ == "__main__":

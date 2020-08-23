@@ -11,6 +11,7 @@ class MVDD:
         self.features = features
         self.graph = None
 
+    #Generate a random graph from a list of nodes, returns a nx graph
     def generateRandomGraph(self, nodes, maxBranches):
         # dot = Digraph(strict=True)
         dot = nx.DiGraph()
@@ -115,7 +116,7 @@ class MVDD:
 
         return dot, edgeDict
 
-
+    #Save graph to file in specific format
     def saveToFile(self, graph, filename='mvdd', format='pdf'):
         dot = to_pydot(graph)
 
@@ -123,3 +124,18 @@ class MVDD:
             dot.write_png(filename + '.png')
         else:
             dot.write_pdf(filename + '.pdf')
+
+    def saveDotFile(self, graph, filename='mvdd'):
+        dot = to_pydot(graph)
+        dot.write_dot(filename+".dot")
+
+
+    def traverseGraph(self, dot):
+        for n in nx.bfs_edges(dot, 'PCWPMod'):
+            print(n)
+            nodeName = n[0]
+            print(dot.nodes[nodeName])
+
+
+        print("edges connected to node", dot.edges('PCWPMod'))
+        print(dot.get_edge_data('PP', 'PAPP')) #get label and style of edge
