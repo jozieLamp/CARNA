@@ -152,13 +152,15 @@ def traverseGraph(dot):
     # print(dot.get_edge_data('PP', 'PAPP'))  # get label and style of edge
 
 
+
 def addGraphParams(mvdd):
     dot = mvdd.dot
-    for ed in nx.bfs_edges(dot, 'PCWPMod'):
-
+    for ed in nx.bfs_edges(dot, mvdd.root):
         print(ed)
-        nodeName = ed[0]
-        print(dot.nodes[nodeName])
+        currNode = ed[0]
+        lower = mvdd.featureDict[currNode][0]
+        upper = mvdd.featureDict[currNode][1]
+
 
 
     print("edges connected to node", dot.edges('PCWPMod'))

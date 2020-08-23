@@ -3,10 +3,11 @@ import networkx as nx
 from networkx.drawing.nx_pydot import *
 
 class MVDD:
-    def __init__(self, features, dot, root=None):
+    def __init__(self, features, dot, root=None, featureDict={}):
         self.features = features
         self.dot = dot
         self.root = root
+        self.featureDict = featureDict
 
     # Save graph to file in specific format
     def saveToFile(self, filename='mvdd', format='pdf'):
