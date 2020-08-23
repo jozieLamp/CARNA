@@ -12,8 +12,8 @@ def run():
        'MPAP', 'CPI', 'PP', 'PPP', 'PAPP', 'VR', 'RAT', 'PPRatio', 'Age',
        'EjF']
 
-    mvd.generateRandomGraph(nodes=hemo, maxBranches=3)
-    # mvd.repeatedStuff(nodes)
+    dot = mvd.generateRandomGraph(nodes=hemo, maxBranches=3)
+    mvd.saveToFile(graph=dot, filename='test')
 
 
 def main():

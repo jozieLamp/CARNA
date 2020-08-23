@@ -9,52 +9,23 @@ from itertools import permutations, repeat, combinations_with_replacement
 class MVDD:
     def __init__(self, features):
         self.features = features
-
-    #Generate set of
-    # def generateRandomGraphs(self):
-
-    def generateRandomConnectedGraph(self, V):
-        initialSet = set()
-        visitedSet = set()
-        vertices = set()
-        edges = set()
-
-        # generate the set of names for the vertices
-        for i in range(V):
-            initialSet.add(str(i))
-            vertices.add(str(i))
-
-        # set the intial vertex to be connected
-        curVertex = random.sample(initialSet, 1).pop()
-        initialSet.remove(curVertex)
-        visitedSet.add(curVertex)
-
-        # loop through all the vertices, connecting them randomly
-        while initialSet:
-            adjVertex = random.sample(initialSet, 1).pop()
-            edge = (random.randint(1, 5), curVertex, adjVertex)
-            edges.add(edge)
-            initialSet.remove(adjVertex)
-            visitedSet.add(adjVertex)
-            curVertex = adjVertex
-
-        return vertices, edges
+        self.graph = None
 
     def generateRandomGraph(self, nodes, maxBranches):
         # dot = Digraph(strict=True)
-        dot = Digraph()
+        dot = nx.DiGraph()
         edgeDict = [] # track edges already added
 
         # Terminal nodes
-        dot.node("1", shape="box")
-        dot.node("2", shape="box")
-        dot.node("3", shape="box")
-        dot.node("4", shape="box")
-        dot.node("5", shape="box")
+        dot.add_node("1", shape="box")
+        dot.add_node("2", shape="box")
+        dot.add_node("3", shape="box")
+        dot.add_node("4", shape="box")
+        dot.add_node("5", shape="box")
 
         #Add nodes to class
         for n in nodes:
-            dot.node(n)
+            dot.add_node(n)
 
         availableNodes = nodes #nodes available to choose
         childNodes = []
@@ -77,7 +48,7 @@ class MVDD:
         while childNodes != []:
             dot, childNodes, availableNodes, edgeDict = self.addChildNodes(dot, childNodes, maxBranches, availableNodes, edgeDict)
 
-        dot.render('tree.gv', view=True)
+        return dot
 
     #add child nodes to dot graph
     def addChildNodes(self, dot, childNodes, maxBranches, availableNodes, edgeDict):
@@ -138,9 +109,17 @@ class MVDD:
         if key in edgeDict:
             pass #edge already in graph
         else:
-            dot.edge(currNode, selected, style=type)
+            dot.add_edge(currNode, selected, style=type)
             key = currNode + selected + type
             edgeDict.append(key)
 
         return dot, edgeDict
 
+
+    def saveToFile(self, graph, filename='mvdd', format='pdf'):
+        dot = to_pydot(graph)
+
+        if format == "png":
+            dot.write_png(filename + '.png')
+        else:
+            dot.write_pdf(filename + '.pdf')
