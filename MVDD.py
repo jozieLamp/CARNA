@@ -1,34 +1,146 @@
-from dd import mdd as _mdd
-# from dd.bdd import BDD
-from dd.autoref import BDD
+import random
+import networkx as nx
+from networkx.drawing.nx_pydot import *
+import matplotlib as plt
+from graphviz import Digraph
+import pydot
+from itertools import permutations, repeat, combinations_with_replacement
 
-def main():
-    # dvars = dict(
-    #     x=dict(level=0, len=200),
-    #     y=dict(level=1, len=10))
-    # mdd = _mdd.MDD(dvars)
+class MVDD:
+    def __init__(self, features):
+        self.features = features
 
-    bits = dict(x=2, y0=20, y1=10)
-    bdd = BDD(bits)
-    u = bdd.add_expr('x \/ (~ y0 /\ y1)')
-    bdd.incref(u)
+    #Generate set of
+    # def generateRandomGraphs(self):
 
-    # convert BDD to MDD
-    ints = dict(
-        x=dict(level=1, len=2, bitnames=['x']),
-        y=dict(level=0, len=25, bitnames=['y0', 'y1']))
-    mdd, umap = _mdd.bdd_to_mdd(bdd, ints)
+    def generateRandomConnectedGraph(self, V):
+        initialSet = set()
+        visitedSet = set()
+        vertices = set()
+        edges = set()
 
-    # map node `u` from BDD to MDD
-    v = umap[abs(u)]
+        # generate the set of names for the vertices
+        for i in range(V):
+            initialSet.add(str(i))
+            vertices.add(str(i))
 
-    s = mdd.to_expr(v)
-    print(s)
+        # set the intial vertex to be connected
+        curVertex = random.sample(initialSet, 1).pop()
+        initialSet.remove(curVertex)
+        visitedSet.add(curVertex)
 
-    pd = _mdd.to_pydot(mdd)
+        # loop through all the vertices, connecting them randomly
+        while initialSet:
+            adjVertex = random.sample(initialSet, 1).pop()
+            edge = (random.randint(1, 5), curVertex, adjVertex)
+            edges.add(edge)
+            initialSet.remove(adjVertex)
+            visitedSet.add(adjVertex)
+            curVertex = adjVertex
 
+        return vertices, edges
 
+    def generateRandomGraph(self, nodes, maxBranches):
+        # dot = Digraph(strict=True)
+        dot = Digraph()
+        edgeDict = [] # track edges already added
 
+        # Terminal nodes
+        dot.node("1", shape="box")
+        dot.node("2", shape="box")
+        dot.node("3", shape="box")
+        dot.node("4", shape="box")
+        dot.node("5", shape="box")
 
-if __name__ == '__main__':
-    main()
+        #Add nodes to class
+        for n in nodes:
+            dot.node(n)
+
+        availableNodes = nodes #nodes available to choose
+        childNodes = []
+
+        #start with root
+        currNode = random.choice(nodes)  # pick random node
+        availableNodes.remove(currNode)
+        for nb in range(random.randint(1, maxBranches)): #add edges to other nodes
+            selected = random.choice(availableNodes)
+            style = random.randint(1, 2)
+            if style == 1:
+                dot, edgeDict = self.addEdge(dot, currNode, selected, 'solid', edgeDict)
+            else:
+                dot, edgeDict = self.addEdge(dot, currNode, selected, 'dashed', edgeDict)
+
+            childNodes.append(selected)
+
+        childNodes = list(set(childNodes))
+
+        while childNodes != []:
+            dot, childNodes, availableNodes, edgeDict = self.addChildNodes(dot, childNodes, maxBranches, availableNodes, edgeDict)
+
+        dot.render('tree.gv', view=True)
+
+    #add child nodes to dot graph
+    def addChildNodes(self, dot, childNodes, maxBranches, availableNodes, edgeDict):
+        for c in childNodes:  # remove new parents
+            availableNodes.remove(c)
+
+        if availableNodes == []: #no more nodes to add
+            dot, edgeDict = self.addTerminalNodes(dot, childNodes, edgeDict)
+            return dot, [], availableNodes, edgeDict
+        else:
+            newChildren = []
+
+            if len(availableNodes) < 6: #can add some terminal nodes
+                for currNode in childNodes:
+
+                    for nb in range(random.randint(1, maxBranches)):  # add edges to other nodes
+                        if random.randint(1, 2) == 1:
+                            selected = random.choice(availableNodes)
+                            style = random.randint(1, 2)
+                            if style == 1:
+                                dot, edgeDict = self.addEdge(dot, currNode, selected, 'solid', edgeDict)
+                            else:
+                                dot, edgeDict = self.addEdge(dot, currNode, selected, 'dashed', edgeDict)
+
+                            newChildren.append(selected)
+
+                        else:
+                            dot, edgeDict = self.addTerminalNodes(dot, childNodes, edgeDict)
+
+            else: #just add internal nodes
+                for currNode in childNodes:
+                    for nb in range(random.randint(1,maxBranches)): #add edges to other nodes
+                        selected = random.choice(availableNodes)
+                        style = random.randint(1,2)
+                        if style == 1:
+                            dot, edgeDict = self.addEdge(dot, currNode, selected, 'solid', edgeDict)
+                        else:
+                            dot, edgeDict = self.addEdge(dot, currNode, selected, 'dashed', edgeDict)
+
+                        newChildren.append(selected)
+
+            newChildren = list(set(newChildren))
+            return dot, newChildren, availableNodes, edgeDict
+
+    # add terminal nodes
+    def addTerminalNodes(self, dot, childNodes, edgeDict):
+        terms = ["1", "2", "3", "4", "5"]
+        for c in childNodes:
+            selected = random.choice(terms)
+            dot, edgeDict = self.addEdge(dot, c, selected, 'solid', edgeDict)
+
+        return dot, edgeDict
+
+    #Add edges to dot graph
+    def addEdge(self, dot, currNode, selected, type, edgeDict):
+        key = currNode + selected + type
+
+        if key in edgeDict:
+            pass #edge already in graph
+        else:
+            dot.edge(currNode, selected, style=type)
+            key = currNode + selected + type
+            edgeDict.append(key)
+
+        return dot, edgeDict
+
