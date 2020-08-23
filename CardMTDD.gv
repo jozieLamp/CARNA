@@ -1,0 +1,62 @@
+// CardMTDD
+digraph {
+	Age
+	EjF
+	RAP [label=RAP]
+	RAPBad [label=RAP]
+	PAD
+	PAS
+	PCWP
+	CI
+	BPSYS
+	BPSYS2 [label=BPSYS]
+	HR
+	"Mixed Venous"
+	"Mixed Venous Bad" [label="Mixed  Venous"]
+	"Pulse Pressure"
+	MAP
+	MPAP
+	RAT [label="Ratio MPAP to MAP"]
+	1 [shape=box]
+	2 [shape=box]
+	3 [shape=box]
+	4 [shape=box]
+	5 [shape=box]
+	Age -> "Mixed Venous" [label="<40"]
+	Age -> RAP [label="40-60"]
+	Age -> RAPBad [label=">60"]
+	EjF -> RAP [label="55-65"]
+	EjF -> RAPBad [label="<55" color=red]
+	RAP -> "Mixed Venous" [label="<10"]
+	RAP -> "Mixed Venous Bad" [label=">10" color=red style=dashed]
+	"Mixed Venous" -> MPAP [label="60-75"]
+	"Mixed Venous" -> BPSYS2 [label="<60 or >75" color=red style=dotted]
+	MPAP -> PAS [label="20-25"]
+	BPSYS2 -> PAD [label="90-150"]
+	PAS -> CI [label="<10"]
+	PAS -> PAD [label=">10" color=red]
+	CI -> PCWP [label=">2.2"]
+	CI -> RAT [label="<1.2" color=red]
+	CI -> 2 [label="<2.2" color=red]
+	RAT -> MAP [label="<10 or >20" color=red]
+	RAT -> HR [label="10-20"]
+	HR -> MAP [label="<60 or >100" color=red]
+	CI -> RAT [label="<2.2" color=red]
+	HR -> 3 [label="<70 or >90" color=red]
+	HR -> "Pulse Pressure" [label="70-90"]
+	PCWP -> "Pulse Pressure" [label="<=15"]
+	PCWP -> HR [label=">15" color=red]
+	"Pulse Pressure" -> 1 [label="40-60"]
+	"Pulse Pressure" -> 2 [label="<40 or >60" color=red]
+	MPAP -> BPSYS2 [label=">25" color=red]
+	BPSYS2 -> 3 [label="<90 or >150" color=red]
+	MAP -> 4 [label="20-25"]
+	MAP -> 5 [label=">25" color=red]
+	PAD -> 3 [label=">15" color=red]
+	PAD -> 2 [label="<=15"]
+	RAPBad -> "Mixed Venous Bad" [label=">10" color=red]
+	RAPBad -> BPSYS2 [label="<10"]
+	"Mixed Venous Bad" -> BPSYS [label="<60 or >75" color=red]
+	BPSYS -> 5 [label="<90 or >150" color=red]
+	BPSYS -> MAP [label="90-150"]
+}
