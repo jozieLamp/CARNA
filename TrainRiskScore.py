@@ -17,7 +17,7 @@ from sklearn.metrics import accuracy_score
 # Training process to develop best MVDDs
 # INPUT = the total number of trees to generate, and how many different parameter sets to generate per new tree added
 # OUTPUT = stores developed trees in the "TreeFiles" folder as images and dot files
-def generateTrees(numTrees=10, numParamGens=5):
+def generateTrees(numTrees=2, numParamGens=5):
     hemoData = pd.read_csv('Preprocessed Data/Cluster_Hemo.csv')
     realScores = hemoData['Score']
 
