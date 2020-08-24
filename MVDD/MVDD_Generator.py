@@ -164,7 +164,7 @@ def addGraphParams(mvdd, aveValues):
             if edg[1] in ['1', '2', '3', '4', '5']:
                 val = aveValues[n][int(edg[1])-1]
                 val = float("{:.2f}".format(val))
-                op = random.choice(["<=", ">="])
+                op = random.choice(['<=', '>='])
                 label = op + " " + str(val)
                 dot.edges[n, edg[1]]['label'] = label
                 dot.edges[n, edg[1]]['op'] = op

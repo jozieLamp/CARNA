@@ -59,13 +59,27 @@ def generateTrees(numTrees=2, numParamGens=3):
     print("Best Overall Accuracy is", globalBestAcc)
 
 
+def test():
+    hemoData = pd.read_csv('Preprocessed Data/Cluster_Hemo.csv')
+    realScores = hemoData['Score']
+
+    dot = read_dot('test2params.dot')
+    dot = nx.DiGraph(dot)
+    mvParam = MVDD(params.hemo, dot, root='PAMN')
+    mvParam.featureDict = params.hemoDict
+
+    row = hemoData.loc[0]
+    score, path = mvParam.predictScore(row)
+    print(score, path)
+
+
 
 
 
 
 def main():
-    generateTrees()
-
+    # generateTrees()
+    test()
 
 if __name__ == "__main__":
     main()
