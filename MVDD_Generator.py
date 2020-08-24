@@ -6,6 +6,7 @@ from graphviz import Digraph
 import pydot
 from itertools import permutations, repeat, combinations_with_replacement
 from MVDD import MVDD
+import copy
 import Params as params
 
 
@@ -27,7 +28,7 @@ def generateRandomMVDD(nodes, maxBranches):
     for n in nodes:
         dot.add_node(n)
 
-    availableNodes = nodes #nodes available to choose
+    availableNodes = copy.deepcopy(nodes) #nodes available to choose
     childNodes = []
 
     #start with root
@@ -121,6 +122,7 @@ def addEdge(dot, currNode, selected, type, edgeDict, terminal=False):
             pass
         else:
             dot.add_edge(currNode, selected, style=type)
+            # dot.add_edges_from(currNode, selected, {'style':type}, {'op':'&'}, {'param': '9'})
             key = currNode + selected + type
             edgeDict.append(key)
 
@@ -135,50 +137,33 @@ def addEdge(dot, currNode, selected, type, edgeDict, terminal=False):
     return dot, edgeDict
 
 
-def traverseGraph(dot):
-    for n in nx.bfs_edges(dot, 'PCWPMod'):
-        print(n)
-        nodeName = n[0]
-        print(dot.nodes[nodeName])
-
-
-    print("edges connected to node", dot.edges('PCWPMod'))
-    print(dot.get_edge_data('PP', 'PAPP')) #get label and style of edge
-
-    #UPDATE LABEL LIKE THIS
-    dot.edges['PP', 'PAPP', 0]['label'] = 'New Label'
-    print("\n\n", dot.edges['PP', 'PAPP', 0])
-
-    # self.saveToFile(dot, "NewTEST")
-    # print(dot.get_edge_data('PP', 'PAPP'))  # get label and style of edge
-
-
-
 def addGraphParams(mvdd, aveValues):
     dot = mvdd.dot
     # for ed in nx.bfs_edges(dot, mvdd.root):
     for n in nx.nodes(dot):
-        print(n)
         # currNode = ed[0]
         # lower = mvdd.featureDict[currNode][0]
         # upper = mvdd.featureDict[currNode][1]
 
         numEdges = len(dot.edges(n))
         for edg in dot.edges(n):
-            print(edg)
             if edg[1] in ['1', '2', '3', '4', '5']:
                 val = aveValues[n][int(edg[1])-1]
                 val = float("{:.2f}".format(val))
                 op = random.choice(["<=", ">="])
                 label = op + " " + str(val)
-                dot.edges[n, edg[1], 0]['label'] = label
+                dot.edges[n, edg[1]]['label'] = label
+                dot.edges[n, edg[1]]['op'] = op
+                dot.edges[n, edg[1]]['param'] = str(val)
             else:
                 pos = random.randint(0,4)
                 val = aveValues[n][pos]
                 val = float("{:.2f}".format(val))
                 op = random.choice(["<=", ">="])
                 label = op + " " + str(val)
-                dot.edges[n, edg[1], 0]['label'] = label
+                dot.edges[n, edg[1]]['label'] = label
+                dot.edges[n, edg[1]]['op'] = op
+                dot.edges[n, edg[1]]['param'] = str(val)
 
     mvdd.dot = dot
 
