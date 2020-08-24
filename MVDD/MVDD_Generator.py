@@ -8,14 +8,8 @@ LAST UPDATED: 8/24/2020
 
 import random
 import networkx as nx
-from networkx.drawing.nx_pydot import *
-import matplotlib as plt
-from graphviz import Digraph
-import pydot
-from itertools import permutations, repeat, combinations_with_replacement
-from MVDD import MVDD
+from MVDD.MVDD import MVDD
 import copy
-import Params as params
 
 
 # Generate a random MVDD from a starting list of nodes

@@ -6,14 +6,11 @@ ORGANIZATION: University of Virginia, Charlottesville, VA
 LAST UPDATED: 8/24/2020
 '''
 
-import MVDD_Generator as mvGen
-from MVDD import MVDD
+from MVDD.MVDD import MVDD
+import MVDD.MVDD_Generator as mvGen
 import networkx as nx
 from networkx.drawing.nx_pydot import *
 import Params as params
-import pandas as pd
-import copy
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
 
 #Expects param dict of 27 parameters, and select one of 3 outcomes

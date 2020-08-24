@@ -6,14 +6,13 @@ ORGANIZATION: University of Virginia, Charlottesville, VA
 LAST UPDATED: 8/24/2020
 '''
 
-import MVDD_Generator as mvGen
-from MVDD import MVDD
+from MVDD.MVDD import MVDD
+import MVDD.MVDD_Generator as mvGen
 import networkx as nx
 from networkx.drawing.nx_pydot import *
 import Params as params
 import pandas as pd
-import copy
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+from sklearn.metrics import accuracy_score
 
 # Training process to develop best MVDDs
 # INPUT = the total number of trees to generate, and how many different parameter sets to generate per new tree added
