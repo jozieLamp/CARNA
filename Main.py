@@ -1,3 +1,11 @@
+'''
+HemoPheno4HF
+SCRIPT DESCRIPTION: Main Runner Class for Learning Scors from the Trained MVDDs
+CODE DEVELOPED BY: Josephine Lamp
+ORGANIZATION: University of Virginia, Charlottesville, VA
+LAST UPDATED: 8/24/2020
+'''
+
 import MVDD_Generator as mvGen
 from MVDD import MVDD
 import networkx as nx

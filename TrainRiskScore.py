@@ -1,3 +1,11 @@
+'''
+HemoPheno4HF
+SCRIPT DESCRIPTION: Training process for developing MVDDs
+CODE DEVELOPED BY: Josephine Lamp
+ORGANIZATION: University of Virginia, Charlottesville, VA
+LAST UPDATED: 8/24/2020
+'''
+
 import MVDD_Generator as mvGen
 from MVDD import MVDD
 import networkx as nx
@@ -7,7 +15,9 @@ import pandas as pd
 import copy
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
-
+# Training process to develop best MVDDs
+# INPUT = the total number of trees to generate, and how many different parameter sets to generate per new tree added
+# OUTPUT = stores developed trees in the "TreeFiles" folder as images and dot files
 def generateTrees(numTrees=2, numParamGens=3):
     hemoData = pd.read_csv('Preprocessed Data/Cluster_Hemo.csv')
     realScores = hemoData['Score']
@@ -41,7 +51,7 @@ def generateTrees(numTrees=2, numParamGens=3):
             #save trees if they have better accuracy than previous ones
             if bestAcc == None or acc > bestAcc:
                 bestAcc = acc
-                mvParam.saveToFile(filename='TreeFiles/treeParams' + str(t), format='png')
+                mvParam.saveToFile(filename='TreeFiles/treeParams' + str(t), format='pdf')
                 mvParam.saveDotFile(filename='TreeFiles/treeParams' + str(t))
 
                 if acc > globalBestAcc:

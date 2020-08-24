@@ -1,4 +1,10 @@
-#Parameters needed for HemoPheno Process
+'''
+HemoPheno4HF
+SCRIPT DESCRIPTION: Parameters needed for HemoPheno Process
+CODE DEVELOPED BY: Josephine Lamp
+ORGANIZATION: University of Virginia, Charlottesville, VA
+LAST UPDATED: 8/24/2020
+'''
 
 allData = ['Age', 'Gender', 'Race', 'Wt', 'BMI', 'InitialHospDays', 'TotalHospDays', 'NYHA', 'MLHFS', 'AF', 'AlchE',
            'ANGP', 'AOREG', 'AOST', 'ARRH', 'CABG', 'CARREST', 'COPD', 'CVD', 'CYTOE', 'DEPR', 'DIAB', 'FAMILE', 'GOUT',

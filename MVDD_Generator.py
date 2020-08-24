@@ -1,3 +1,11 @@
+'''
+HemoPheno4HF
+SCRIPT DESCRIPTION: Generation of MVDDs
+CODE DEVELOPED BY: Josephine Lamp
+ORGANIZATION: University of Virginia, Charlottesville, VA
+LAST UPDATED: 8/24/2020
+'''
+
 import random
 import networkx as nx
 from networkx.drawing.nx_pydot import *
@@ -10,7 +18,9 @@ import copy
 import Params as params
 
 
-#Generate a random graph from a list of nodes, returns a nx graph
+# Generate a random MVDD from a starting list of nodes
+# INPUT = list of feature nodes, and the maximum number of branches allowed from each node
+# OUTPUT = returns a MVDD object class with the created network x dot graph
 def generateRandomMVDD(nodes, maxBranches):
 
     #Generate dot graph
@@ -54,7 +64,9 @@ def generateRandomMVDD(nodes, maxBranches):
 
     return newMvdd
 
-#add child nodes to dot graph
+# Add child nodes to a dot graph
+# INPUT = dot graph, list of child nodes to add, the number of max branches, a list of available nodes to select from, and a dictionary of edges
+# OUTPUT = returns the dot graph, the list of new child nodes, the updated list of available nodes and the updated dictionary of edges
 def addChildNodes(dot, childNodes, maxBranches, availableNodes, edgeDict):
     for c in childNodes:  # remove new parents
         availableNodes.remove(c)
@@ -97,7 +109,9 @@ def addChildNodes(dot, childNodes, maxBranches, availableNodes, edgeDict):
         newChildren = list(set(newChildren))
         return dot, newChildren, availableNodes, edgeDict
 
-# add terminal nodes
+# Add terminal (leaf) nodes to dot graph
+# INPUT = dot graph, list of child nodes to add and a dictionary of edges
+# OUTPUT = returns the dot graph and the updated dictionary of edges
 def addTerminalNodes(dot, childNodes, edgeDict):
     terms = ["1", "2", "3", "4", "5"]
     for c in childNodes:
@@ -106,7 +120,11 @@ def addTerminalNodes(dot, childNodes, edgeDict):
 
     return dot, edgeDict
 
-#Add edges to dot graph
+
+# Add an edge to a dot graph
+# INPUT = dot graph, current node and selected node to add the edge between, the type of the edge [dashed for or, and solid for and operators], a dictionary of edges,
+#         and a check if the edge is connecting a terminal node or not
+# OUTPUT = returns the dot graph and the updated dictionary of edges
 def addEdge(dot, currNode, selected, type, edgeDict, terminal=False):
     key = currNode + selected + type
 
@@ -136,7 +154,9 @@ def addEdge(dot, currNode, selected, type, edgeDict, terminal=False):
 
     return dot, edgeDict
 
-
+# Updates or adds the parameters to a dot graph
+# INPUT = the MVDD object and a list of average values
+# OUTPUT = returns the updated mvdd
 def addGraphParams(mvdd, aveValues):
     dot = mvdd.dot
     # for ed in nx.bfs_edges(dot, mvdd.root):
