@@ -9,6 +9,7 @@ from sklearn.metrics import confusion_matrix, classification_report, accuracy_sc
 
 
 #Expects param dict of 27 parameters, and select one of 3 outcomes
+#Returns a text file location to display the graph, a integer score value and a string phenotype to be displayed
 def runHemo(paramDict, outcome):
     #load tree
     dot = read_dot('test2params.dot')
@@ -18,8 +19,11 @@ def runHemo(paramDict, outcome):
 
     #Predict score
     score, path = mvdd.predictScore(paramDict)
+    path[-2] = '->'
+    stringPath = ' '.join(path)
+    print(stringPath)
 
-    return 'test2params.pdf', score, path #will be displayed on webpage
+    return 'test2params.pdf', score, stringPath #will be displayed on webpage
 
 
 #Expects a param dict of 119 parameters

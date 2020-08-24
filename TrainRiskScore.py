@@ -41,13 +41,14 @@ def generateTrees(numTrees=2, numParamGens=3):
             #save trees if they have better accuracy than previous ones
             if bestAcc == None or acc > bestAcc:
                 bestAcc = acc
-                mvParam.saveToFile(filename='TreeFiles/treeParams' + str(t))
+                mvParam.saveToFile(filename='TreeFiles/treeParams' + str(t), format='png')
                 mvParam.saveDotFile(filename='TreeFiles/treeParams' + str(t))
 
                 if acc > globalBestAcc:
                     globalBestAcc = acc
 
     print("Best Overall Accuracy is", globalBestAcc)
+
 
 
 
