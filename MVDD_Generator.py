@@ -6,6 +6,7 @@ from graphviz import Digraph
 import pydot
 from itertools import permutations, repeat, combinations_with_replacement
 from MVDD import MVDD
+import Params as params
 
 
 #Generate a random graph from a list of nodes, returns a nx graph
@@ -153,22 +154,33 @@ def traverseGraph(dot):
 
 
 
-def addGraphParams(mvdd):
+def addGraphParams(mvdd, aveValues):
     dot = mvdd.dot
-    for ed in nx.bfs_edges(dot, mvdd.root):
-        print(ed)
-        currNode = ed[0]
-        lower = mvdd.featureDict[currNode][0]
-        upper = mvdd.featureDict[currNode][1]
+    # for ed in nx.bfs_edges(dot, mvdd.root):
+    for n in nx.nodes(dot):
+        print(n)
+        # currNode = ed[0]
+        # lower = mvdd.featureDict[currNode][0]
+        # upper = mvdd.featureDict[currNode][1]
 
+        numEdges = len(dot.edges(n))
+        for edg in dot.edges(n):
+            print(edg)
+            if edg[1] in ['1', '2', '3', '4', '5']:
+                val = aveValues[n][int(edg[1])-1]
+                val = float("{:.2f}".format(val))
+                op = random.choice(["<=", ">="])
+                label = op + " " + str(val)
+                dot.edges[n, edg[1], 0]['label'] = label
+            else:
+                pos = random.randint(0,4)
+                val = aveValues[n][pos]
+                val = float("{:.2f}".format(val))
+                op = random.choice(["<=", ">="])
+                label = op + " " + str(val)
+                dot.edges[n, edg[1], 0]['label'] = label
 
+    mvdd.dot = dot
 
-    print("edges connected to node", dot.edges('PCWPMod'))
-    print(dot.get_edge_data('PP', 'PAPP')) #get label and style of edge
+    return mvdd
 
-    #UPDATE LABEL LIKE THIS
-    dot.edges['PP', 'PAPP', 0]['label'] = 'New Label'
-    print("\n\n", dot.edges['PP', 'PAPP', 0])
-
-    # self.saveToFile(dot, "NewTEST")
-    # print(dot.get_edge_data('PP', 'PAPP'))  # get label and style of edge

@@ -33,12 +33,15 @@ def josieTest():
 
     # mvdd.featureDict = hemoDict
 
-    dot = read_dot('test.dot')
+    dot = read_dot('test2.dot')
 
-    mvdd = MVDD(params.hemo, dot, root="PAS")
+    mvdd = MVDD(params.hemo, dot, root="PCWPMod")
     mvdd.featureDict = params.hemoDict
 
-    mvGen.addGraphParams(mvdd)
+    mvdd = mvGen.addGraphParams(mvdd, params.clusterHemoScoreDict)
+
+
+
 
 def main():
     josieTest()
