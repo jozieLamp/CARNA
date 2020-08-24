@@ -47,20 +47,26 @@ class MVDD:
         # print(paths)
 
         scores = []
+        truePaths =[]
         for p in paths:
             # print(p)
             truthVal, score = self.evaluateTruthValue(p, featureDict)
             # print(truthVal)
             if truthVal:
                 scores.append(score)
+                truePaths.append(p)
 
         # print(scores)
         # print(featureDict)
 
         if scores == []:
-            return 5
+            return 5, paths[0]
         else:
-            return max(set(scores), key = scores.count)
+            finalScore = max(set(scores), key=scores.count)
+            idx = scores.index(finalScore)
+            finalPath = truePaths[idx]
+
+            return finalScore, finalPath
 
 
 
