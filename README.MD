@@ -1,4 +1,6 @@
-# Intelligently Characterizing Patient Hemodynamic Phenotypes for Advanced Heart Failure in the ESCAPE Trial Using Learned Multi-Valued Decision Diagrams
+# HemoPheno4HF  
+
+### Intelligently Characterizing Patient Hemodynamic Phenotypes for Advanced Heart Failure in the ESCAPE Trial Using Learned Multi-Valued Decision Diagrams
 
 _Josephine Lamp*, Yuxin Wu*, Steven Lamp^, Lu Feng*, Sula Mazimba+_   
 *Department of Computer Science, University of Virginia, Charlottesville, VA, USA  
@@ -6,4 +8,4 @@ _Josephine Lamp*, Yuxin Wu*, Steven Lamp^, Lu Feng*, Sula Mazimba+_
 +Department of Cardiovascular Medicine, University of Virginia, Charlottesville, VA, USA  
 -------
 
-The Tool: HemoPheno4HF
+
