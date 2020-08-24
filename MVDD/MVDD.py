@@ -67,128 +67,57 @@ class MVDD:
         paths = self.get_all_tree_paths()
         # print(paths)
 
-        testPath = ['PAMN', '"<="', '0.0', '&', 'HRTRT', '"<="', '81.12', '|', 'CPI', '">="', '0.0', '|', 'CWP', '"<="', '23.4', '|', 'PCWPMN', '">="', '22.54', '|', 'PAS', '"<="', '40.73', '&', '1']
-        # testPath = ['PAMN', '"<="', '0.0', '&', 'HRTRT', '"<="', '81.12', '|', 'CPI', '">="', '0.0', '|', 'CWP', '"<="', '23.4', '|', 'PCWPMN', '">="', '22.54', '&', '1']
-        testPath = ['PAMN', '"<="', '0.0', '|', 'HRTRT', '"<="', '81.12', '|', 'CPI', '">="', '0.0', '&', 'CWP', '"<="', '23.4', '|', 'PCWPMN', '">="', '22.54',  '|', 'PAS', '"<="', '40.73', '&', '1']
-        testPath = ['RAP', '"<="', '0.0', '|','PAS', '"<="', '0.0', '&','PAMN', '"<="', '0.0', '|', 'HRTRT', '"<="', '81.12', '|', 'CPI', '">="', '0.0', '&', 'CWP', '"<="', '23.4', '|', 'PCWPMN', '">="', '22.54',  '|', 'PAS', '"<="', '40.73', '&', '1']
-        # testPath = ['RAP', '"<="', '0.0', '|','PAS', '"<="', '0.0', '&','PAMN', '"<="', '0.0', '|', 'HRTRT', '"<="', '81.12', '|', 'CPI', '">="', '0.0', '&', 'CWP', '"<="', '23.4', '&', 'PCWPMN', '">="', '22.54',  '|', 'PAS', '"<="', '40.73', '&', '1']
+        scores = []
+        truePaths =[]
+        for p in paths:
+            truthVal, score = self.evaluatePathValue(p, featureDict)
+            if truthVal:
+                scores.append(score)
+                truePaths.append(p)
 
-        truthVal, score = self.evaluatePathValue(testPath, featureDict)
-        #     print(truthVal)
+        # print(scores)
+        # print(featureDict)
 
-        # scores = []
-        # truePaths =[]
-        # for p in paths:
-        #     print(p)
-        #     truthVal, score = self.evaluateTruthValue(p, featureDict)
-        #     print(truthVal)
-        #     if truthVal:
-        #         scores.append(score)
-        #         truePaths.append(p)
-        #
-        # # print(scores)
-        # # print(featureDict)
-        #
-        # if scores == []:
-        #     return 5, paths[0]
-        # else:
-        #     finalScore = max(set(scores), key=scores.count)
-        #     idx = scores.index(finalScore)
-        #     finalPath = truePaths[idx]
-        #
-        #     return finalScore, finalPath
+        if scores == []:
+            return 5, paths[0]
+        else:
+            finalScore = max(set(scores), key=scores.count)
+            idx = scores.index(finalScore)
+            finalPath = truePaths[idx]
 
-    # Evaluates the truth value of a path (whether the path is applicable, i.e. true, to the supplied data or not)
-    # INPUT = Tree path and data in feature dict
-    # OUTPUT = returns true or false and the final score terminal node
-    # def evaluateTruthValue(self, path, featureDict):
-    #     orList = []
-    #     for i in range(0,len(path),4):
-    #
-    #         if i+1 == len(path): #reached terminal node
-    #             if orList != []:
-    #                 if True in orList:
-    #                     orList = []
-    #                 else:
-    #                     # print("false at final or node")
-    #                     return False, path[-1]
-    #
-    #         else:#not terminal node
-    #             value = featureDict[path[i]]
-    #             print(path[i], " is", value)
-    #
-    #             if not math.isnan(value):
-    #
-    #                 bound = path[i+1]
-    #                 param = float(path[i+2])
-    #                 op = path[i+3]
-    #
-    #                 print(bound, param, op)
-    #
-    #
-    #                 if op == '&':
-    #                     if orList != []:
-    #                         #finish previous or list
-    #                         if bound == '<=':
-    #                             if value <= param:
-    #                                 orList.append(True)
-    #                             else:
-    #                                 orList.append(False)
-    #                         else:
-    #                             if value >= param:
-    #                                 orList.append(True)
-    #                             else:
-    #                                 orList.append(False)
-    #
-    #                         print(orList)
-    #                         if True in orList:
-    #                             orList = []
-    #                         else:
-    #                             print("return false at or list")
-    #                             return False, path[-1]
-    #
-    #                     if bound == '<=':
-    #                         if not value <= param:
-    #                             return False, path[-1]
-    #                     else:
-    #                         if not value >= param:
-    #                             return False, path[-1]
-    #                 else: #OR op
-    #                     if bound == '<=':
-    #                         if value <= param:
-    #                             orList.append(True)
-    #                         else:
-    #                             orList.append(False)
-    #                     else:
-    #                         if value >= param:
-    #                             orList.append(True)
-    #                         else:
-    #                             orList.append(False)
-    #
-    #     return True, path[-1]
+            return finalScore, finalPath
+
 
     def evaluatePathValue(self, path, featureDict):
-        orList = []
-
+        newPath = []
         path = self.parseOrs(path, featureDict)
-        # print(path)
 
-        # for i in range(0,len(path),4):
-        #     value = featureDict[path[i]]
-        #     print(path[i], " is", value)
-        #
-        #     bound = path[i+1]
-        #     param = float(path[i+2])
-        #     op = path[i+3]
+        count=0
+        while count <= len(path)-3:
+            if path[count] == True or path[count] == False or path[count] == '&':
+                newPath.append(path[count])
+                count += 1
+            else:
+                ftName = path[count]
+                value = featureDict[ftName]
+                bound = path[count + 1]
+                param = path[count + 2]
+
+                truthVal = self.getTruthValue(value, bound, param)
+                newPath.append(truthVal)
+
+                count += 3
+
+        if False in newPath:
+            return False, path[-1]
+        else:
+            return True, path[-1]
 
 
 
     def parseOrs(self, path, featureDict):
         newPath = copy.deepcopy(path)
-        count = 0
-        print(path)
         indices = [i for i, x in enumerate(path) if x == "|"]
-        print(indices)
 
         rowIndices = []
         currRow = []
@@ -201,10 +130,7 @@ class MVDD:
                 rowIndices.append(currRow)
                 currRow = []
 
-        print(rowIndices)
-
         newIndices = list(np.setdiff1d(indices, rowIndices))
-        print("New indices", newIndices)
 
         #parse individual ORs in new indices
         for i in newIndices:
@@ -231,13 +157,10 @@ class MVDD:
             newPath[i + 3] = "DELETED"
 
             #get final truth value
-            if truthVal1 ==True or truthVal2 == True:
+            if truthVal1 == True or truthVal2 == True:
                 newPath[i] = True
             else:
                 newPath[i] = False
-
-        print("After individual ors")
-        print(newPath)
 
         #parse group ors
         for group in rowIndices:
@@ -259,16 +182,13 @@ class MVDD:
                 if newPath[item +3] == '|':
                     newPath[item + 3] = "DELETED"
 
-            print(truthVals)
+
             if True in truthVals:
                 newPath[maxIdx] = True
             else:
                 newPath[maxIdx] = False
 
-        print(newPath)
         newPath = list(filter(lambda a: a != "DELETED", newPath))
-        print(newPath)
-
         return newPath
 
 
