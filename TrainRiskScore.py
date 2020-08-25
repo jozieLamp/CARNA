@@ -128,7 +128,7 @@ def generateTreeStructures(nodes, numTreesPerPermutation, maxBranches, xData, yD
 
 def runTrees():
     #Load data
-    hemoData = pd.read_csv('Preprocessed Data/Cluster_Hemo.csv')
+    hemoData = pd.read_csv('Data/Preprocessed Data/Cluster_Hemo.csv')
     realScores = hemoData['Score']
 
     # Preprocess and create training and testing sets
@@ -171,7 +171,7 @@ def optimizeParams(treeFilename, rootNode, xData, yData, paramRanges, relops):
 
 def findBestParams():
     # Load data
-    hemoData = pd.read_csv('Preprocessed Data/Cluster_Hemo.csv')
+    hemoData = pd.read_csv('Data/Preprocessed Data/Cluster_Hemo.csv')
     realScores = hemoData['Score']
 
     # Preprocess and create training and testing sets
