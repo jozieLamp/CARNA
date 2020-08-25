@@ -24,7 +24,7 @@ warnings.filterwarnings('ignore')
 # INPUT = the total number of trees to generate, and how many different parameter sets to generate per new tree added
 # OUTPUT = stores developed trees in the "TreeFiles" folder as images and dot files
 def generateTrees(numTrees=10, numParamGens=1):
-    hemoData = pd.read_csv('Preprocessed Data/Cluster_Hemo.csv')
+    hemoData = pd.read_csv('Data/Preprocessed Data/Cluster_Hemo.csv')
     realScores = hemoData['Score']
 
     globalBestAcc = 0
