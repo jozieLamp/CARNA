@@ -77,7 +77,7 @@ def generateTreeStructures(nodes, numTreesPerPermutation, maxBranches, xData, yD
 
     terminalOrder = ["1", "2", "3", "4", "5"]
     perms = list(permutations(terminalOrder, len(terminalOrder)))
-    for p in (len(perms)):
+    for p in range(len(perms)):
         for t in range(numTreesPerPermutation):
             # generate tree structure
             mvdd = mvGen.generateMVDDFeatureImportance(nodes=nodes, terminalOrder=perms[p], maxBranches=maxBranches)
@@ -113,7 +113,7 @@ def runTrees():
     hemo = hemo.fillna(0)
     xTrain, xTest, yTrain, yTest = train_test_split(hemo, realScores, test_size=.2)
 
-    accDF = generateTreeStructures(nodes=params.hemoFeatureImportance, numTreesPerPermutation=1, maxBranches=3, xData=xTrain, yData=yTrain)
+    accDF = generateTreeStructures(nodes=params.hemoFeatureImportance, numTreesPerPermutation=1, maxBranches=4, xData=xTrain, yData=yTrain)
 
     print(accDF)
 
@@ -146,32 +146,32 @@ def optimizeParams(treeFilename, rootNode, xData, yData, paramRanges, relops):
 
 
 def main():
-    # #Load data
-    # hemoData = pd.read_csv('Preprocessed Data/Cluster_Hemo.csv')
-    # realScores = hemoData['Score']
-    #
-    # #Preprocess and create training and testing sets
-    # hemo = hemoData.drop('Score', axis=1)
-    # hemo = hemo.replace(np.inf, 0)
-    # hemo = hemo.fillna(0)
-    # xTrain, xTest, yTrain, yTest = train_test_split(hemo, realScores, test_size=.2)
-    #
-    # #TODO - create param ranges to try
-    # #NOTE- each node can have up to 4 branches, so each param dict needs to send at least 4 params
-    # paramRanges = params.hemoParamsV1
-    # relopChoices = params.hemoRelopsV1
-    # selectedTree = 'TreeFiles/tree2' #selected tree to try
-    # rootNode = 'BPSYS'
-    #
-    # #Run param optimization
-    # acc, usedParams, usedRelops = optimizeParams(treeFilename=selectedTree, rootNode=rootNode, xData=xTrain, yData=yTrain, paramRanges=paramRanges, relops=relopChoices)
-    # print("Accuracy is", acc)
-    # print(usedParams)
-    # print(usedRelops)
-    # print("selected tree is", selectedTree)
-    # print("Rootnode is ", rootNode)
+    #Load data
+    hemoData = pd.read_csv('Preprocessed Data/Cluster_Hemo.csv')
+    realScores = hemoData['Score']
 
-   runTrees()
+    #Preprocess and create training and testing sets
+    hemo = hemoData.drop('Score', axis=1)
+    hemo = hemo.replace(np.inf, 0)
+    hemo = hemo.fillna(0)
+    xTrain, xTest, yTrain, yTest = train_test_split(hemo, realScores, test_size=.2)
+
+    #TODO - create param ranges to try
+    #NOTE- each node can have up to 4 branches, so each param dict needs to send at least 4 params
+    paramRanges = params.hemoParamsV1
+    relopChoices = params.hemoRelopsV1
+    selectedTree = 'TreeFiles/tree2' #selected tree to try
+    rootNode = 'BPSYS'
+
+    #Run param optimization
+    acc, usedParams, usedRelops = optimizeParams(treeFilename=selectedTree, rootNode=rootNode, xData=xTrain, yData=yTrain, paramRanges=paramRanges, relops=relopChoices)
+    print("Accuracy is", acc)
+    print(usedParams)
+    print(usedRelops)
+    print("selected tree is", selectedTree)
+    print("Rootnode is ", rootNode)
+
+
 
 
 
