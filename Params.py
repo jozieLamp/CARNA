@@ -952,3 +952,9 @@ clusterAllDataScoreDict = {'Age': [47.36363636363637,
   0.6024844720496895,
   0.7757009345794392]}
 
+# hemoFeatureImportance = ['RAP', 'MIXED', 'MPAP', 'BPSYS', 'PAD', 'CO', 'PAS', 'PAMN', 'RATHemo', 'CPI', 'RAT']
+#
+#     ['', '', '', 'CWP', 'PCWPMod', 'PCWPA', 'PCWPMN', '',
+#         'CI', 'SVRHemo',  '', 'BPDIAS', 'HRTRT', '', 'MAP',
+#         '', '', 'PP', 'PPP', 'PAPP', 'VR', '', 'PPRatio', 'Age',
+#         'EjF']

@@ -37,7 +37,7 @@ def runHemo(paramDict, outcome):
     stringPath = ' '.join(path)
     print(stringPath)
 
-    return 'TreeFiles/treeParams2.png', score, stringPath #will be displayed on webpage
+    return 'treeParams2.png', score, stringPath #will be displayed on webpage
 
 
 #Expects a param dict of 119 parameters
