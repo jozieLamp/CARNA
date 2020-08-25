@@ -96,6 +96,7 @@ def generateTreeStructures(nodes, numTreesPerPermutation, maxBranches, xData, yD
                 predScores.append(int(score))
 
             acc = accuracy_score(yData, predScores)
+            print(acc)
             accList.append([filename + str(count) + '.dot', acc])
 
             count += 1
@@ -116,6 +117,7 @@ def generateTreeStructures(nodes, numTreesPerPermutation, maxBranches, xData, yD
                 predScores.append(int(score))
 
             acc = accuracy_score(yData, predScores)
+            print(acc)
             accList.append([filename + "Random" + str(count) + '.dot', acc])
 
             count += 1
