@@ -17,6 +17,14 @@ import Params as params
 #Returns a text file location to display the graph, a integer score value and a string phenotype to be displayed
 #Outcome can be "Death" "Rehospitalization" "Readmission"
 def runHemo(paramDict, outcome):
+
+    #check for strings in paramDict
+    for p in paramDict:
+        if paramDict[p] == "":
+            paramDict[p] = 0
+        else:
+            paramDict[p] = float(paramDict[p])
+
     #load tree
     dot = read_dot('test2params.dot')
     dot = nx.DiGraph(dot)
@@ -41,7 +49,8 @@ def runAllData(paramDict):
 
 def main():
     pass
-    # runHemo()
+#     runHemo({"Age":"","BPDIAS":"","BPSYS":"3232","CI":"","CO":"","CPI":"","CWP":"12333","EjF":"","HRTRT":"","MAP":"","MIXED":"","MPAP":"","PAD":"","PAMN":"","PAPP":"","PAS":"","PCWPA":"","PCWPMN":"","PCWPMod":"","PP":"","PPP":"","PPRatio":"","RAP":"","RAT":"","RATHemo":"","SVRHemo":"","VR":""}
+# , 'Death')
 
 
 if __name__ == "__main__":

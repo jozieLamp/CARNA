@@ -13,6 +13,9 @@ from networkx.drawing.nx_pydot import *
 import Params as params
 import pandas as pd
 from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+import numpy as np
+import random
 
 # Training process to develop best MVDDs
 # INPUT = the total number of trees to generate, and how many different parameter sets to generate per new tree added
@@ -36,7 +39,7 @@ def generateTrees(numTrees=2, numParamGens=5):
             mvParam = MVDD(params.hemo, dot, root=mvdd.root)
             mvParam.featureDict = params.hemoDict
 
-            mvParam = mvGen.addGraphParams(mvParam, params.clusterHemoScoreDict)
+            mvParam = mvGen.addGraphParamsRandom(mvParam, params.clusterHemoScoreDict)
 
             predScores = []
             for i in range(len(hemoData)):
@@ -58,28 +61,57 @@ def generateTrees(numTrees=2, numParamGens=5):
 
     print("Best Overall Accuracy is", globalBestAcc)
 
-
-def test():
-    hemoData = pd.read_csv('Preprocessed Data/Cluster_Hemo.csv')
-    realScores = hemoData['Score']
-
-    dot = read_dot('test2params.dot')
+# Training process to find best set of parameters for a given tree
+# INPUT = the .dot tree file name, root node of tree, the training data (xdata / ydata), a dictionary of parameters to try for each feature
+#         and a dictionary of relational operators (>=, >, <, <=) for each parameter
+# OUTPUT = returns an accuracy score, a dictionary of used params and a dictionary of used relops
+def optimizeParams(treeFilename, rootNode, xData, yData, paramRanges, relops):
+    dot = read_dot(treeFilename + '.dot')
     dot = nx.DiGraph(dot)
-    mvParam = MVDD(params.hemo, dot, root='PAMN')
-    mvParam.featureDict = params.hemoDict
+    mvdd = MVDD(params.hemo, dot, root=rootNode)
+    mvdd.featureDict = params.hemoDict
 
-    row = hemoData.loc[0]
-    score, path = mvParam.predictScore(row)
-    print(score, path)
+    mvParam, usedParams, usedRelops = mvGen.addGraphParams(mvdd, paramRanges, relops, inorder=True)
 
+    mvParam.saveToFile(treeFilename + "Params")
+    mvParam.saveDotFile(treeFilename + "Params")
+
+    predScores = []
+
+    for index, row in xData.iterrows():
+        score, path = mvParam.predictScore(row)
+        predScores.append(int(score))
+
+    acc = accuracy_score(yData, predScores)
+
+    return acc, usedParams, usedRelops
 
 
 
 
 
 def main():
-    generateTrees()
-    # test()
+    #Load data
+    hemoData = pd.read_csv('Preprocessed Data/Cluster_Hemo.csv')
+    realScores = hemoData['Score']
+
+    #Preprocess and create training and testing sets
+    hemo = hemoData.drop('Score', axis=1)
+    hemo = hemo.replace(np.inf, 0)
+    hemo = hemo.fillna(0)
+    xTrain, xTest, yTrain, yTest = train_test_split(hemo, realScores, test_size=.2)
+
+    #TODO - create param ranges to try
+    #NOTE- each node can have up to 4 branches, so each param dict needs to send at least 4 params
+    paramRanges = params.hemoParamsV1
+    relopChoices = params.hemoRelopsV1
+    selectedTree = 'tree7' #selected tree to try
+    rootNode = 'MPAP'
+
+    #Run param optimization
+    optimizeParams(treeFilename=selectedTree, rootNode=rootNode, xData=xTrain, yData=yTrain, paramRanges=paramRanges, relops=relopChoices)
+
+
 
 if __name__ == "__main__":
     main()

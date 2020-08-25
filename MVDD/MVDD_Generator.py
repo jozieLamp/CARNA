@@ -148,10 +148,10 @@ def addEdge(dot, currNode, selected, type, edgeDict, terminal=False):
 
     return dot, edgeDict
 
-# Updates or adds the parameters to a dot graph
+# Updates or adds RANDOM parameters to a dot graph
 # INPUT = the MVDD object and a list of average values
 # OUTPUT = returns the updated mvdd
-def addGraphParams(mvdd, aveValues):
+def addGraphParamsRandom(mvdd, aveValues):
     dot = mvdd.dot
     # for ed in nx.bfs_edges(dot, mvdd.root):
     for n in nx.nodes(dot):
@@ -183,3 +183,48 @@ def addGraphParams(mvdd, aveValues):
 
     return mvdd
 
+# Updates or adds specified parameters to a dot graph
+# INPUT = the MVDD object, a dictionary with params and the values to add, if the params should be added in order or randomly
+# OUTPUT = returns the updated mvdd, the parameters used and the relops used
+def addGraphParams(mvdd, paramValues, relopValues, inorder=True):
+    usedParams = {}
+    usedRelops = {}
+    for key in paramValues:
+        usedParams[key] = []
+        usedRelops[key] = []
+
+    dot = mvdd.dot
+
+    for n in nx.nodes(dot):
+        if inorder:
+            count = 0
+            for edg in dot.edges(n):
+                val = paramValues[n][count]
+                val = float("{:.2f}".format(val))
+                op = relopValues[n][count]
+                label = op + " " + str(val)
+                dot.edges[n, edg[1]]['label'] = label
+                dot.edges[n, edg[1]]['op'] = op
+                dot.edges[n, edg[1]]['param'] = str(val)
+
+                usedParams[n].append(val)
+                usedRelops[n].append(op)
+
+                count += 1
+        else:
+            for edg in dot.edges(n):
+                idx = random.randint(0, len(relopValues[n])-1)
+                val = paramValues[n][idx]
+                val = float("{:.2f}".format(val))
+                op = relopValues[n][idx]
+                label = op + " " + str(val)
+                dot.edges[n, edg[1]]['label'] = label
+                dot.edges[n, edg[1]]['op'] = op
+                dot.edges[n, edg[1]]['param'] = str(val)
+
+                usedParams[n].append(val)
+                usedRelops[n].append(op)
+
+    mvdd.dot = dot
+
+    return mvdd, usedParams, usedRelops
