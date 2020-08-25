@@ -15,7 +15,8 @@ import Params as params
 
 #Expects param dict of 27 parameters, and select one of 3 outcomes
 #Returns a text file location to display the graph, a integer score value and a string phenotype to be displayed
-#Outcome can be "Death" "Rehospitalization" "Readmission"
+#Outcome can be "all", "Death" "Rehospitalization" "Readmission"
+#outcomes passed in all caps
 def runHemo(paramDict, outcome):
 
     #check for strings in paramDict
@@ -26,7 +27,7 @@ def runHemo(paramDict, outcome):
             paramDict[p] = float(paramDict[p])
 
     #load tree
-    dot = read_dot('treeParams1.dot')
+    dot = read_dot('TreeFiles/treeParams1.dot')
     dot = nx.DiGraph(dot)
     mvdd = MVDD(params.hemo, dot, root='PCWP')
     mvdd.featureDict = params.hemoDict
@@ -37,7 +38,7 @@ def runHemo(paramDict, outcome):
     stringPath = ' '.join(path)
     print(stringPath)
 
-    return 'treeParams1.png', score, stringPath #will be displayed on webpage
+    return 'TreeFiles/treeParams1.png', score, stringPath #will be displayed on webpage
 
 
 #Expects a param dict of 119 parameters

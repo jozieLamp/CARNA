@@ -11,3 +11,12 @@
 
 
 
+File Breakdown:
+- Data: 
+    - Original DataFrames: Original patient data before preprocessing
+    - Preprocessed Data: Preprocessed data with derived supervised score labels
+- Score Label Preprocessing: contains the code to preprocess the data and derive the supervised score labels from the data
+    - Figures: 
+
+
+
