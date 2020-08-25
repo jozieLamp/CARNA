@@ -101,7 +101,7 @@ def generateTreeStructures(nodes, numTreesPerPermutation, maxBranches, xData, yD
             count += 1
 
         for r in range(numRandom):
-            mvdd = mvGen.generateRandomMVDD(nodes=nodes, maxBranches=maxBranches)
+            mvdd = mvGen.generateRandomMVDD(nodes=nodes, maxBranches=maxBranches-1)
             mvdd.saveToFile(filename=filename + "Random" + str(count), format='pdf')
             mvdd.saveToFile(filename=filename + "Random" + str(count), format='png')
             mvdd.saveDotFile(filename=filename + "Random" + str(count))
@@ -180,7 +180,6 @@ def findBestParams():
     hemo = hemo.fillna(0)
     xTrain, xTest, yTrain, yTest = train_test_split(hemo, realScores, test_size=.2)
 
-    # TODO - create param ranges to try
     # NOTE- each node can have up to 4 branches, so each param dict needs to send at least 4 params
     paramRanges = params.hemoParamsV1
     relopChoices = params.hemoRelopsV1
