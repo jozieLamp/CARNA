@@ -120,14 +120,16 @@ def main():
     #NOTE- each node can have up to 4 branches, so each param dict needs to send at least 4 params
     paramRanges = params.hemoParamsV1
     relopChoices = params.hemoRelopsV1
-    selectedTree = 'TreeFiles/tree1' #selected tree to try
-    rootNode = 'PCWP'
+    selectedTree = 'TreeFiles/tree2' #selected tree to try
+    rootNode = 'BPSYS'
 
     #Run param optimization
     acc, usedParams, usedRelops = optimizeParams(treeFilename=selectedTree, rootNode=rootNode, xData=xTrain, yData=yTrain, paramRanges=paramRanges, relops=relopChoices)
     print("Accuracy is", acc)
     print(usedParams)
     print(usedRelops)
+    print("selected tree is", selectedTree)
+    print("Rootnode is ", rootNode)
 
 
 
