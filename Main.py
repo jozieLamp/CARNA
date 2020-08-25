@@ -48,9 +48,10 @@ def runAllData(paramDict):
 
 
 def main():
-    pass
-#     runHemo({"Age":"","BPDIAS":"","BPSYS":"3232","CI":"","CO":"","CPI":"","CWP":"12333","EjF":"","HRTRT":"","MAP":"","MIXED":"","MPAP":"","PAD":"","PAMN":"","PAPP":"","PAS":"","PCWPA":"","PCWPMN":"","PCWPMod":"","PP":"","PPP":"","PPRatio":"","RAP":"","RAT":"","RATHemo":"","SVRHemo":"","VR":""}
-# , 'Death')
+    filename, score, path = runHemo({"Age":"","BPDIAS":"","BPSYS":"3232","CI":"","CO":"","CPI":"","CWP":"12333","EjF":"","HRTRT":"","MAP":"","MIXED":"","MPAP":"","PAD":"","PAMN":"","PAPP":"","PAS":"","PCWPA":"","PCWPMN":"","PCWPMod":"","PP":"","PPP":"","PPRatio":"","RAP":"","RAT":"","RATHemo":"","SVRHemo":"","VR":""}
+, 'Death')
+
+
 
 
 if __name__ == "__main__":

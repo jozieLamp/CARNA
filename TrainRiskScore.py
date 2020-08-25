@@ -109,8 +109,8 @@ def main():
     rootNode = 'MPAP'
 
     #Run param optimization
-    optimizeParams(treeFilename=selectedTree, rootNode=rootNode, xData=xTrain, yData=yTrain, paramRanges=paramRanges, relops=relopChoices)
-
+    acc, usedParams, usedRelops = optimizeParams(treeFilename=selectedTree, rootNode=rootNode, xData=xTrain, yData=yTrain, paramRanges=paramRanges, relops=relopChoices)
+    print("Accuracy is", acc)
 
 
 if __name__ == "__main__":
