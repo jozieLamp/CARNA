@@ -17,7 +17,7 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 import random
 
-# Training process to develop best MVDDs
+# Training process to develop random MVDDs
 # INPUT = the total number of trees to generate, and how many different parameter sets to generate per new tree added
 # OUTPUT = stores developed trees in the "TreeFiles" folder as images and dot files
 def generateTrees(numTrees=2, numParamGens=5):
@@ -54,12 +54,26 @@ def generateTrees(numTrees=2, numParamGens=5):
             if bestAcc == None or acc > bestAcc:
                 bestAcc = acc
                 mvParam.saveToFile(filename='TreeFiles/treeParams' + str(t), format='pdf')
+                mvParam.saveToFile(filename='TreeFiles/treeParams' + str(t), format='png')
                 mvParam.saveDotFile(filename='TreeFiles/treeParams' + str(t))
 
                 if acc > globalBestAcc:
                     globalBestAcc = acc
 
     print("Best Overall Accuracy is", globalBestAcc)
+
+# Training process to develop best MVDDs
+# INPUT = the total number of trees to generate, and how many different parameter sets to generate per new tree added
+# OUTPUT = stores developed trees in the "TreeFiles" folder as images and dot files
+def generateTreeStructures(numTrees=1):
+
+    for t in range(numTrees):
+        # generate tree structure
+        mvdd = mvGen.generateMVDDFeatureImportance(nodes=params.hemo, maxBranches=3)
+        mvdd.saveToFile(filename='TreeFiles/tree' + str(t))
+        mvdd.saveDotFile(filename='TreeFiles/tree' + str(t))
+
+    #TODO - create trees using feature order
 
 # Training process to find best set of parameters for a given tree
 # INPUT = the .dot tree file name, root node of tree, the training data (xdata / ydata), a dictionary of parameters to try for each feature
@@ -105,12 +119,13 @@ def main():
     #NOTE- each node can have up to 4 branches, so each param dict needs to send at least 4 params
     paramRanges = params.hemoParamsV1
     relopChoices = params.hemoRelopsV1
-    selectedTree = 'tree7' #selected tree to try
-    rootNode = 'MPAP'
+    selectedTree = 'TreeFiles/tree0' #selected tree to try
+    rootNode = 'SVR'
 
     #Run param optimization
     acc, usedParams, usedRelops = optimizeParams(treeFilename=selectedTree, rootNode=rootNode, xData=xTrain, yData=yTrain, paramRanges=paramRanges, relops=relopChoices)
     print("Accuracy is", acc)
+
 
 
 if __name__ == "__main__":

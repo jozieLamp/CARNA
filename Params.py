@@ -7,9 +7,9 @@ LAST UPDATED: 8/24/2020
 '''
 
 #List of hemo features
-hemo = ['RAP', 'PAS', 'PAD', 'PAMN', 'CWP', 'PCWPMod', 'PCWPA', 'PCWPMN', 'CO',
+hemo = ['RAP', 'PAS', 'PAD', 'PAMN', 'PCWP', 'PCWPMod', 'PCWPA', 'PCWPMN', 'CO',
         'CI', 'SVRHemo', 'MIXED', 'BPSYS', 'BPDIAS', 'HRTRT', 'RATHemo', 'MAP',
-        'MPAP', 'CPI', 'PP', 'PPP', 'PAPP', 'VR', 'RAT', 'PPRatio', 'Age',
+        'MPAP', 'CPI', 'PP', 'PPP', 'PAPP', 'SVR', 'RAT', 'PPRatio', 'Age',
         'EjF']
 
 #List of hemo ranges for each feature
@@ -17,7 +17,7 @@ hemoDict = {'RAP': [0.0, 85.0],
             'PAS': [0.0, 90.0],
             'PAD': [0.0, 59.0],
             'PAMN': [0.0, 82.0],
-            'CWP': [0.0, 53.0],
+            'PCWP': [0.0, 53.0],
             'PCWPMod': [0.0, 53.0],
             'PCWPA': [0.0, 53.0],
             'PCWPMN': [0.0, 49.0],
@@ -35,7 +35,7 @@ hemoDict = {'RAP': [0.0, 85.0],
             'PP': [-55.0, 106.0],
             'PPP': [-0.833333333, 0.736842105],
             'PAPP': [0.0, 0.8444444440000001],
-            'VR': [0.0, 10755.555559999999],
+            'SVR': [0.0, 10755.555559999999],
             'RAT': [0.0, 3.736842105],
             'PPRatio': [-0.8870967740000001, 9.666666667000001],
             'Age': [23.0, 88.0],
@@ -57,7 +57,7 @@ hemoParamsV1 = {'RAP': [10.617021276595745, 0.0, 18.553571428571427, 7.586956521
   48.01754385964912,
   26.431654676258994,
   36.63970588235294],
- 'CWP': [18.35,
+ 'PCWP': [18.35,
   0.0,
   34.94736842105263,
   13.991869918699187,
@@ -147,7 +147,7 @@ hemoParamsV1 = {'RAP': [10.617021276595745, 0.0, 18.553571428571427, 7.586956521
   0.44163834891228076,
   0.5615927534366196,
   0.5140710068321168],
- 'VR': [2589.8704747812503,
+ 'SVR': [2589.8704747812503,
   0.0,
   3513.218464888889,
   2413.2820651742645,
@@ -169,7 +169,7 @@ hemoParamsV1 = {'RAP': [10.617021276595745, 0.0, 18.553571428571427, 7.586956521
   21.18840579710145,
   18.696969696969695]}
 
-hemoRelopsV1 = {'RAP': ['>=', '<=', '<=', '>'], 'PAS': ['>=', '<', '>=', '<='], 'PAD': ['>=', '>', '<=', '>='], 'PAMN': ['<=', '<=', '>=', '>='], 'CWP': ['<=', '>=', '>=', '>='], 'PCWPMod': ['>=', '>=', '>=', '<='], 'PCWPA': ['<=', '<=', '<=', '<='], 'PCWPMN': ['>=', '<=', '<=', '>='], 'CO': ['>=', '<=', '>=', '>='], 'CI': ['>=', '<=', '<', '>='], 'SVRHemo': ['>', '<=', '>=', '>='], 'MIXED': ['<=', '<=', '<=', '<='], 'BPSYS': ['>=', '>=', '>=', '<='], 'BPDIAS': ['>=', '<=', '<=', '>='], 'HRTRT': ['<=', '<=', '<=', '>='], 'RATHemo': ['>=', '>=', '<=', '>='], 'MAP': ['>=', '>=', '>=', '>='], 'MPAP': ['>=', '>=', '>=', '>='], 'CPI': ['<=', '>=', '<=', '>='], 'PP': ['<=', '<=', '<=', '>='], 'PPP': ['>=', '>=', '>=', '>='], 'PAPP': ['>=', '<=', '<=', '<='], 'VR': ['>=', '>=', '<=', '>='], 'RAT': ['<=', '>=', '<=', '<='], 'PPRatio': ['<=', '<=', '<=', '>='], 'Age': ['>=', '<=', '>=', '<='], 'EjF': ['>=', '>=', '>=', '>=']}
+hemoRelopsV1 = {'RAP': ['>=', '<=', '<=', '>'], 'PAS': ['>=', '<', '>=', '<='], 'PAD': ['>=', '>', '<=', '>='], 'PAMN': ['<=', '<=', '>=', '>='], 'PCWP': ['<=', '>=', '>=', '>='], 'PCWPMod': ['>=', '>=', '>=', '<='], 'PCWPA': ['<=', '<=', '<=', '<='], 'PCWPMN': ['>=', '<=', '<=', '>='], 'CO': ['>=', '<=', '>=', '>='], 'CI': ['>=', '<=', '<', '>='], 'SVRHemo': ['>', '<=', '>=', '>='], 'MIXED': ['<=', '<=', '<=', '<='], 'BPSYS': ['>=', '>=', '>=', '<='], 'BPDIAS': ['>=', '<=', '<=', '>='], 'HRTRT': ['<=', '<=', '<=', '>='], 'RATHemo': ['>=', '>=', '<=', '>='], 'MAP': ['>=', '>=', '>=', '>='], 'MPAP': ['>=', '>=', '>=', '>='], 'CPI': ['<=', '>=', '<=', '>='], 'PP': ['<=', '<=', '<=', '>='], 'PPP': ['>=', '>=', '>=', '>='], 'PAPP': ['>=', '<=', '<=', '<='], 'SVR': ['>=', '>=', '<=', '>='], 'RAT': ['<=', '>=', '<=', '<='], 'PPRatio': ['<=', '<=', '<=', '>='], 'Age': ['>=', '<=', '>=', '<='], 'EjF': ['>=', '>=', '>=', '>=']}
 
 
 #list of possible outcomes
@@ -320,7 +320,7 @@ clusterHemoScoreDict = {'RAP': [10.617021276595745, 0.0, 18.553571428571427, 7.5
   48.01754385964912,
   26.431654676258994,
   36.63970588235294],
- 'CWP': [18.35,
+ 'PCWP': [18.35,
   0.0,
   34.94736842105263,
   13.991869918699187,
@@ -410,7 +410,7 @@ clusterHemoScoreDict = {'RAP': [10.617021276595745, 0.0, 18.553571428571427, 7.5
   0.44163834891228076,
   0.5615927534366196,
   0.5140710068321168],
- 'VR': [2589.8704747812503,
+ 'SVR': [2589.8704747812503,
   0.0,
   3513.218464888889,
   2413.2820651742645,
@@ -952,9 +952,26 @@ clusterAllDataScoreDict = {'Age': [47.36363636363637,
   0.6024844720496895,
   0.7757009345794392]}
 
-# hemoFeatureImportance = ['RAP', 'MIXED', 'MPAP', 'BPSYS', 'PAD', 'CO', 'PAS', 'PAMN', 'RATHemo', 'CPI', 'RAT']
-#
-#     ['', '', '', 'CWP', 'PCWPMod', 'PCWPA', 'PCWPMN', '',
-#         'CI', 'SVRHemo',  '', 'BPDIAS', 'HRTRT', '', 'MAP',
-#         '', '', 'PP', 'PPP', 'PAPP', 'VR', '', 'PPRatio', 'Age',
-#         'EjF']
+#Most important features for hemo by outcome
+hemoFeatureImportance = ['Age', 'EjF', ' RAP', ' MIXED', ' MPAP', ' BPSYS', ' PAD', ' CO', ' PAS', ' PAMN', ' RATHemo', ' CPI', ' RAT', ' SVR', ' PCWPMod', ' PCWPA', ' PCWPMN', ' SVRHemo', ' BPDIAS', ' MAP', ' PP', ' PPP', ' PPRatio', ' PCWP', ' CI', ' PAPP', ' HRTRT']
+
+hemoFeatureImportanceDeath = ['Age', 'EjF', ' RAP', ' PCWPMod', ' BPSYS', ' PAMN', ' PCWP', ' CO', ' HRTRT', ' RATHemo', ' MAP', ' RAT', ' PAS', ' PAD', ' CI', ' SVRHemo', ' MIXED', ' MPAP', ' CPI', ' PCWPA', ' PCWPMN', ' BPDIAS', ' PP', ' PPP', ' PAPP', ' SVR', ' PPRatio']
+
+hemoFeatureImportanceRehosp = ['Age', 'EjF', ' PAD', ' PCWPMN', ' MIXED', ' PP', ' PPRatio', ' RAP', ' PAMN', ' PCWP', ' MPAP', ' PAS', ' PCWPA', ' CO', ' SVRHemo', ' BPSYS', ' BPDIAS', ' MAP', ' PPP', ' PAPP', ' PCWPMod', ' RATHemo', ' CPI', ' RAT', ' CI', ' HRTRT', ' SVR']
+
+hemoFeatureImportanceReadmission = ['Age', 'EjF', ' MIXED', ' RATHemo', ' SVR', ' RAT', ' PCWPA', ' BPSYS', ' RAP', ' PAS', ' PAD', ' PAMN', ' PCWP', ' PCWPMod', ' PCWPMN', ' CO', ' CI', ' SVRHemo', ' BPDIAS', ' HRTRT', ' MAP', ' MPAP', ' CPI', ' PP', ' PPP', ' PAPP', ' PPRatio']
+
+allDataFeatureImportance = [' TotalHospDays', ' CRT', ' PP', ' PPRatio', ' InitialHospDays', ' SixFtWlk_M6', ' BUN', ' ACE', ' BEN', ' PPP', 'Age', ' AF', ' ARRH', ' MI', ' SixFtWlk', ' SixFtWlk_M3', ' BET', ' FUR', ' BPDIAS', ' BPSYS', ' MAP', ' Race', ' HYPERE', ' IDIOPE', ' VO2', ' VO2_M3', ' HEM', ' CINF', ' DIN', ' LIS', ' MON', ' TOR', ' VALSA', ' Wt', ' BMI', ' ANGP', ' AOREG', ' AOST', ' CARREST', ' FAMILE', ' HTN', ' ISCHEME', ' PERIPAE', ' PTCI', ' TIA', ' VAHD', ' ALB', ' TALB', ' TOTP', ' DIUR', ' MET', ' MIL', ' NAT', ' OTHB', ' TOP', ' EjF', ' CVD', ' CYTOE', ' DEPR', ' DIAB', ' GOUT', ' HEPT', ' ISCHD', ' MALIG', ' OTHUNE', ' PTREG', ' PVD', ' RENALI', ' SMOKING', ' STERD', ' SVT', ' ALT', ' AST', ' DIAL', ' POT', ' SOD', ' BUM', ' CAND', ' CAP', ' CAR', ' DIGX', ' DOB', ' DOP', ' ENA', ' LOSA', ' OTHA', ' QUI', ' HR', ' Gender', ' AlchE', ' CABG', ' COPD', ' HTRANS', ' ICD', ' MTST', ' PACE', ' PMRG', ' STROKE', ' TDP', ' VALVUE', ' VF', ' HEC', ' PLA', ' WBC', ' NIT', ' ANGIO', ' AMR', ' ATE', ' BIS', ' ETH', ' FOS', ' NIG', ' NIP', ' OTHAA', ' OTHD', ' PRO', ' RAM', ' TRA', ' PV']
+
+allDataFeatureImportanceDeath = [' InitialHospDays', ' TotalHospDays', ' AF', ' AOREG', ' ARRH', ' HTN', ' HYPERE', ' MI', ' VAHD', ' SixFtWlk_M6', ' BUN', ' CRT', ' ACE', ' BET', ' BEN', ' FUR', ' LIS', ' BPDIAS', ' MAP', ' PP', ' PPRatio', 'Age', ' Race', ' Wt', ' BMI', ' ANGP', ' AOST', ' DIAB', ' FAMILE', ' ISCHEME', ' PTREG', ' PVD', ' SVT', ' SixFtWlk', ' SixFtWlk_M3', ' VO2', ' VO2_M3', ' HEM', ' SOD', ' TALB', ' DIUR', ' CAP', ' CAR', ' DIN', ' MET', ' MON', ' OTHB', ' TOP', ' TOR', ' VALSA', ' EjF', ' BPSYS', ' PPP', ' Gender', ' AlchE', ' CABG', ' CARREST', ' COPD', ' CVD', ' CYTOE', ' DEPR', ' GOUT', ' HEPT', ' HTRANS', ' ICD', ' IDIOPE', ' ISCHD', ' MALIG', ' MTST', ' OTHUNE', ' PACE', ' PERIPAE', ' PMRG', ' PTCI', ' RENALI', ' SMOKING', ' STERD', ' STROKE', ' TDP', ' TIA', ' VALVUE', ' VF', ' ALB', ' ALT', ' AST', ' DIAL', ' HEC', ' PLA', ' POT', ' TOTP', ' WBC', ' NIT', ' ANGIO', ' CINF', ' AMR', ' ATE', ' BIS', ' BUM', ' CAND', ' DIGX', ' DOB', ' DOP', ' ENA', ' ETH', ' FOS', ' LOSA', ' MIL', ' NAT', ' NIG', ' NIP', ' OTHAA', ' OTHA', ' OTHD', ' PRO', ' QUI', ' RAM', ' TRA', ' HR', ' PV']
+
+allDataFeatureImportanceRehosp = [' Race', ' InitialHospDays', ' TotalHospDays', ' AF', ' ARRH', ' IDIOPE', ' MI', ' PTCI', ' SixFtWlk', ' BUN', ' CRT', ' ACE', ' BEN', ' FUR', ' MON', ' BPSYS', ' PP', ' PPP', ' PPRatio', 'Age', ' ANGP', ' AOST', ' CARREST', ' CYTOE', ' DEPR', ' FAMILE', ' GOUT', ' HEPT', ' HYPERE', ' ISCHD', ' ISCHEME', ' SMOKING', ' TIA', ' SixFtWlk_M3', ' SixFtWlk_M6', ' VO2', ' VO2_M3', ' ALB', ' HEM', ' POT', ' TALB', ' TOTP', ' BET', ' CINF', ' DIGX', ' DIN', ' LIS', ' LOSA', ' QUI', ' TOP', ' VALSA', ' HR', ' MAP', ' Gender', ' Wt', ' BMI', ' AlchE', ' AOREG', ' CABG', ' COPD', ' CVD', ' DIAB', ' HTN', ' HTRANS', ' ICD', ' MALIG', ' MTST', ' OTHUNE', ' PACE', ' PERIPAE', ' PMRG', ' PTREG', ' PVD', ' RENALI', ' STERD', ' STROKE', ' SVT', ' TDP', ' VAHD', ' VALVUE', ' VF', ' ALT', ' AST', ' DIAL', ' HEC', ' PLA', ' SOD', ' WBC', ' NIT', ' ANGIO', ' DIUR', ' AMR', ' ATE', ' BIS', ' BUM', ' CAND', ' CAP', ' CAR', ' DOB', ' DOP', ' ENA', ' ETH', ' FOS', ' MET', ' MIL', ' NAT', ' NIG', ' NIP', ' OTHAA', ' OTHA', ' OTHB', ' OTHD', ' PRO', ' RAM', ' TOR', ' TRA', ' EjF', ' BPDIAS', ' PV']
+
+allDataFeatureImportanceReadmission = [' BMI', ' TotalHospDays', ' PERIPAE', ' BUN', ' CINF', ' DIN', ' MIL', ' NAT', ' TOR', ' PP', ' PPP', ' PPRatio', 'Age', ' IDIOPE', ' MALIG', ' OTHUNE', ' STERD', ' SixFtWlk', ' SixFtWlk_M3', ' SixFtWlk_M6', ' ALB', ' ALT', ' AST', ' CRT', ' DIAL', ' POT', ' SOD', ' TALB', ' TOTP', ' DIUR', ' BUM', ' DOP', ' ENA', ' FUR', ' MON', ' OTHA', ' OTHB', ' QUI', ' VALSA', ' EjF', ' BPDIAS', ' Gender', ' Race', ' Wt', ' InitialHospDays', ' AF', ' AlchE', ' ANGP', ' AOREG', ' AOST', ' ARRH', ' CABG', ' CARREST', ' COPD', ' CVD', ' CYTOE', ' DEPR', ' DIAB', ' FAMILE', ' GOUT', ' HEPT', ' HTN', ' HYPERE', ' HTRANS', ' ICD', ' ISCHD', ' ISCHEME', ' MI', ' MTST', ' PACE', ' PMRG', ' PTCI', ' PTREG', ' PVD', ' RENALI', ' SMOKING', ' STROKE', ' SVT', ' TDP', ' TIA', ' VAHD', ' VALVUE', ' VF', ' VO2', ' VO2_M3', ' HEC', ' HEM', ' PLA', ' WBC', ' ACE', ' BET', ' NIT', ' ANGIO', ' AMR', ' ATE', ' BEN', ' BIS', ' CAND', ' CAP', ' CAR', ' DIGX', ' DOB', ' ETH', ' FOS', ' LIS', ' LOSA', ' MET', ' NIG', ' NIP', ' OTHAA', ' OTHD', ' PRO', ' RAM', ' TOP', ' TRA', ' BPSYS', ' HR', ' PV', ' MAP']
+
+
+
+
+
+
+

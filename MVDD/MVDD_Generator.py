@@ -52,7 +52,7 @@ def generateRandomMVDD(nodes, maxBranches):
     childNodes = list(set(childNodes))
 
     while childNodes != []:
-        dot, childNodes, availableNodes, edgeDict = addChildNodes(dot, childNodes, maxBranches, availableNodes, edgeDict)
+        dot, childNodes, availableNodes, edgeDict = addChildNodesRandom(dot, childNodes, maxBranches, availableNodes, edgeDict)
 
     newMvdd = MVDD(features=nodes, dot=dot, root=root)
 
@@ -61,12 +61,12 @@ def generateRandomMVDD(nodes, maxBranches):
 # Add child nodes to a dot graph
 # INPUT = dot graph, list of child nodes to add, the number of max branches, a list of available nodes to select from, and a dictionary of edges
 # OUTPUT = returns the dot graph, the list of new child nodes, the updated list of available nodes and the updated dictionary of edges
-def addChildNodes(dot, childNodes, maxBranches, availableNodes, edgeDict):
+def addChildNodesRandom(dot, childNodes, maxBranches, availableNodes, edgeDict):
     for c in childNodes:  # remove new parents
         availableNodes.remove(c)
 
     if availableNodes == []: #no more nodes to add
-        dot, edgeDict = addTerminalNodes(dot, childNodes, edgeDict)
+        dot, edgeDict = addTerminalNodesRandom(dot, childNodes, edgeDict)
         return dot, [], availableNodes, edgeDict
     else:
         newChildren = []
@@ -86,7 +86,7 @@ def addChildNodes(dot, childNodes, maxBranches, availableNodes, edgeDict):
                         newChildren.append(selected)
 
                     else:
-                        dot, edgeDict = addTerminalNodes(dot, childNodes, edgeDict)
+                        dot, edgeDict = addTerminalNodesRandom(dot, childNodes, edgeDict)
 
         else: #just add internal nodes
             for currNode in childNodes:
@@ -106,13 +106,60 @@ def addChildNodes(dot, childNodes, maxBranches, availableNodes, edgeDict):
 # Add terminal (leaf) nodes to dot graph
 # INPUT = dot graph, list of child nodes to add and a dictionary of edges
 # OUTPUT = returns the dot graph and the updated dictionary of edges
-def addTerminalNodes(dot, childNodes, edgeDict):
+def addTerminalNodesRandom(dot, childNodes, edgeDict):
     terms = ["1", "2", "3", "4", "5"]
     for c in childNodes:
         selected = random.choice(terms)
         dot, edgeDict = addEdge(dot, c, selected, 'solid', edgeDict, terminal=True)
 
     return dot, edgeDict
+
+# Generate a random MVDD from a starting list of nodes
+# INPUT = list of feature nodes, and the maximum number of branches allowed from each node
+# OUTPUT = returns a MVDD object class with the created network x dot graph
+def generateMVDDFeatureImportance(nodes, maxBranches):
+
+    #Generate dot graph
+    dot = nx.DiGraph()
+    edgeDict = [] # track edges already added
+
+    # Terminal nodes
+    dot.add_node("1", shape="box")
+    dot.add_node("2", shape="box")
+    dot.add_node("3", shape="box")
+    dot.add_node("4", shape="box")
+    dot.add_node("5", shape="box")
+
+    #Add nodes to class
+    for n in nodes:
+        dot.add_node(n)
+
+    availableNodes = copy.deepcopy(nodes) #nodes available to choose
+    childNodes = []
+
+    #start with root
+    currNode = random.choice(nodes)  # pick random node
+    root = currNode
+    availableNodes.remove(currNode)
+    for nb in range(random.randint(1, maxBranches)): #add edges to other nodes
+        selected = random.choice(availableNodes)
+        style = random.randint(1, 2)
+        if style == 1:
+            dot, edgeDict = addEdge(dot, currNode, selected, 'solid', edgeDict)
+        else:
+            dot, edgeDict = addEdge(dot, currNode, selected, 'dashed', edgeDict)
+
+        childNodes.append(selected)
+
+    childNodes = list(set(childNodes))
+
+    while childNodes != []:
+        dot, childNodes, availableNodes, edgeDict = addChildNodes(dot, childNodes, maxBranches, availableNodes, edgeDict)
+
+    newMvdd = MVDD(features=nodes, dot=dot, root=root)
+
+    return newMvdd
+
 
 
 # Add an edge to a dot graph
