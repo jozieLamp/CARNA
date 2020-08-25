@@ -68,22 +68,23 @@ def generateTrees(numTrees=10, numParamGens=1):
 # Training process to develop best MVDDs
 # INPUT = the total number of trees to generate, and how many different parameter sets to generate per new tree added
 # OUTPUT = stores developed trees in the "TreeFiles" folder as images and dot files
-def generateTreeStructures(nodes, numTreesPerPermutation, maxBranches, xData, yData):
-    paramRanges = params.clusterHemoScoreDict
+def generateTreeStructures(nodes, numTreesPerPermutation, maxBranches, xData, yData, numRandom):
+    paramRanges = params.hemoParamsV1
     relops = params.hemoRelopsV1
     filename = 'TreeFiles/TreeTraining/tree'
 
     accList = []
 
+    count = 0
     terminalOrder = ["1", "2", "3", "4", "5"]
     perms = list(permutations(terminalOrder, len(terminalOrder)))
     for p in range(len(perms)):
         for t in range(numTreesPerPermutation):
             # generate tree structure
             mvdd = mvGen.generateMVDDFeatureImportance(nodes=nodes, terminalOrder=perms[p], maxBranches=maxBranches)
-            mvdd.saveToFile(filename=filename + str(p) + "v" + str(t), format='pdf')
-            mvdd.saveToFile(filename=filename + str(p) + "v" + str(t), format='png')
-            mvdd.saveDotFile(filename=filename + str(p) + "v" + str(t))
+            mvdd.saveToFile(filename=filename + str(count), format='pdf')
+            mvdd.saveToFile(filename=filename + str(count), format='png')
+            mvdd.saveDotFile(filename=filename + str(count))
 
             #Get some sample ranges
             mvParam, usedParams, usedRelops = mvGen.addGraphParams(mvdd, paramRanges, relops, inorder=True)
@@ -95,7 +96,30 @@ def generateTreeStructures(nodes, numTreesPerPermutation, maxBranches, xData, yD
                 predScores.append(int(score))
 
             acc = accuracy_score(yData, predScores)
-            accList.append([filename + str(p) + "v" + str(t) + '.dot', acc])
+            accList.append([filename + str(count) + '.dot', acc])
+
+            count += 1
+
+        for r in range(numRandom):
+            mvdd = mvGen.generateRandomMVDD(nodes=nodes, maxBranches=maxBranches)
+            mvdd.saveToFile(filename=filename + "Random" + str(count), format='pdf')
+            mvdd.saveToFile(filename=filename + "Random" + str(count), format='png')
+            mvdd.saveDotFile(filename=filename + "Random" + str(count))
+
+            # Get some sample ranges
+            mvParam, usedParams, usedRelops = mvGen.addGraphParams(mvdd, paramRanges, relops, inorder=True)
+
+            # Get accuracy
+            predScores = []
+            for index, row in xData.iterrows():
+                score, path = mvParam.predictScore(row)
+                predScores.append(int(score))
+
+            acc = accuracy_score(yData, predScores)
+            accList.append([filename + "Random" + str(count) + '.dot', acc])
+
+            count += 1
+
 
     accDF = pd.DataFrame(accList, columns=['Filename', 'Accuracy'])
     accDF = accDF.sort_values(by=['Accuracy'], ascending=False)
@@ -113,7 +137,8 @@ def runTrees():
     hemo = hemo.fillna(0)
     xTrain, xTest, yTrain, yTest = train_test_split(hemo, realScores, test_size=.2)
 
-    accDF = generateTreeStructures(nodes=params.hemoFeatureImportance, numTreesPerPermutation=1, maxBranches=4, xData=xTrain, yData=yTrain)
+    accDF = generateTreeStructures(nodes=params.hemoFeatureImportance, numTreesPerPermutation=5, maxBranches=4, xData=xTrain, yData=yTrain, numRandom=5)
+    accDF.to_csv('AccuracyDFTrees.csv')
 
     print(accDF)
 
@@ -144,35 +169,35 @@ def optimizeParams(treeFilename, rootNode, xData, yData, paramRanges, relops):
     return acc, usedParams, usedRelops
 
 
-
-def main():
-    #Load data
+def findBestParams():
+    # Load data
     hemoData = pd.read_csv('Preprocessed Data/Cluster_Hemo.csv')
     realScores = hemoData['Score']
 
-    #Preprocess and create training and testing sets
+    # Preprocess and create training and testing sets
     hemo = hemoData.drop('Score', axis=1)
     hemo = hemo.replace(np.inf, 0)
     hemo = hemo.fillna(0)
     xTrain, xTest, yTrain, yTest = train_test_split(hemo, realScores, test_size=.2)
 
-    #TODO - create param ranges to try
-    #NOTE- each node can have up to 4 branches, so each param dict needs to send at least 4 params
+    # TODO - create param ranges to try
+    # NOTE- each node can have up to 4 branches, so each param dict needs to send at least 4 params
     paramRanges = params.hemoParamsV1
     relopChoices = params.hemoRelopsV1
-    
+
     # selectedTree = 'TreeFiles/tree1' #selected tree to try
     # rootNode = 'PCWP'
-    rootNodeList = ['PAS','PCWP','BPSYS','BPSYS','PAS','CI','EjF','MPAP','HRTRT',
-    'PAPP','SVR','PAD','PCWPMN','BPDIAS','PAS','PPRatio','PPRatio','PCWPA','PAPP','EjF']
-    accuracy=[]
+    rootNodeList = ['PAS', 'PCWP', 'BPSYS', 'BPSYS', 'PAS', 'CI', 'EjF', 'MPAP', 'HRTRT',
+                    'PAPP', 'SVR', 'PAD', 'PCWPMN', 'BPDIAS', 'PAS', 'PPRatio', 'PPRatio', 'PCWPA', 'PAPP', 'EjF']
+    accuracy = []
     for i in range(len(rootNodeList)):
-        selectedTree='TreeFiles/tree'+str(i)
+        selectedTree = 'TreeFiles/tree' + str(i)
         rootNode = rootNodeList[i]
 
-        #Run param optimization
-        acc, usedParams, usedRelops = optimizeParams(treeFilename=selectedTree, rootNode=rootNode, xData=xTrain, yData=yTrain, paramRanges=paramRanges, relops=relopChoices)
-        accuracy.append("tree"+str(i)+": "+str(acc))
+        # Run param optimization
+        acc, usedParams, usedRelops = optimizeParams(treeFilename=selectedTree, rootNode=rootNode, xData=xTrain,
+                                                     yData=yTrain, paramRanges=paramRanges, relops=relopChoices)
+        accuracy.append("tree" + str(i) + ": " + str(acc))
         print("Accuracy is", acc)
         print("selected tree is", selectedTree)
         print("Rootnode is ", rootNode)
@@ -180,10 +205,11 @@ def main():
         # print(usedRelops)
 
     print(accuracy)
-    #0.44
+    # 0.44
 
 
-
+def main():
+    runTrees()
 
 
 
