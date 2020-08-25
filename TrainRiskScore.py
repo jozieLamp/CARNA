@@ -28,7 +28,7 @@ def generateTrees(numTrees=10, numParamGens=1):
 
     for t in range(numTrees):
         #generate tree structure
-        mvdd = mvGen.generateRandomMVDD(nodes=params.hemo, maxBranches=2)
+        mvdd = mvGen.generateRandomMVDD(nodes=params.hemo, maxBranches=3)
         mvdd.saveToFile(filename='TreeFiles/tree'+str(t))
         mvdd.saveDotFile(filename='TreeFiles/tree'+str(t))
 
@@ -69,7 +69,7 @@ def generateTreeStructures(numTrees=1):
 
     for t in range(numTrees):
         # generate tree structure
-        mvdd = mvGen.generateMVDDFeatureImportance(nodes=params.hemo, maxBranches=3)
+        mvdd = mvGen.generateMVDDFeatureImportance(nodes=params.hemo, maxBranches=2)
         mvdd.saveToFile(filename='TreeFiles/tree' + str(t))
         mvdd.saveDotFile(filename='TreeFiles/tree' + str(t))
 
@@ -130,6 +130,7 @@ def main():
     print(usedRelops)
     print("selected tree is", selectedTree)
     print("Rootnode is ", rootNode)
+
 
 
 

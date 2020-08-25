@@ -26,9 +26,9 @@ def runHemo(paramDict, outcome):
             paramDict[p] = float(paramDict[p])
 
     #load tree
-    dot = read_dot('TreeFiles/treeParams0.dot')
+    dot = read_dot('TreeFiles/treeParams1.dot')
     dot = nx.DiGraph(dot)
-    mvdd = MVDD(params.hemo, dot, root='PAMN')
+    mvdd = MVDD(params.hemo, dot, root='PCWP')
     mvdd.featureDict = params.hemoDict
 
     #Predict score
@@ -48,7 +48,7 @@ def runAllData(paramDict):
 
 
 def main():
-    filename, score, path = runHemo({"Age":"","BPDIAS":"","BPSYS":"3232","CI":"","CO":"","CPI":"","CWP":"12333","EjF":"","HRTRT":"","MAP":"","MIXED":"","MPAP":"","PAD":"","PAMN":"","PAPP":"","PAS":"","PCWPA":"","PCWPMN":"","PCWPMod":"","PP":"","PPP":"","PPRatio":"","RAP":"","RAT":"","RATHemo":"","SVRHemo":"","VR":""}
+    filename, score, path = runHemo({"Age":"","BPDIAS":"","BPSYS":"3232","CI":"","CO":"","CPI":"","PCWP":"12333","EjF":"","HRTRT":"","MAP":"","MIXED":"","MPAP":"","PAD":"","PAMN":"","PAPP":"","PAS":"","PCWPA":"","PCWPMN":"","PCWPMod":"","PP":"","PPP":"","PPRatio":"","RAP":"","RAT":"","RATHemo":"","SVRHemo":"","SVR":""}
 , 'Death')
 
 
