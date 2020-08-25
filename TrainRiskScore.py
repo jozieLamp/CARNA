@@ -28,7 +28,7 @@ def generateTrees(numTrees=10, numParamGens=1):
 
     for t in range(numTrees):
         #generate tree structure
-        mvdd = mvGen.generateRandomMVDD(nodes=params.hemo, maxBranches=3)
+        mvdd = mvGen.generateRandomMVDD(nodes=params.hemo, maxBranches=2)
         mvdd.saveToFile(filename='TreeFiles/tree'+str(t))
         mvdd.saveDotFile(filename='TreeFiles/tree'+str(t))
 
@@ -120,12 +120,14 @@ def main():
     #NOTE- each node can have up to 4 branches, so each param dict needs to send at least 4 params
     paramRanges = params.hemoParamsV1
     relopChoices = params.hemoRelopsV1
-    selectedTree = 'TreeFiles/tree0' #selected tree to try
-    rootNode = 'SVR'
+    selectedTree = 'TreeFiles/tree1' #selected tree to try
+    rootNode = 'PCWP'
 
     #Run param optimization
     acc, usedParams, usedRelops = optimizeParams(treeFilename=selectedTree, rootNode=rootNode, xData=xTrain, yData=yTrain, paramRanges=paramRanges, relops=relopChoices)
     print("Accuracy is", acc)
+    print(usedParams)
+    print(usedRelops)
 
 
 
