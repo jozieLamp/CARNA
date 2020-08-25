@@ -26,7 +26,7 @@ def runHemo(paramDict, outcome):
             paramDict[p] = float(paramDict[p])
 
     #load tree
-    dot = read_dot('test2params.dot')
+    dot = read_dot('TreeFiles/treeParams0.dot')
     dot = nx.DiGraph(dot)
     mvdd = MVDD(params.hemo, dot, root='PAMN')
     mvdd.featureDict = params.hemoDict
@@ -37,7 +37,7 @@ def runHemo(paramDict, outcome):
     stringPath = ' '.join(path)
     print(stringPath)
 
-    return 'treeParams2.png', score, stringPath #will be displayed on webpage
+    return 'treeParams0.png', score, stringPath #will be displayed on webpage
 
 
 #Expects a param dict of 119 parameters

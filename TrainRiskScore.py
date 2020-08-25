@@ -20,7 +20,7 @@ import random
 # Training process to develop random MVDDs
 # INPUT = the total number of trees to generate, and how many different parameter sets to generate per new tree added
 # OUTPUT = stores developed trees in the "TreeFiles" folder as images and dot files
-def generateTrees(numTrees=2, numParamGens=5):
+def generateTrees(numTrees=10, numParamGens=1):
     hemoData = pd.read_csv('Preprocessed Data/Cluster_Hemo.csv')
     realScores = hemoData['Score']
 
@@ -75,6 +75,7 @@ def generateTreeStructures(numTrees=1):
 
     #TODO - create trees using feature order
 
+
 # Training process to find best set of parameters for a given tree
 # INPUT = the .dot tree file name, root node of tree, the training data (xdata / ydata), a dictionary of parameters to try for each feature
 #         and a dictionary of relational operators (>=, >, <, <=) for each parameter
@@ -125,6 +126,7 @@ def main():
     #Run param optimization
     acc, usedParams, usedRelops = optimizeParams(treeFilename=selectedTree, rootNode=rootNode, xData=xTrain, yData=yTrain, paramRanges=paramRanges, relops=relopChoices)
     print("Accuracy is", acc)
+
 
 
 
