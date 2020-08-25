@@ -60,6 +60,19 @@ class MVDD:
         # self.saveToFile(dot, "NewTEST")
         # print(dot.get_edge_data('PP', 'PAPP'))  # get label and style of edge
 
+    #return dictionary of node and number edges
+    def getNumberBranchesPerNode(self, returnTerminals=False):
+        dct = {}
+        for n in nx.nodes(self.dot):
+            if returnTerminals:
+                dct[n] = len(self.dot.edges(n))
+            else:
+                if n not in ['1', '2', '3', '4', '5']:
+                    dct[n] = len(self.dot.edges(n))
+
+        return dct
+
+
     # Predicts score from a dictionary of feature values
     # INPUT = feature dictionary of actual data values
     # OUTPUT = predicted score and the final path illustrating the used phenotype
