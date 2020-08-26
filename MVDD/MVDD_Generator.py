@@ -36,6 +36,10 @@ from sklearn.preprocessing import label_binarize
 from sklearn.metrics import roc_curve, auc
 import matplotlib.pyplot as plt
 from sklearn.metrics import f1_score,accuracy_score,recall_score,precision_score
+from statistics import mean
+from sklearn.model_selection import StratifiedKFold
+import numpy.ma as ma
+from itertools import zip_longest
 
 # Generate a random MVDD from a starting list of nodes
 # INPUT = list of feature nodes, and the maximum number of branches allowed from each node
@@ -455,39 +459,186 @@ def generateTree(xData, yData, classes, learningCriteria='gini', maxLevels=None,
 
     return mvdd
 
-def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', maxLevels=None, minSamplesPerLeaf=5, modelName='MVDD', numFolds=5):
+def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', maxLevels=None, minSamplesPerLeaf=5, modelName='MVDD', numFolds=5, showIndividualROC=True):
 
     #First learn a decision tree classifier to boost the learning process
     dt = DecisionTreeClassifier(criterion=learningCriteria, random_state=100,
                                 max_depth=maxLevels, min_samples_leaf=minSamplesPerLeaf)
-    acc = 0
-    recall = 0
-    f1 = 0
-    precision = 0
-    for i in range(5):
-        X_train, X_test, y_train, y_test = train_test_split(xData, yData, test_size=0.33, random_state=42)
-        dt.fit(X_train, y_train)
-        y_pred = dt.predict(X_test)
-        acc+=accuracy_score(y_test,y_pred)
-        recall+=recall_score(y_test,y_pred,average='weighted')
-        f1+=f1_score(y_test,y_pred,average='weighted')
-        precision+=precision_score(y_test,y_pred,average='weighted')
-        y_score= label_binarize(y_pred, classes=[1, 2,3,4,5])
-        y_test= label_binarize(y_test, classes=[1, 2,3,4,5])
-        ROC_graph(y_test,y_score)
-    acc/=5
-    recall/=5
-    f1/=5
-    precision/=5
 
-    print('accuracy is:', acc)
-    print('precision_weighted is', precision)
-    print('recall_weighted is', recall)
-    print('f1_weighted is', f1 )
+    #Perform training using cross validation
+    dt = trainCrossValidation(xData, yData, dt, numFolds, showIndividualROC, modelName)
+
+    #Old cross validation method
     # scoring= ['accuracy', 'precision_weighted', 'recall_weighted', 'f1_weighted', 'roc_auc_ovr_weighted']
     # scores = cross_validate(dt, xData, yData, cv=numFolds, scoring=scoring)
 
-    #Convert decision tree into dot graph
+    #Convert decision tree to MVDD
+    mvdd = convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria)
+
+    #Save model to file
+    pickle.dump(mvdd, open('TreeFiles/' + modelName+'.sav', 'wb'))
+
+    #Save tree to file
+    mvdd.saveDotFile('TreeFiles/' +modelName)
+    mvdd.saveToFile('TreeFiles/' +modelName, 'pdf')
+    mvdd.saveToFile('TreeFiles/' +modelName, 'png')
+
+    return mvdd
+
+def trainCrossValidation(xData, yData, dt, numFolds, showIndividualROC, modelName):
+    #make stratified k fold object
+    kFold = StratifiedKFold(n_splits=numFolds)
+
+    acc = []
+    recall = []
+    f1 = []
+    precision = []
+
+    fprList = []
+    tprList = []
+    rocList = []
+    count = 1
+    for train_index, test_index in kFold.split(xData, yData):
+        X_train, X_test = xData.iloc[train_index], xData.iloc[test_index]
+        y_train, y_test = yData.iloc[train_index], yData.iloc[test_index]
+
+        dt.fit(X_train, y_train)
+        y_pred = dt.predict(X_test)
+
+        #get accuracy metrics
+        acc.append(accuracy_score(y_test,y_pred))
+        recall.append(recall_score(y_test,y_pred,average='weighted'))
+        f1.append(f1_score(y_test,y_pred,average='weighted'))
+        precision.append(precision_score(y_test,y_pred,average='weighted'))
+
+        #calculate average roc across all classes
+        y_score = label_binarize(y_pred, classes=[1,2,3,4,5])
+        y_test = label_binarize(y_test, classes=[1,2,3,4,5])
+        fpr, tpr, roc_auc = getClassROC(y_test,y_score)
+        fprList.append(fpr)
+        tprList.append(tpr)
+        rocList.append(roc_auc)
+
+        #show individual fold roc curves
+        if showIndividualROC:
+            getIndividualROCGraph(y_test, y_score, count, modelName)
+
+        count += 1
+
+    aveFPR = getDictionaryAverages(fprList)
+    aveTPR = getDictionaryAverages(tprList)
+    ave_roc_auc = getDictionaryAverages(rocList, hasList=False)
+
+    getAverageROCGraph(aveFPR, aveTPR, ave_roc_auc, modelName)
+
+    print("*****Averaged Final Classification Results*****")
+    print("Accuracy: %0.3f(+/- %0.3f)" % (np.mean(acc), np.std(acc) * 2))
+    print("Precision: %0.3f(+/- %0.3f)" % (np.mean(precision), np.std(precision) * 2))
+    print("Recall: %0.3f(+/- %0.3f)" % (np.mean(recall), np.std(recall) * 2))
+    print("F1: %0.3f(+/- %0.3f)" % (np.mean(f1), np.std(f1) * 2))
+
+    return dt
+
+def getDictionaryAverages(dictList, hasList=True):
+    d = {}
+    for k in dictList[0].keys():
+        d[k] = tuple(d[k] for d in dictList)
+
+    if hasList:
+        finalDict = {}
+        #create average
+        for key, value in d.items():
+            finalDict[key] = list(map(mapAvg, zip_longest(*value)))
+    else:
+        finalDict = {}
+
+        for key,value in d.items():
+            finalDict[key] = np.mean(value)
+
+    return finalDict
+
+def mapAvg(x):
+    x = [i for i in x if i is not None]
+    return sum(x, 0.0) / len(x)
+
+
+
+def getClassROC(y_test, y_score):
+    fpr = dict()
+    tpr = dict()
+    roc_auc = dict()
+    for i in range(5):
+        fpr[i], tpr[i], _ = roc_curve(y_test[:, i], y_score[:, i])
+        roc_auc[i] = auc(fpr[i], tpr[i])
+    # First aggregate all false positive rates
+    all_fpr = np.unique(np.concatenate([fpr[i] for i in range(5)]))
+
+    # Then interpolate all ROC curves at this points
+    mean_tpr = np.zeros_like(all_fpr)
+    for i in range(5):
+        mean_tpr += interp(all_fpr, fpr[i], tpr[i])
+
+    # Finally average it and compute AUC
+    mean_tpr /= 5
+
+    return fpr, tpr, roc_auc
+
+def getAverageROCGraph(fpr, tpr, roc_auc, modelName):
+    plt.figure(figsize=(10, 8))
+    colors = cycle(['aqua', 'darkorange', 'cornflowerblue', 'palegreen', 'mistyrose'])
+    for i, color in zip(range(5), colors):
+        plt.plot(fpr[i], tpr[i], color=color, lw=2,
+                 label='ROC Class {0} (area = {1:0.2f})'
+                       ''.format(i + 1, roc_auc[i]))
+    plt.plot([0, 1], [0, 1], 'k--', lw=2)
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Averaged ROC Curve for Each Score Classification')
+    plt.legend(loc="lower right")
+    plt.savefig("Graphs/"+ modelName + "Averaged_ROC.png")
+    plt.show()
+
+def getIndividualROCGraph(y_test, y_score, foldNum, modelName):
+
+    fpr = dict()
+    tpr = dict()
+    roc_auc = dict()
+    for i in range(5):
+        fpr[i], tpr[i], _ = roc_curve(y_test[:, i], y_score[:, i])
+        roc_auc[i] = auc(fpr[i], tpr[i])
+    # First aggregate all false positive rates
+    all_fpr = np.unique(np.concatenate([fpr[i] for i in range(5)]))
+
+    # Then interpolate all ROC curves at this points
+    mean_tpr = np.zeros_like(all_fpr)
+    for i in range(5):
+        mean_tpr += interp(all_fpr, fpr[i], tpr[i])
+
+    # Finally average it and compute AUC
+    mean_tpr /= 5
+
+    plt.figure(figsize=(10, 8))
+    colors = cycle(['aqua', 'darkorange', 'cornflowerblue','palegreen', 'mistyrose'])
+    for i, color in zip(range(5), colors):
+        plt.plot(fpr[i], tpr[i], color=color, lw=2,
+                 label='ROC Class {0} (area = {1:0.2f})'
+                 ''.format(i+1, roc_auc[i]))
+    plt.plot([0, 1], [0, 1], 'k--', lw=2)
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC Curve for Each Score Classification Fold ' + str(foldNum))
+    plt.legend(loc="lower right")
+
+    plt.savefig("Graphs/" + modelName + "ROC for Fold " + str(foldNum) + ".png")
+    plt.show()
+
+
+def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria):
+    # Convert decision tree into dot graph
     dot_data = tree.export_graphviz(dt,
                                     feature_names=xData.columns,
                                     class_names=classes,
@@ -496,7 +647,7 @@ def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', 
                                     rounded=True)
     graph = pydotplus.graph_from_dot_data(dot_data)
 
-    #Recolor the nodes
+    # Recolor the nodes
     colors = ('palegreen', 'honeydew', 'lightyellow', 'mistyrose', 'lightcoral')
     nodes = graph.get_node_list()
 
@@ -518,7 +669,7 @@ def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', 
         labelSplit = label.split('\\n')[0]
         tokens = labelSplit.split(' ')
 
-        if tokens[0] == learningCriteria: #NOTE was 'gini'
+        if tokens[0] == learningCriteria:  # NOTE was 'gini'
             terminalIndices.append(n)
 
     for n in dot.nodes:
@@ -551,57 +702,13 @@ def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', 
 
                 dot.edges[edg[0], edg[1]]['headlabel'] = ""
 
-    #Create MVDD
+    # Create MVDD
     mvdd = MVDD(features=xData.columns, dot=dot, root='0', model=dt)
     mvdd.terminalIndices = terminalIndices
 
-    #Save model to file
-    pickle.dump(mvdd, open(modelName+'.sav', 'wb'))
-
-    #Save tree to file
-    mvdd.saveDotFile(modelName)
-    mvdd.saveToFile(modelName, 'pdf')
-    mvdd.saveToFile(modelName, 'png')
-
     return mvdd
 
-def ROC_graph(y_test, y_score):
-    # y_Data = label_binarize(yData, classes=[1, 2,3,4,5])
-    # X_train, X_test, y_train, y_test = train_test_split(xData, y_Data, test_size=0.33, random_state=42)
-    
-    # y_score = model.fit(X_train,y_train).predict(X_test)
-    # print(y_score)
-    fpr = dict()
-    tpr = dict()
-    roc_auc = dict()
-    for i in range(5):
-        fpr[i], tpr[i], _ = roc_curve(y_test[:, i], y_score[:, i])
-        roc_auc[i] = auc(fpr[i], tpr[i])
-    # First aggregate all false positive rates
-    all_fpr = np.unique(np.concatenate([fpr[i] for i in range(5)]))
 
-    # Then interpolate all ROC curves at this points
-    mean_tpr = np.zeros_like(all_fpr)
-    for i in range(5):
-        mean_tpr += interp(all_fpr, fpr[i], tpr[i])
-
-    # Finally average it and compute AUC
-    mean_tpr /= 5
-
-    colors = cycle(['aqua', 'darkorange', 'cornflowerblue','palegreen', 'mistyrose'])
-    for i, color in zip(range(5), colors):
-        plt.plot(fpr[i], tpr[i], color=color, lw=2,
-                 label='ROC curve of class {0} (area = {1:0.2f})'
-                 ''.format(i+1, roc_auc[i]))
-    plt.plot([0, 1], [0, 1], 'k--', lw=2)
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Some extension of Receiver operating characteristic to multi-class')
-    plt.legend(loc="lower right")
-    plt.show()
-    return
 
 # Helper methods
 def getLeftRightLabels(tokens):
