@@ -76,8 +76,8 @@ class MVDD:
     # Predicts score from a dictionary of feature values
     # INPUT = feature dictionary of actual data values
     # OUTPUT = predicted score and the final path illustrating the used phenotype
-    def predictScore(self, featureDict):
-        paths = self.get_all_tree_paths()
+    def predictScore(self, featureDict, terminalIndices):
+        paths = self.get_all_tree_paths(terminalIndices)
         # print(paths)
 
         scores = []
@@ -229,14 +229,19 @@ class MVDD:
     #Get all tree paths from root
     # INPUT = N/A
     # OUTPUT = returns a list of all paths through the mvdd dot tree
-    def get_all_tree_paths(self):
+    def get_all_tree_paths(self, terminalIndices):
         allPaths = []
-        for t in ['1', '2', '3', '4', '5']:
+        for t in terminalIndices:
             for p in self.all_simple_paths(self.dot, self.root, t):
+                # print(p)
                 path = []
 
                 for i in range(len(p)-1):
-                    path.append(p[i])
+                    label = self.dot.nodes[p[i]]['label']
+                    label = label.replace("\"", "")
+                    ft = label.split('\\n')[0]
+                    path.append(ft)
+
                     style = self.dot.get_edge_data(p[i], p[i+1], 0)['style']
                     bound = self.dot.get_edge_data(p[i], p[i + 1], 0)['op']
                     param = self.dot.get_edge_data(p[i], p[i + 1], 0)['param']
@@ -246,7 +251,11 @@ class MVDD:
                     path.append(param)
                     path.append(op)
 
-                path.append(p[len(p)-1])
+                label = self.dot.nodes[p[len(p)-1]]['label']
+                label = label.replace("\"", "")
+                cls = label.split('\\n')[-1]
+                cls = cls.replace("class = ", "")
+                path.append(cls)
                 allPaths.append(path)
 
         return allPaths
