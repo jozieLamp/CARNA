@@ -13,17 +13,14 @@ import collections
 import math
 import copy
 import numpy as np
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
 
 class MVDD:
-    def __init__(self, features, dot, root=None, model=None, featureDict={}):
+    def __init__(self, features, dot, root=None, featureDict={}):
         self.features = features #list of features
         self.dot = dot #network x graph, representing MVDD
         self.root = root #root node of tree
         self.featureDict = featureDict #feature dictionary with ranges for each of the features
-        self.model = model
-        self.terminalIndices = None
 
     # Save graph to file in specific format
     # INPUT = filename and format
@@ -75,84 +72,11 @@ class MVDD:
 
         return dct
 
-    # Predicts score from a single dictionary of feature values
-    # INPUT = feature dictionary of actual data values
-    # OUTPUT = predicted score and the final path illustrating the used phenotype
-    def predictScore(self, xData):
-        predScore = self.model.predict(xData)[0]
-
-        #TODO - make sure returns path generation correclty
-        paths = self.get_all_tree_paths(self.terminalIndices)
-        # print(paths)
-
-        path = None
-        for p in paths:
-            truthVal, score = self.evaluatePathValue(p, xData)
-            if score == predScore:
-                path = p
-                break
-
-        # self.getDecisionPath(xData)
-        return predScore, path
-
-    def getDecisionPath(self, data):
-        node_indicator = self.model.decision_path(data)
-        leaf_id = self.model.apply(data)
-        n_nodes = self.model.tree_.node_count
-        children_left = self.model.tree_.children_left
-        children_right = self.model.tree_.children_right
-        feature = self.model.tree_.feature
-        threshold = self.model.tree_.threshold
-        print(feature, threshold)
-
-        sample_id = 0
-        # obtain ids of the nodes `sample_id` goes through, i.e., row `sample_id`
-        node_index = node_indicator.indices[node_indicator.indptr[sample_id]:
-                                            node_indicator.indptr[sample_id + 1]]
-
-        print('Rules used to predict sample {id}:\n'.format(id=sample_id))
-        for node_id in node_index:
-            # continue to the next node if it is a leaf node
-            if leaf_id[sample_id] == node_id:
-                continue
-
-            # check if value of the split feature for sample 0 is below threshold
-            # if (data[sample_id, feature[node_id]] <= threshold[node_id]):
-            if (data[sample_id] <= threshold[node_id]):
-
-                threshold_sign = "<="
-            else:
-                threshold_sign = ">"
-
-            print("decision node {node} : (X_test[{sample}, {feature}] = {value}) "
-                  "{inequality} {threshold})".format(
-                node=node_id,
-                sample=sample_id,
-                feature=feature[node_id],
-                value=data[sample_id, feature[node_id]],
-                inequality=threshold_sign,
-                threshold=threshold[node_id]))
-
-    # Predicts a set of scores from a dataframe of values for testing purposes
-    # INPUT = dataframe of x values, y values and flags if want to print confusion matrix or report
-    # OUTPUT = accuracy score value
-    def predictScoreSet(self, xData, yData, confusionMatrix=False, report=True):
-        predScores = self.model.predict(xData)
-
-        if confusionMatrix:
-            print(confusion_matrix(yData, predScores))
-
-        if report:
-            print(classification_report(yData, predScores))
-
-        return accuracy_score(yData, predScores)
-
-
 
     # Predicts score from a dictionary of feature values
     # INPUT = feature dictionary of actual data values
     # OUTPUT = predicted score and the final path illustrating the used phenotype
-    def predictScorePathValue(self, featureDict, terminalIndices):
+    def predictScore(self, featureDict, terminalIndices):
         paths = self.get_all_tree_paths(terminalIndices)
         # print(paths)
 
@@ -282,6 +206,9 @@ class MVDD:
 
 
 
+
+
+
     def getTruthValue(self, value, bound, param):
         value = float(value)
         param = float(param)
@@ -292,6 +219,11 @@ class MVDD:
             return value <= param
         else:
             return value >= param
+
+
+
+
+
 
 
     #Get all tree paths from root
@@ -379,4 +311,3 @@ class MVDD:
                         yield list(visited) + [target]
                 stack.pop()
                 visited.popitem()
-
