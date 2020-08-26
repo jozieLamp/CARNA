@@ -25,13 +25,17 @@ from networkx.drawing.nx_pydot import *
 from MVDD.MVDD import MVDD
 import Params as params
 import pandas as pd
-from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 import numpy as np
 import random
 from itertools import permutations
 import re
-
+from scipy import interp
+from itertools import cycle
+from sklearn.preprocessing import label_binarize
+from sklearn.metrics import roc_curve, auc
+import matplotlib.pyplot as plt
+from sklearn.metrics import f1_score,accuracy_score,recall_score,precision_score
 
 # Generate a random MVDD from a starting list of nodes
 # INPUT = list of feature nodes, and the maximum number of branches allowed from each node
@@ -456,11 +460,32 @@ def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', 
     #First learn a decision tree classifier to boost the learning process
     dt = DecisionTreeClassifier(criterion=learningCriteria, random_state=100,
                                 max_depth=maxLevels, min_samples_leaf=minSamplesPerLeaf)
+    acc = 0
+    recall = 0
+    f1 = 0
+    precision = 0
+    for i in range(5):
+        X_train, X_test, y_train, y_test = train_test_split(xData, yData, test_size=0.33, random_state=42)
+        dt.fit(X_train, y_train)
+        y_pred = dt.predict(X_test)
+        acc+=accuracy_score(y_test,y_pred)
+        recall+=recall_score(y_test,y_pred,average='weighted')
+        f1+=f1_score(y_test,y_pred,average='weighted')
+        precision+=precision_score(y_test,y_pred,average='weighted')
+        y_score= label_binarize(y_pred, classes=[1, 2,3,4,5])
+        y_test= label_binarize(y_test, classes=[1, 2,3,4,5])
+        ROC_graph(y_test,y_score)
+    acc/=5
+    recall/=5
+    f1/=5
+    precision/=5
 
-    dt.fit(xData, yData)
-
-    scoring= ['accuracy', 'precision_weighted', 'recall_weighted', 'f1_weighted', 'roc_auc_ovr_weighted']
-    scores = cross_validate(dt, xData, yData, cv=numFolds, scoring=scoring)
+    print('accuracy is:', acc)
+    print('precision_weighted is', precision)
+    print('recall_weighted is', recall)
+    print('f1_weighted is', f1 )
+    # scoring= ['accuracy', 'precision_weighted', 'recall_weighted', 'f1_weighted', 'roc_auc_ovr_weighted']
+    # scores = cross_validate(dt, xData, yData, cv=numFolds, scoring=scoring)
 
     #Convert decision tree into dot graph
     dot_data = tree.export_graphviz(dt,
@@ -538,8 +563,45 @@ def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', 
     mvdd.saveToFile(modelName, 'pdf')
     mvdd.saveToFile(modelName, 'png')
 
-    return mvdd, scores
+    return mvdd
 
+def ROC_graph(y_test, y_score):
+    # y_Data = label_binarize(yData, classes=[1, 2,3,4,5])
+    # X_train, X_test, y_train, y_test = train_test_split(xData, y_Data, test_size=0.33, random_state=42)
+    
+    # y_score = model.fit(X_train,y_train).predict(X_test)
+    # print(y_score)
+    fpr = dict()
+    tpr = dict()
+    roc_auc = dict()
+    for i in range(5):
+        fpr[i], tpr[i], _ = roc_curve(y_test[:, i], y_score[:, i])
+        roc_auc[i] = auc(fpr[i], tpr[i])
+    # First aggregate all false positive rates
+    all_fpr = np.unique(np.concatenate([fpr[i] for i in range(5)]))
+
+    # Then interpolate all ROC curves at this points
+    mean_tpr = np.zeros_like(all_fpr)
+    for i in range(5):
+        mean_tpr += interp(all_fpr, fpr[i], tpr[i])
+
+    # Finally average it and compute AUC
+    mean_tpr /= 5
+
+    colors = cycle(['aqua', 'darkorange', 'cornflowerblue','palegreen', 'mistyrose'])
+    for i, color in zip(range(5), colors):
+        plt.plot(fpr[i], tpr[i], color=color, lw=2,
+                 label='ROC curve of class {0} (area = {1:0.2f})'
+                 ''.format(i+1, roc_auc[i]))
+    plt.plot([0, 1], [0, 1], 'k--', lw=2)
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Some extension of Receiver operating characteristic to multi-class')
+    plt.legend(loc="lower right")
+    plt.show()
+    return
 
 # Helper methods
 def getLeftRightLabels(tokens):
