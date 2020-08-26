@@ -14,6 +14,7 @@ from collections import OrderedDict
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.model_selection import cross_val_score, cross_validate
 from sklearn.tree import export_graphviz
 from sklearn.model_selection import GridSearchCV
 from sklearn import tree
@@ -419,21 +420,20 @@ def generateTree(xData, yData, classes, learningCriteria='gini', maxLevels=None,
             nodeLabel = tokens[0] + nodeLabel
             dot.nodes[n]['label'] = nodeLabel
 
-        count = 0
         for edg in dot.edges(n):
-            if edg[0] in terminalIndices or edg[1] in terminalIndices or count == 0:
+            if edg[0] in terminalIndices or edg[1] in terminalIndices:
                 dot.edges[edg[0], edg[1]]['label'] = leftLabel
                 dot.edges[edg[0], edg[1]]['op'] = leftOp
                 dot.edges[edg[0], edg[1]]['param'] = param
                 dot.edges[edg[0], edg[1]]['style'] = 'solid'
 
                 dot.edges[edg[0], edg[1]]['headlabel'] = ""
-                count += 1
             else:
+                stl = random.choice(['solid', 'dashed'])
                 dot.edges[edg[0], edg[1]]['label'] = rightLabel
                 dot.edges[edg[0], edg[1]]['op'] = rightOp
                 dot.edges[edg[0], edg[1]]['param'] = param
-                dot.edges[edg[0], edg[1]]['style'] = 'dashed'
+                dot.edges[edg[0], edg[1]]['style'] = stl
 
                 dot.edges[edg[0], edg[1]]['headlabel'] = ""
 
@@ -450,6 +450,95 @@ def generateTree(xData, yData, classes, learningCriteria='gini', maxLevels=None,
     mvdd.saveToFile(modelName, 'png')
 
     return mvdd
+
+def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', maxLevels=None, minSamplesPerLeaf=5, modelName='MVDD', numFolds=5):
+
+    #First learn a decision tree classifier to boost the learning process
+    dt = DecisionTreeClassifier(criterion=learningCriteria, random_state=100,
+                                max_depth=maxLevels, min_samples_leaf=minSamplesPerLeaf)
+
+    dt.fit(xData, yData)
+
+    scoring= ['accuracy', 'precision_weighted', 'recall_weighted', 'f1_weighted', 'roc_auc_ovr_weighted']
+    scores = cross_validate(dt, xData, yData, cv=numFolds, scoring=scoring)
+
+    #Convert decision tree into dot graph
+    dot_data = tree.export_graphviz(dt,
+                                    feature_names=xData.columns,
+                                    class_names=classes,
+                                    out_file=None,
+                                    filled=True,
+                                    rounded=True)
+    graph = pydotplus.graph_from_dot_data(dot_data)
+
+    #Recolor the nodes
+    colors = ('palegreen', 'honeydew', 'lightyellow', 'mistyrose', 'lightcoral')
+    nodes = graph.get_node_list()
+
+    for node in nodes:
+        if node.get_name() not in ('node', 'edge'):
+            vals = dt.tree_.value[int(node.get_name())][0]
+            maxPos = np.argmax(vals)
+            node.set_fillcolor(colors[maxPos])
+
+    # Convert decision tree dot data to decision diagram
+    dot = nx.nx_pydot.from_pydot(graph)
+    dot = nx.DiGraph(dot)
+
+    # Get terminal indices
+    terminalIndices = []
+    for n in dot.nodes:
+        label = dot.nodes[n]['label']
+        label = label.replace("\"", "")
+        labelSplit = label.split('\\n')[0]
+        tokens = labelSplit.split(' ')
+
+        if tokens[0] == learningCriteria: #NOTE was 'gini'
+            terminalIndices.append(n)
+
+    for n in dot.nodes:
+        label = dot.nodes[n]['label']
+        label = label.replace("\"", "")
+        labelSplit = label.split('\\n')[0]
+        tokens = labelSplit.split(' ')
+        leftLabel, leftOp, rightLabel, rightOp, param = getLeftRightLabels(tokens)
+
+        if tokens[0] != 'gini':
+            nodeLabel = re.sub(labelSplit, '', dot.nodes[n]['label'])
+            nodeLabel = nodeLabel.replace("\"", "")
+            nodeLabel = tokens[0] + nodeLabel
+            dot.nodes[n]['label'] = nodeLabel
+
+        for edg in dot.edges(n):
+            if edg[0] in terminalIndices or edg[1] in terminalIndices:
+                dot.edges[edg[0], edg[1]]['label'] = leftLabel
+                dot.edges[edg[0], edg[1]]['op'] = leftOp
+                dot.edges[edg[0], edg[1]]['param'] = param
+                dot.edges[edg[0], edg[1]]['style'] = 'solid'
+
+                dot.edges[edg[0], edg[1]]['headlabel'] = ""
+            else:
+                stl = random.choice(['solid', 'dashed'])
+                dot.edges[edg[0], edg[1]]['label'] = rightLabel
+                dot.edges[edg[0], edg[1]]['op'] = rightOp
+                dot.edges[edg[0], edg[1]]['param'] = param
+                dot.edges[edg[0], edg[1]]['style'] = stl
+
+                dot.edges[edg[0], edg[1]]['headlabel'] = ""
+
+    #Create MVDD
+    mvdd = MVDD(features=xData.columns, dot=dot, root='0', model=dt)
+    mvdd.terminalIndices = terminalIndices
+
+    #Save model to file
+    pickle.dump(mvdd, open(modelName+'.sav', 'wb'))
+
+    #Save tree to file
+    mvdd.saveDotFile(modelName)
+    mvdd.saveToFile(modelName, 'pdf')
+    mvdd.saveToFile(modelName, 'png')
+
+    return mvdd, scores
 
 
 # Helper methods
