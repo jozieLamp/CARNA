@@ -18,5 +18,6 @@ File Breakdown:
 - Score Label Preprocessing: contains the code to preprocess the data and derive the supervised score labels from the data
     - Figures: 
 
+A data dictionary is available in the tool for ease of understanding feature abbreviations.
 
 
