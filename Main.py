@@ -38,7 +38,7 @@ def runHemo(paramDict, outcome):
     elif outcome == "DEATH":
         modelName = 'TreeFiles/Hemo_Death'
     elif outcome == "REHOSPITALIZATION":
-        modelName = 'TreeFiles/Hemo_Rehospitalization'
+        modelName = 'TreeFiles/Hemo_Rehosp'
     else:
         modelName = 'TreeFiles/Hemo_AllOutcomes'
 
@@ -84,7 +84,7 @@ def main():
      "PCWPMod": "", "PP": "", "PPP": "", "PPRatio": "0.9", "RAP": "", "RAT": "", "RATHemo": "10", "SVRHemo": "",
      "SVR": ""}
 
-    filename, score, path = runHemo(paramDict, "DEATH")
+    filename, score, path = runHemo(paramDict, "REHOSPITALIZATION")
 
 
 
