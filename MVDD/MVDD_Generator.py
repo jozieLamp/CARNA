@@ -688,7 +688,7 @@ def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria):
 
         count = 0
         for edg in dot.edges(n):
-            if edg[0] in terminalIndices or edg[1] in terminalIndices:
+            if (edg[0] in terminalIndices or edg[1] in terminalIndices) and count == 0:
                 dot.edges[edg[0], edg[1]]['label'] = leftLabel
                 dot.edges[edg[0], edg[1]]['op'] = leftOp
                 dot.edges[edg[0], edg[1]]['param'] = param
@@ -697,6 +697,13 @@ def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria):
                 dot.edges[edg[0], edg[1]]['headlabel'] = ""
 
                 count += 1
+            elif (edg[0] in terminalIndices or edg[1] in terminalIndices) and count == 1:
+                dot.edges[edg[0], edg[1]]['label'] = rightLabel
+                dot.edges[edg[0], edg[1]]['op'] = rightOp
+                dot.edges[edg[0], edg[1]]['param'] = param
+                dot.edges[edg[0], edg[1]]['style'] = 'solid'
+
+                dot.edges[edg[0], edg[1]]['headlabel'] = ""
             elif count == 0:
                 stl = random.choice(['solid', 'dashed'])
                 dot.edges[edg[0], edg[1]]['label'] = leftLabel
