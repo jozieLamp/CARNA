@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Design by TEMPLATED
+http://templated.co
+Released for free under the Creative Commons Attribution License
+
+Name       : Anodized
+Description: A two-column, fixed-width design with a dark color scheme.
+Version    : 1.0
+Released   : 20120705
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>
+	HemoPheno4HF
+</title>
+<link href="http://fonts.googleapis.com/css?family=Arvo" rel="stylesheet" type="text/css" />
+<link href="http://fonts.googleapis.com/css?family=Bevan" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="./static/style.css" />
+</head>
+<body>
+<div id="wrapper">
+	<div id="header">
+		<div id="logo">
+			<h1>
+				<a href="/">HemoPheno4HF</a>
+			</h1>
+		</div>
+		<div id="menu">
+			<ul>
+				<li class="first active">
+				    <a href="http://hemopheno.pythonanywhere.com">Hemodynamic</a>
+
+				</li>
+			</ul><br class="clearfix" />
+		</div>
+	</div>
+
+
+<style>
+    .button1{
+        box-shadow:inset 0px 39px 0px -24px #e67a73;
+        background-color:#f17070;
+        border-radius:4px;
+        border:1px solid #ffffff;
+        display:inline-block;
+        cursor:pointer;
+        color:#ffffff;
+        font-family:Arial;
+        font-size:12px;
+        padding:6px 15px;
+        text-decoration:none;
+        text-shadow:0px 1px 0px #b23e35;
+        width:150px;
+    }
+
+    button{
+        box-shadow:inset 0px 39px 0px -24px #e67a73;
+        background-color:#f17070;
+        border-radius:4px;
+        border:1px solid #ffffff;
+        display:inline-block;
+        cursor:pointer;
+        color:#ffffff;
+        font-family:Arial;
+        font-size:12px;
+        padding:6px 15px;
+        text-decoration:none;
+        text-shadow:0px 1px 0px #b23e35;
+
+    }
+
+    input{
+        display: inline-block;
+        float: right;
+        padding: 4px;
+        font-size: 11px;
+        border-width: 1px;
+        border-color: #cccccc;
+        background-color: #e9e9e9;
+        color: #000000;
+        border-style: solid;
+        border-radius: 7px;
+        box-shadow: 0px 0px 5px rgba(66,66,66,.75);
+        text-shadow: 0px 0px 5px rgba(66,66,66,.75);
+
+    }
+
+
+</style>
+
+<form method="post" action="#">
+
+    <div id="page">
+		<div id="content">
+			<div class="box">
+				<h2>
+					Hemodynamic Phenotyping
+				</h2>
+
+			</div>
+
+                <h3>
+					Example Risk Parameters: <br/>
+                    <button type=button onclick="low()">LOW</button>
+                    <button type=button onclick="medium()">INTERMEDIATE</button>
+                    <button type=button onclick="high()">HIGH</button>
+				</h3>
+            <br/>
+
+			<div class="box" id="box-left">
+
+
+                <p>RAP: <input type=text name=rap id=rap><br/>
+                PAS:        <input type=text name=pas id=pas><br/>
+                PAD: <input type=text name=pad id=pad><br/>
+                PAMN: <input type=text name=pamn id=pamn><br/>
+                PCWP: <input type=text name=pcwp id=pcwp><br/>
+                PCWPMod: <input type=text name=pcwpmod id=pcwpmod><br/>
+                PCWPA: <input type=text name=pcwpa id=pcwpa><br/>
+                PCWPMN: <input type=text name=pcwpmn id=pcwpmn><br/>
+                CO: <input type=text name=co id=co><br/>
+                CI: <input type=text name=ci id=ci><br/>
+                SVRHemo: <input type=text name=svrhemo id=svrhemo><br/>
+                MIXED: <input type=text name=mixed id=mixed><br/>
+                BPSYS: <input type=text name=bpsys id=bpsys><br/>
+                BPDIAS: <input type=text name=bpdias id=bpdias><br/>
+                </p>
+
+                <button type="reset" value="CLEAR">CLEAR</button>
+
+            </div>
+			<div class="box" id="box-right">
+
+				<p>
+                HRTRT: <input type=text name=hrtrt id=hrtrt><br/>
+                RATHemo: <input type=text name=rathemo id=rathemo><br/>
+                MAP: <input type=text name=map id=map><br/>
+                MPAP: <input type=text name=mpap id=mpap><br/>
+                CPI: <input type=text name=cpi id=cpi><br/>
+                PP: <input type=text name=pp id=pp><br/>
+                PPP: <input type=text name=ppp id=ppp><br/>
+                PAPP: <input type=text name=papp id=papp><br/>
+                SVR: <input type=text name=svr id=svr><br/>
+                RAT: <input type=text name=rat id=rat><br/>
+                PPRatio: <input type=text name=ppratio id=ppratio><br/>
+                Age: <input type=text name=age id=age><br/>
+                EJF: <input type=text name=ejf id=ejf><br/>
+                </p>
+			</div><br class="clearfix" />
+
+
+		</div>
+		<div id="sidebar">
+			<div class="box">
+				<br/><br/><br/>
+                <h3>Outcome:<br/><br/>
+                    <button class=button1 type="submit" value="ALL" name="testparam">ALL</button><br/><br/>
+                    <button class=button1 type="submit" value="DEATH" name="testparam">DEATH</button><br/><br/>
+                    <button class=button1 type="submit" value="REHOSPITALIZATION" name="testparam">REHOSPITILIZATION</button><br/><br/>
+                    <button class=button1 type="submit" value="READMISSION" name="testparam">READMISSION</button>
+                </h3>
+			</div>
+			<div class="box">
+				<h3>
+				</h3>
+
+			</div>
+		</div><br class="clearfix" />
+	</div>
+
+
+
+
+
+        <script>
+            var hemo = ['RAP', 'PAS', 'PAD', 'PAMN', 'PCWP', 'PCWPMod', 'PCWPA', 'PCWPMN', 'CO','CI', 'SVRHemo', 'MIXED', 'BPSYS', 'BPDIAS', 'HRTRT', 'RATHemo', 'MAP', 'MPAP', 'CPI', 'PP', 'PPP', 'PAPP', 'SVR', 'RAT', 'PPRatio', 'Age','EjF']
+
+            var lower =[10,40,20,27,18,18,18,20,4.52,2.02,1097,60,80,63,70,0.56,122,53.33333333,0.5643016,17,0.2125,0.5,1982.300885,0.555555556,0.242857143,69,20]
+
+            var mediumer = [10,50,25,33,25,25,25,25,2.72,1.43,1499,58,90,47,65,0.4,121.3333333,66.6666667,0.384715447,43,0.477777778,0.5,3274.509804,0.4,0.661538462,66,12]
+
+            var higher = [24,42,24,30,36,36,36,36,2.2,1.6,2354,80,114,86,105,0.67,171.3333333,58,0.607834442,28,0.245614035,0.428571429,5357.575758,0.666666667,0.266666667,88,25]
+
+
+
+
+            function low(){
+                for(var i=0;i<27;i++){
+                    document.getElementById(hemo[i].toLowerCase()).value = lower[i];
+                }
+            }
+
+            function medium(){
+                for(var i=0;i<27;i++){
+                    document.getElementById(hemo[i].toLowerCase()).value = mediumer[i];
+                }
+            }
+
+            function high(){
+                for(var i=0;i<27;i++){
+                    document.getElementById(hemo[i].toLowerCase()).value = higher[i];
+                }
+            }
+
+        </script>
+
+
+
+</form>
+
+<div id="footer">
+	&copy; HemoPheno4HF | Photos by <a href="http://fotogrph.com/">Fotogrph</a> | Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a> | Backend by Josie et al. | Website created by Steven Lamp
+</div>
+</body>
+</html>
