@@ -678,6 +678,7 @@ def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria):
         labelSplit = label.split('\\n')[0]
         tokens = labelSplit.split(' ')
         leftLabel, leftOp, rightLabel, rightOp, param = getLeftRightLabels(tokens)
+        # print(leftOp, leftLabel, rightOp, rightLabel)
 
         if tokens[0] != 'gini':
             nodeLabel = re.sub(labelSplit, '', dot.nodes[n]['label'])
@@ -685,6 +686,7 @@ def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria):
             nodeLabel = tokens[0] + nodeLabel
             dot.nodes[n]['label'] = nodeLabel
 
+        count = 0
         for edg in dot.edges(n):
             if edg[0] in terminalIndices or edg[1] in terminalIndices:
                 dot.edges[edg[0], edg[1]]['label'] = leftLabel
@@ -693,6 +695,18 @@ def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria):
                 dot.edges[edg[0], edg[1]]['style'] = 'solid'
 
                 dot.edges[edg[0], edg[1]]['headlabel'] = ""
+
+                count += 1
+            elif count == 0:
+                stl = random.choice(['solid', 'dashed'])
+                dot.edges[edg[0], edg[1]]['label'] = leftLabel
+                dot.edges[edg[0], edg[1]]['op'] = leftOp
+                dot.edges[edg[0], edg[1]]['param'] = param
+                dot.edges[edg[0], edg[1]]['style'] = stl
+
+                dot.edges[edg[0], edg[1]]['headlabel'] = ""
+
+                count += 1
             else:
                 stl = random.choice(['solid', 'dashed'])
                 dot.edges[edg[0], edg[1]]['label'] = rightLabel

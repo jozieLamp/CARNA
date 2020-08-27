@@ -15,7 +15,6 @@ import copy
 import numpy as np
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
-
 class MVDD:
     def __init__(self, features, dot, root=None, model=None, featureDict={}):
         self.features = features #list of features
@@ -81,57 +80,93 @@ class MVDD:
     def predictScore(self, xData):
         predScore = self.model.predict(xData)[0]
 
-        #TODO - make sure returns path generation correclty
-        paths = self.get_all_tree_paths(self.terminalIndices)
-        # print(paths)
-
-        path = None
-        for p in paths:
-            truthVal, score = self.evaluatePathValue(p, xData)
-            if score == predScore:
-                path = p
-                break
+        path = self.getDecisionPath(self.terminalIndices, predScore, xData)
+        # path = None
+        # for p in paths:
+        #     truthVal, score = self.evaluatePathValue(p, xData)
+        #     if score == predScore:
+        #         path = p
+        #         break
 
         # self.getDecisionPath(xData)
+        # tree_rules = export_text(self.model, feature_names=list(xData))
+        # print(tree_rules)
+
         return predScore, path
 
-    def getDecisionPath(self, data):
-        node_indicator = self.model.decision_path(data)
-        leaf_id = self.model.apply(data)
-        n_nodes = self.model.tree_.node_count
-        children_left = self.model.tree_.children_left
-        children_right = self.model.tree_.children_right
-        feature = self.model.tree_.feature
-        threshold = self.model.tree_.threshold
-        print(feature, threshold)
 
-        sample_id = 0
-        # obtain ids of the nodes `sample_id` goes through, i.e., row `sample_id`
-        node_index = node_indicator.indices[node_indicator.indptr[sample_id]:
-                                            node_indicator.indptr[sample_id + 1]]
+    #Get all tree paths from root
+    # INPUT = N/A
+    # OUTPUT = returns a list of all paths through the mvdd dot tree
+    def getDecisionPath(self, terminalIndices, score, xData):
+        allPaths = []
 
-        print('Rules used to predict sample {id}:\n'.format(id=sample_id))
-        for node_id in node_index:
-            # continue to the next node if it is a leaf node
-            if leaf_id[sample_id] == node_id:
-                continue
+        for t in terminalIndices:
+            for p in self.all_simple_paths(self.dot, self.root, t):
 
-            # check if value of the split feature for sample 0 is below threshold
-            # if (data[sample_id, feature[node_id]] <= threshold[node_id]):
-            if (data[sample_id] <= threshold[node_id]):
+                featureList = []
 
-                threshold_sign = "<="
-            else:
-                threshold_sign = ">"
+                #get score
+                label = self.dot.nodes[p[-1]]['label']
+                label = label.replace("\"", "")
+                cls = label.split('\\n')[-1]
+                cls = cls.replace("class = ", "")
 
-            print("decision node {node} : (X_test[{sample}, {feature}] = {value}) "
-                  "{inequality} {threshold})".format(
-                node=node_id,
-                sample=sample_id,
-                feature=feature[node_id],
-                value=data[sample_id, feature[node_id]],
-                inequality=threshold_sign,
-                threshold=threshold[node_id]))
+                if str(cls) == str(score):
+                    for i in range(len(p)-1):
+                        label = self.dot.nodes[p[i]]['label']
+                        label = label.replace("\"", "")
+                        ft = label.split('\\n')[0]
+                        featureList.append(ft)
+
+                    allPaths.append(featureList)
+
+        #get exact path
+        # print(allPaths)
+        return allPaths[0]
+
+
+
+
+
+
+    # def getDecisionPath(self, data):
+    #     node_indicator = self.model.decision_path(data)
+    #     leaf_id = self.model.apply(data)
+    #     n_nodes = self.model.tree_.node_count
+    #     children_left = self.model.tree_.children_left
+    #     children_right = self.model.tree_.children_right
+    #     feature = self.model.tree_.feature
+    #     threshold = self.model.tree_.threshold
+    #     print(feature, threshold)
+    #     leave_id = self.model.apply(data)
+    #
+    #     sample_id = 0
+    #     node_index = node_indicator.indices[node_indicator.indptr[sample_id]:
+    #                                         node_indicator.indptr[sample_id + 1]]
+    #
+    #     print('Rules used to predict sample %s: ' % sample_id)
+    #     for node_id in node_index:
+    #
+    #         if leave_id[sample_id] == node_id:  # <-- changed != to ==
+    #             # continue # <-- comment out
+    #             print("leaf node {} reached, no decision here".format(leave_id[sample_id]))  # <--
+    #
+    #         else:  # < -- added else to iterate through decision nodes
+    #             if (data[sample_id, feature[node_id]] <= threshold[node_id]):
+    #                 threshold_sign = "<="
+    #             else:
+    #                 threshold_sign = ">"
+    #
+    #             print("decision id node %s : (X[%s, %s] (= %s) %s %s)"
+    #                   % (node_id,
+    #                      sample_id,
+    #                      feature[node_id],
+    #                      data[sample_id, feature[node_id]],  # <-- changed i to sample_id
+    #                      threshold_sign,
+    #                      threshold[node_id]))
+
+
 
     # Predicts a set of scores from a dataframe of values for testing purposes
     # INPUT = dataframe of x values, y values and flags if want to print confusion matrix or report
@@ -294,39 +329,7 @@ class MVDD:
             return value >= param
 
 
-    #Get all tree paths from root
-    # INPUT = N/A
-    # OUTPUT = returns a list of all paths through the mvdd dot tree
-    def get_all_tree_paths(self, terminalIndices):
-        allPaths = []
-        for t in terminalIndices:
-            for p in self.all_simple_paths(self.dot, self.root, t):
-                # print(p)
-                path = []
 
-                for i in range(len(p)-1):
-                    label = self.dot.nodes[p[i]]['label']
-                    label = label.replace("\"", "")
-                    ft = label.split('\\n')[0]
-                    path.append(ft)
-
-                    style = self.dot.get_edge_data(p[i], p[i+1], 0)['style']
-                    bound = self.dot.get_edge_data(p[i], p[i + 1], 0)['op']
-                    param = self.dot.get_edge_data(p[i], p[i + 1], 0)['param']
-                    op = '&' if style == 'solid' else '|'
-
-                    path.append(bound)
-                    path.append(param)
-                    path.append(op)
-
-                label = self.dot.nodes[p[len(p)-1]]['label']
-                label = label.replace("\"", "")
-                cls = label.split('\\n')[-1]
-                cls = cls.replace("class = ", "")
-                path.append(cls)
-                allPaths.append(path)
-
-        return allPaths
 
     # Helper function for getting all tree paths, override of networkx method
     # INPUT = dot graph G, source (starting) node, and target (ending) node, possible cutoff value

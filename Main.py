@@ -14,12 +14,11 @@ from networkx.drawing.nx_pydot import *
 import Params as params
 
 
-#Expects param dict of 27 parameters, and select one of 3 outcomes
+#Expects param dict of 27 parameters, and select one of 4 outcomes
 #Returns a text file location to display the graph, a integer score value and a string phenotype to be displayed
 #Outcome can be "all", "Death" "Rehospitalization" "Readmission"
-#outcomes passed in all caps
+#Outcomes passed in all caps
 def runHemo(paramDict, outcome):
-    modelName = 'MVDD_Test'
 
     #check for strings in paramDict
     for p in paramDict:
@@ -33,21 +32,43 @@ def runHemo(paramDict, outcome):
     input = input.to_frame()
     input = input.T
 
+    #get outcome
+    if outcome == "READMISSION":
+        modelName = 'TreeFiles/Hemo_Readmission'
+    elif outcome == "DEATH":
+        modelName = 'TreeFiles/Hemo_Death'
+    elif outcome == "REHOSPITALIZATION":
+        modelName = 'TreeFiles/Hemo_Rehospitalization'
+    else:
+        modelName = 'TreeFiles/Hemo_AllOutcomes'
+
     #load model
     mvdd = mvGen.loadMVDDFromFile(modelName)
 
     #Predict score
     score, path = mvdd.predictScore(input)
-    print(score)
-    print(path)
 
-    stringPath = ""
-    if path != None:
-        path[-2] = '->'
-        stringPath = ' '.join(path)
-        print(stringPath)
+    if score == 5:
+        stringPath = "Returned Score of " + str(score) + ", Risk Level: HIGH\nIndicates a >= 40% chance of the outcome " + outcome
+    elif score == 4:
+        stringPath = "Returned Score of " + str(score) + ", Risk Level: INTERMEDIATE - HIGH\nIndicates a 30-40% chance of the outcome " + outcome
+    elif score == 3:
+        stringPath = "Returned Score of " + str(score) + ", Risk Level: INTERMEDIATE\nIndicates a 20-30% chance of the outcome " + outcome
+    elif score == 2:
+        stringPath = "Returned Score of " + str(score) + ", Risk Level: LOW - INTERMEDIATE\nIndicates a 10-20% chance of the outcome " + outcome
+    elif score == 1:
+        stringPath = "Returned Score of " + str(score) + ", Risk Level: LOW\nIndicates a < 10% chance of the outcome " + outcome
 
-    return 'TreeFiles/treeParams1.png', score, stringPath #will be displayed on webpage
+
+    # stringPath = ""
+    # if path != None:
+    #     # path[-2] = '->'
+    #     stringPath = ' and '.join(path)
+    #     # print(stringPath)
+
+    imageName = modelName + '.png'
+
+    return imageName, score, stringPath #will be displayed on webpage
 
 
 #Expects a param dict of 119 parameters
@@ -58,12 +79,13 @@ def runAllData(paramDict):
 
 
 def main():
-    paramDict = {"Age": "10", "BPDIAS": "63", "BPSYS": "80", "CI": "2.02", "CO": "4.52", "CPI": "0.54", "PCWP": "18", "EjF": "20", "HRTRT": "70",
-     "MAP": "", "MIXED": "", "MPAP": "", "PAD": "", "PAMN": "", "PAPP": "", "PAS": "", "PCWPA": "", "PCWPMN": "",
-     "PCWPMod": "", "PP": "", "PPP": "", "PPRatio": "", "RAP": "", "RAT": "", "RATHemo": "", "SVRHemo": "",
+    paramDict = {"Age": "60", "BPDIAS": "63", "BPSYS": "80", "CI": "2.02", "CO": "4.52", "CPI": "10", "PCWP": "10", "EjF": "20", "HRTRT": "30",
+     "MAP": "", "MIXED": "", "MPAP": "20", "PAD": "", "PAMN": "", "PAPP": "", "PAS": "11", "PCWPA": "32", "PCWPMN": "90",
+     "PCWPMod": "", "PP": "", "PPP": "", "PPRatio": "0.9", "RAP": "", "RAT": "", "RATHemo": "10", "SVRHemo": "",
      "SVR": ""}
 
     filename, score, path = runHemo(paramDict, "DEATH")
+
 
 
 
