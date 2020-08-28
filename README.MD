@@ -111,7 +111,7 @@ These can be easily installed into a Python environment such as by using PyCharm
     - TreeTraining: Contains all the exhasutively generated MVDDs
 
 
-
+## License available in LICENSE.txt
 
 
 
