@@ -1,3 +1,11 @@
+'''
+HemoPheno4HF
+SCRIPT DESCRIPTION: Random Number Generator for Parameters
+CODE DEVELOPED BY: Yuxin Wu
+ORGANIZATION: University of Virginia, Charlottesville, VA
+LAST UPDATED: 8/24/2020
+'''
+
 import random
 import numpy as np
 # RAP=[]

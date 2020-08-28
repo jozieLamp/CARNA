@@ -1,7 +1,7 @@
 '''
 HemoPheno4HF
-SCRIPT DESCRIPTION: Main Runner Class for Learning Scors from the Trained MVDDs
-CODE DEVELOPED BY: Josephine Lamp
+SCRIPT DESCRIPTION: Main Runner Class for Learning Scores from the Trained MVDDs
+CODE DEVELOPED BY: Josephine Lamp, Steven Lamp
 ORGANIZATION: University of Virginia, Charlottesville, VA
 LAST UPDATED: 8/24/2020
 '''

@@ -3,7 +3,7 @@ HemoPheno4HF
 SCRIPT DESCRIPTION: Multi Valued Decision Diagram Object Class
 CODE DEVELOPED BY: Josephine Lamp
 ORGANIZATION: University of Virginia, Charlottesville, VA
-LAST UPDATED: 8/24/2020
+LAST UPDATED: 8/28/2020
 '''
 
 import pydot
@@ -62,7 +62,9 @@ class MVDD:
         # self.saveToFile(dot, "NewTEST")
         # print(dot.get_edge_data('PP', 'PAPP'))  # get label and style of edge
 
-    #return dictionary of node and number edges
+    # Return dictionary of node and number edges
+    # INPUT = if want to return terminal nodes
+    # OUTPUT = dictionary of node and number edges
     def getNumberBranchesPerNode(self, returnTerminals=False):
         dct = {}
         for n in nx.nodes(self.dot):
@@ -211,7 +213,9 @@ class MVDD:
 
             return finalScore, finalPath
 
-
+    # Evaluate the value of the path
+    # INPUT = path and feature dictionary
+    # OUTPUT = path and score value
     def evaluatePathValue(self, path, featureDict):
         newPath = []
         path = self.parseOrs(path, featureDict)
@@ -237,8 +241,9 @@ class MVDD:
         else:
             return True, path[-1]
 
-
-
+    # Helper function for evaluate path val
+    # INPUT = path, feature dictionary
+    # OUTPUT = path
     def parseOrs(self, path, featureDict):
         newPath = copy.deepcopy(path)
         indices = [i for i, x in enumerate(path) if x == "|"]
@@ -315,8 +320,9 @@ class MVDD:
         newPath = list(filter(lambda a: a != "DELETED", newPath))
         return newPath
 
-
-
+    # Get truth value from feature, relatioan operator and parameter
+    # INPUT = feature, relational operator and parameter
+    # OUTPUT = truth value - true or false
     def getTruthValue(self, value, bound, param):
         value = float(value)
         param = float(param)

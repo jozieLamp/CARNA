@@ -1,9 +1,9 @@
 '''
 HemoPheno4HF
 SCRIPT DESCRIPTION: Generation of MVDDs
-CODE DEVELOPED BY: Josephine Lamp
+CODE DEVELOPED BY: Josephine Lamp, Yuxin Wu
 ORGANIZATION: University of Virginia, Charlottesville, VA
-LAST UPDATED: 8/24/2020
+LAST UPDATED: 8/28/2020
 '''
 
 import random
@@ -374,6 +374,9 @@ def addGraphParams(mvdd, paramValues, relopValues, inorder=True):
 
     return mvdd, usedParams, usedRelops
 
+# MVDD Training and Generation Process
+# INPUT = x and y data, classes predicting, learning splitting criteria, number of max tree levels, minimum number of samples per leaf and name of model to save
+# OUTPUT = returns a MVDD object class with the created network x dot graph
 def generateTree(xData, yData, classes, learningCriteria='gini', maxLevels=None, minSamplesPerLeaf=5, modelName='MVDD'):
 
     #First learn a decision tree classifier to boost the learning process
@@ -459,6 +462,14 @@ def generateTree(xData, yData, classes, learningCriteria='gini', maxLevels=None,
 
     return mvdd
 
+
+'''
+MAIN TRAINING CLASS HERE
+'''
+# MVDD Training and Generation Process using Cross Validation
+# INPUT = x and y data, classes predicting, learning splitting criteria, number of max tree levels, minimum number of samples per leaf and name of model to save,
+#   number of folds for cross validation and flag if want to show the individual ROC graphs in the cross validation
+# OUTPUT = returns a MVDD object class with the created network x dot graph
 def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', maxLevels=None, minSamplesPerLeaf=5, modelName='MVDD', numFolds=5, showIndividualROC=True):
 
     #First learn a decision tree classifier to boost the learning process
@@ -485,6 +496,9 @@ def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', 
 
     return mvdd
 
+# Performs training of MVDDs
+# INPUT = x and y data, classes predicting, decision tree model, number of cross validation folds, whether to show individual roc graphs and model name
+# OUTPUT = returns trained decision model
 def trainCrossValidation(xData, yData, dt, numFolds, showIndividualROC, modelName):
     #make stratified k fold object
     kFold = StratifiedKFold(n_splits=numFolds)
@@ -539,6 +553,7 @@ def trainCrossValidation(xData, yData, dt, numFolds, showIndividualROC, modelNam
 
     return dt
 
+#Helper method to train cross validation
 def getDictionaryAverages(dictList, hasList=True):
     d = {}
     for k in dictList[0].keys():
@@ -557,12 +572,15 @@ def getDictionaryAverages(dictList, hasList=True):
 
     return finalDict
 
+#Helper method to get dictinoary averages
 def mapAvg(x):
     x = [i for i in x if i is not None]
     return sum(x, 0.0) / len(x)
 
 
-
+# Get the ROC curve for multi classes
+# INPUT = x and y data
+# OUTPUT = saves an roc graph
 def getClassROC(y_test, y_score):
     fpr = dict()
     tpr = dict()
@@ -583,6 +601,9 @@ def getClassROC(y_test, y_score):
 
     return fpr, tpr, roc_auc
 
+# Get an averaged ROC curve for multi classes from cross validation
+# INPUT = averaged false positive rates, true positvie rates and model name
+# OUTPUT = saves an roc graph
 def getAverageROCGraph(fpr, tpr, roc_auc, modelName):
     plt.figure(figsize=(10, 8))
     colors = cycle(['aqua', 'darkorange', 'cornflowerblue', 'palegreen', 'mistyrose'])
@@ -600,6 +621,9 @@ def getAverageROCGraph(fpr, tpr, roc_auc, modelName):
     plt.savefig("Graphs/"+ modelName + "Averaged_ROC.png")
     plt.show()
 
+# Get the individual ROC curves for each class
+# INPUT = x and y data the fold number and the model name
+# OUTPUT = saves an roc graph
 def getIndividualROCGraph(y_test, y_score, foldNum, modelName):
 
     fpr = dict()
@@ -637,6 +661,9 @@ def getIndividualROCGraph(y_test, y_score, foldNum, modelName):
     plt.show()
 
 
+# Convert decision tree to MVDD
+# INPUT = decision tree model, xdata, classes and learning criteria used
+# OUTPUT = saves a MVDD graph and returns the new MVDD
 def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria):
     # Convert decision tree into dot graph
     dot_data = tree.export_graphviz(dt,
@@ -750,10 +777,15 @@ def getLeftRightLabels(tokens):
 
     return leftLabel, leftOp, rightLabel, rightOp, param
 
-
+# Load Saved MVDD model from file
+# INPUT = model name
+# OUTPUT = MVDD data structure
 def loadMVDDFromFile(modelName):
     return pickle.load(open(modelName + '.sav', 'rb'))
 
+# Training for finding best set of model params
+# INPUT = x and y data and params to try
+# OUTPUT = prints best params and their accuracies
 def findBestModelParams(xData, yData, params):
     dt = DecisionTreeClassifier()
 

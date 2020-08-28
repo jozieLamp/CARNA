@@ -1,3 +1,11 @@
+'''
+HemoPheno4HF
+SCRIPT DESCRIPTION: Main Runner Class for Learning Scores from the Trained MVDDs
+CODE DEVELOPED BY: Steven Lamp
+ORGANIZATION: Colorado State, Fort Collins, CO
+LAST UPDATED: 8/27/2020
+'''
+
 from flask import Flask, redirect, url_for, render_template, request, Response
 app = Flask (__name__)
 from Main import *
