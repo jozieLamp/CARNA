@@ -16,8 +16,7 @@ import Params as params
 
 #Expects param dict of 27 parameters, and select one of 4 outcomes
 #Returns a text file location to display the graph, a integer score value and a string phenotype to be displayed
-#Outcome can be "all", "Death" "Rehospitalization" "Readmission"
-#Outcomes passed in all caps
+#Outcome can be "ALL", "DEATH" "REHOSPITALIZATION" "READMISSION" (passed in all caps)
 def runHemo(paramDict, outcome):
 
     #check for strings in paramDict
@@ -71,11 +70,53 @@ def runHemo(paramDict, outcome):
     return imageName, score, stringPath #will be displayed on webpage
 
 
-#Expects a param dict of 119 parameters
-def runAllData(paramDict):
-    pass
+#Expects a param dict of 119 parameters and the specified outcome
+#Returns a text file location to display the graph, a integer score value and a string phenotype to be displayed
+#Outcome can be "ALL", "DEATH" "REHOSPITALIZATION" "READMISSION" (passed in all caps)
+def runAllData(paramDict, outcome):
+    # check for strings in paramDict
+    for p in paramDict:
+        if paramDict[p] == "":
+            paramDict[p] = 0
+        else:
+            paramDict[p] = float(paramDict[p])
 
+    # Convert input into dataframe
+    input = pd.Series(paramDict)
+    input = input.to_frame()
+    input = input.T
 
+    # get outcome
+    if outcome == "READMISSION":
+        modelName = 'TreeFiles/AllData_Readmission'
+    elif outcome == "DEATH":
+        modelName = 'TreeFiles/AllData_Death'
+    elif outcome == "REHOSPITALIZATION":
+        modelName = 'TreeFiles/AllData_Rehosp'
+    else:
+        modelName = 'TreeFiles/AllData_AllOutcomes'
+
+    # load model
+    mvdd = mvGen.loadMVDDFromFile(modelName)
+
+    # Predict score
+    score, path = mvdd.predictScore(input)
+
+    if score == 5:
+        stringPath = "Returned Score of " + str(
+            score) + ", Risk Level: HIGH\nIndicates a >= 40% chance of the outcome " + outcome
+    elif score == 4:
+        stringPath = "Returned Score of " + str(
+            score) + ", Risk Level: INTERMEDIATE - HIGH\nIndicates a 30-40% chance of the outcome " + outcome
+    elif score == 3:
+        stringPath = "Returned Score of " + str(
+            score) + ", Risk Level: INTERMEDIATE\nIndicates a 20-30% chance of the outcome " + outcome
+    elif score == 2:
+        stringPath = "Returned Score of " + str(
+            score) + ", Risk Level: LOW - INTERMEDIATE\nIndicates a 10-20% chance of the outcome " + outcome
+    elif score == 1:
+        stringPath = "Returned Score of " + str(
+            score) + ", Risk Level: LOW\nIndicates a < 10% chance of the outcome " + outcome
 
 
 def main():
