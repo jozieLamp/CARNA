@@ -10,6 +10,7 @@ from MVDD.MVDD import MVDD
 import MVDD.MVDD_Generator as mvGen
 import pandas as pd
 import networkx as nx
+import matplotlib.pyplot as plt
 from networkx.drawing.nx_pydot import *
 import Params as params
 
@@ -19,17 +20,13 @@ import Params as params
 #Outcome can be "ALL", "DEATH" "REHOSPITALIZATION" "READMISSION" (passed in all caps)
 def runHemo(paramDict, outcome):
 
-    #check for strings in paramDict
-    for p in paramDict:
-        if paramDict[p] == "":
-            paramDict[p] = 0
-        else:
-            paramDict[p] = float(paramDict[p])
+    # #check for strings in paramDict
+    # for p in paramDict:
+    #     if paramDict[p] == "":
+    #         paramDict[p] = 0
+    #     else:
+    #         paramDict[p] = float(paramDict[p])
 
-    #Convert input into dataframe
-    input = pd.Series(paramDict)
-    input = input.to_frame()
-    input = input.T
 
     #get outcome
     if outcome == "READMISSION":
@@ -45,7 +42,7 @@ def runHemo(paramDict, outcome):
     mvdd = mvGen.loadMVDDFromFile(modelName)
 
     #Predict score
-    score, path = mvdd.predictScore(input)
+    score, path = mvdd.predictScore(paramDict)
 
     if score == 5:
         scorePath = "Returned Score of " + str(score) + ", Risk Level: HIGH\nIndicates a >= 40% chance of the outcome " + outcome
@@ -55,15 +52,15 @@ def runHemo(paramDict, outcome):
         scorePath = "Returned Score of " + str(score) + ", Risk Level: INTERMEDIATE\nIndicates a 20-30% chance of the outcome " + outcome
     elif score == 2:
         scorePath = "Returned Score of " + str(score) + ", Risk Level: LOW - INTERMEDIATE\nIndicates a 10-20% chance of the outcome " + outcome
-    elif score == 1:
+    else: #score == 1:
         scorePath = "Returned Score of " + str(score) + ", Risk Level: LOW\nIndicates a < 10% chance of the outcome " + outcome
 
 
     # stringPath = ""
     # if path != None:
-    #     # path[-2] = '->'
+    #     path[-2] = '->'
     #     stringPath = ' and '.join(path)
-    #     # print(stringPath)
+    #     print(stringPath)
 
     imageName = modelName + '.png'
 
@@ -75,11 +72,11 @@ def runHemo(paramDict, outcome):
 #Outcome can be "ALL", "DEATH" "REHOSPITALIZATION" "READMISSION" (passed in all caps)
 def runAllData(paramDict, outcome):
     # check for strings in paramDict
-    for p in paramDict:
-        if paramDict[p] == "":
-            paramDict[p] = 0
-        else:
-            paramDict[p] = float(paramDict[p])
+    # for p in paramDict:
+    #     if paramDict[p] == "":
+    #         paramDict[p] = 0
+    #     else:
+    #         paramDict[p] = float(paramDict[p])
 
     # Convert input into dataframe
     input = pd.Series(paramDict)
@@ -120,8 +117,8 @@ def runAllData(paramDict, outcome):
 
 
 def main():
-    paramDict = {"Age": "60", "BPDIAS": "63", "BPSYS": "80", "CI": "2.02", "CO": "4.52", "CPI": "10", "PCWP": "10", "EjF": "20", "HRTRT": "30",
-     "MAP": "", "MIXED": "", "MPAP": "20", "PAD": "", "PAMN": "", "PAPP": "", "PAS": "11", "PCWPA": "32", "PCWPMN": "90",
+    paramDict = {"Age": "60", "BPDIAS": "63", "BPSYS": "80", "CI": "2.02", "CO": "4.52", "CPI": "0.1", "PCWP": "10", "EjF": "20", "HRTRT": "30",
+     "MAP": "110", "MIXED": "", "MPAP": "20", "PAD": "10", "PAMN": "", "PAPP": "", "PAS": "11", "PCWPA": "32", "PCWPMN": "90",
      "PCWPMod": "", "PP": "", "PPP": "", "PPRatio": "0.9", "RAP": "", "RAT": "", "RATHemo": "10", "SVRHemo": "",
      "SVR": ""}
 
