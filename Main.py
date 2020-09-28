@@ -117,7 +117,7 @@ def runAllData(paramDict, outcome):
 
 
 def main():
-    paramDict = {"Age": "60", "BPDIAS": "63", "BPSYS": "80", "CI": "2.02", "CO": "4.52", "CPI": "0.1", "PCWP": "10", "EjF": "20", "HRTRT": "30",
+    paramDict = {"Age": "60", "BPDIAS": "63", "BPSYS": "80", "CI": "2.02", "CO": "4.52", "CPI": "0.5", "PCWP": "10", "EjF": "20", "HRTRT": "30",
      "MAP": "110", "MIXED": "", "MPAP": "20", "PAD": "10", "PAMN": "", "PAPP": "", "PAS": "11", "PCWPA": "32", "PCWPMN": "90",
      "PCWPMod": "", "PP": "", "PPP": "", "PPRatio": "0.9", "RAP": "", "RAT": "", "RATHemo": "10", "SVRHemo": "",
      "SVR": ""}

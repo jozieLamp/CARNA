@@ -95,6 +95,7 @@ class MVDD:
         xData = input.T
 
         predScore = self.model.predict(xData)[0]
+        print("PREDICTED SCORE", predScore)
         path = None
 
         #path = self.getDecisionPath(self.terminalIndices, predScore, xData)
@@ -120,18 +121,52 @@ class MVDD:
 
     def getDecisionPath(self, allPaths, ftDict):
         truePaths = []
+        scores = []
         for path in allPaths:
-            truthVal = self.evaluatePath(path, ftDict)
+            truthVal, s = self.evaluatePath(path, ftDict)
             if truthVal:
                 truePaths.append(path)
+                scores.append(s)
 
         print("TRUE PATHS")
-        for t in truePaths:
-            print(t)
+        for t in range(len(truePaths)):
+            print(truePaths[t])
+            print(scores[t])
+
+        finalPaths = []
+        # Get majority count of score
+        counts = collections.Counter(scores)
+        print(counts)
+        bestScore = counts.most_common(1)[0][0]
+        print("Best Score", bestScore)
+
+        #TODO
+        #Now need to get paths that have this score
+        #And return best path with this score
+
+        #check if any paths have only 'ANDs'
+        andPaths = []
+        for p in allPaths:
+            if 'OR' not in p:
+                andPaths.append(p)
+
+        if andPaths != []:
+            finalPaths = andPaths
+
+        print("FINAL PATHS")
+        # for p in finalPaths:
+        #     print(p)
+
+
+
+
+
+
+
 
     #return true or false of ftDict on this path
     def evaluatePath(self, path, ftDict):
-        print(path)
+        # print(path)
 
         boolPath = []
         for i in range(0, len(path) - 1, 4):  # iterate through each ft of path
@@ -143,8 +178,10 @@ class MVDD:
             boolPath.append(self.getTruthValue(ftDict[var], relop, param))
             if op != '==>':
                 boolPath.append(op)
+            else:
+                score = path[i + 4]
 
-        print("boolist", boolPath)
+        # print("boolist", boolPath)
 
         truthVal = boolPath[0]
         for b in range(1, len(boolPath), 2):
@@ -157,10 +194,9 @@ class MVDD:
             else:
                 truthVal = truthVal or tr
 
-        print(truthVal)
-        return truthVal
+        # print(truthVal)
+        return truthVal, score
 
-    #TODO - need to go through and verify that true val is returning properly... especially with missing values
 
     # Get truth value from feature, relational operator and parameter
     # INPUT = feature, relational operator and parameter
@@ -201,6 +237,7 @@ class MVDD:
 
                         lbl2 = self.dot.nodes[node1]['label'].split('\\n')
                         cls = lbl2[-1].replace("class = ", "")
+                        cls = cls.replace("\"","")
                         relop, param = self.dot.get_edge_data(node0, node1)['label'].split(" ")
                         op = '==>'
 
