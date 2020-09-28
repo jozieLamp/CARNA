@@ -48,15 +48,15 @@ def runHemo(paramDict, outcome):
     score, path = mvdd.predictScore(input)
 
     if score == 5:
-        stringPath = "Returned Score of " + str(score) + ", Risk Level: HIGH\nIndicates a >= 40% chance of the outcome " + outcome
+        scorePath = "Returned Score of " + str(score) + ", Risk Level: HIGH\nIndicates a >= 40% chance of the outcome " + outcome
     elif score == 4:
-        stringPath = "Returned Score of " + str(score) + ", Risk Level: INTERMEDIATE - HIGH\nIndicates a 30-40% chance of the outcome " + outcome
+        scorePath = "Returned Score of " + str(score) + ", Risk Level: INTERMEDIATE - HIGH\nIndicates a 30-40% chance of the outcome " + outcome
     elif score == 3:
-        stringPath = "Returned Score of " + str(score) + ", Risk Level: INTERMEDIATE\nIndicates a 20-30% chance of the outcome " + outcome
+        scorePath = "Returned Score of " + str(score) + ", Risk Level: INTERMEDIATE\nIndicates a 20-30% chance of the outcome " + outcome
     elif score == 2:
-        stringPath = "Returned Score of " + str(score) + ", Risk Level: LOW - INTERMEDIATE\nIndicates a 10-20% chance of the outcome " + outcome
+        scorePath = "Returned Score of " + str(score) + ", Risk Level: LOW - INTERMEDIATE\nIndicates a 10-20% chance of the outcome " + outcome
     elif score == 1:
-        stringPath = "Returned Score of " + str(score) + ", Risk Level: LOW\nIndicates a < 10% chance of the outcome " + outcome
+        scorePath = "Returned Score of " + str(score) + ", Risk Level: LOW\nIndicates a < 10% chance of the outcome " + outcome
 
 
     # stringPath = ""
@@ -67,7 +67,7 @@ def runHemo(paramDict, outcome):
 
     imageName = modelName + '.png'
 
-    return imageName, score, stringPath #will be displayed on webpage
+    return imageName, score, scorePath #will be displayed on webpage
 
 
 #Expects a param dict of 119 parameters and the specified outcome
