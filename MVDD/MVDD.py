@@ -60,21 +60,37 @@ class MVDD:
     # Predicts score from a single dictionary of feature values
     # INPUT = feature dictionary of actual data values
     # OUTPUT = predicted score and the final path illustrating the used phenotype
-    def predictScore(self, paramDict):
+    def predictScore(self, paramDict, returnPath=True):
 
         #Comparison to model only prediction
         dtScore = self.getModelPrediction(paramDict)
-        print("Decision Tree score:", dtScore)
+        # print("Decision Tree score:", dtScore)
 
         #Get all paths through graph
         allPaths = self.getAllPaths(self.terminalIndices)
 
         #Predict score and get decision path
         predScore, path = self.getDecisionPath(allPaths, paramDict)
-        print("\nFinal Score:", predScore)
-        print("Final Path:", path)
+        # print("\nFinal Score:", predScore)
+        # print("Final Path:", path)
 
-        return predScore, path
+        if returnPath:
+            return predScore, path
+        else:
+            return predScore
+
+    # Predicts a set of scores from a dataframe of values for testing purposes
+    # INPUT = dataframe of x values
+    # OUTPUT = numpy nd array of predicted scores
+    def predictScoreSet(self, xData):
+        predScores = []
+        for index, row in xData.iterrows():
+            dictVals = row.to_dict()
+            ps = int(self.predictScore(dictVals, returnPath=False))
+            predScores.append(ps)
+
+        return np.asarray(predScores)
+
 
     # Get prediction from actual decision tree model for comparison (not MVDD)
     # INPUT = feature dictionary
@@ -107,40 +123,70 @@ class MVDD:
                 truePaths.append(path)
                 scores.append(s)
 
-        # print("TRUE PATHS")
-        # for t in range(len(truePaths)):
-        #     print(truePaths[t])
-        #     print(scores[t])
 
-        # Get majority count of score
-        counts = collections.Counter(scores)
-        # print(counts)
-        bestScore = counts.most_common(1)[0][0]
-        # print("Best Score", bestScore)
-
-        #Get paths that have this score
-        pathsWithScore = []
-        for path in truePaths:
-            if path[-1] == bestScore:
-                pathsWithScore.append(path)
-
-        # print("Paths with Score")
-        # for p in pathsWithScore:
-        #     print(p)
 
         #Check for paths with all ANDs and longest num features
         finalPath = []
-        for p in pathsWithScore:
+        for p in truePaths:
             if ('OR' not in p) and (len(p) > len(finalPath)):
                 finalPath = p
 
         #No AND path, now pick longest path remaining
         if finalPath == []:
-            for p in pathsWithScore:
+            for p in truePaths:
                 if len(p) > len(finalPath):
                     finalPath = p
 
+        bestScore = finalPath[-1]
         return bestScore, finalPath
+
+
+    # # Get decision path used to determine score
+    # # INPUT = list of all paths through graph and feature dictionary
+    # # OUTPUT = predicted score and final path
+    # def getDecisionPath(self, allPaths, ftDict):
+    #     truePaths = []
+    #     scores = []
+    #     for path in allPaths: #get all paths that evaluate to true on this data
+    #         truthVal, s = self.evaluatePath(path, ftDict)
+    #         if truthVal:
+    #             truePaths.append(path)
+    #             scores.append(s)
+    #
+    #     # print("TRUE PATHS")
+    #     # for t in range(len(truePaths)):
+    #     #     print(truePaths[t])
+    #     #     print(scores[t])
+    #
+    #     # Get majority count of score
+    #     counts = collections.Counter(scores)
+    #     # print(counts)
+    #     bestScore = counts.most_common(1)[0][0]
+    #     # print("Best Score", bestScore)
+    #
+    #     #Get paths that have this score
+    #     pathsWithScore = []
+    #     for path in truePaths:
+    #         if path[-1] == bestScore:
+    #             pathsWithScore.append(path)
+    #
+    #     # print("Paths with Score")
+    #     # for p in pathsWithScore:
+    #     #     print(p)
+    #
+    #     #Check for paths with all ANDs and longest num features
+    #     finalPath = []
+    #     for p in pathsWithScore:
+    #         if ('OR' not in p) and (len(p) > len(finalPath)):
+    #             finalPath = p
+    #
+    #     #No AND path, now pick longest path remaining
+    #     if finalPath == []:
+    #         for p in pathsWithScore:
+    #             if len(p) > len(finalPath):
+    #                 finalPath = p
+    #
+    #     return bestScore, finalPath
 
     # Evaluate truth value of path given data
     # INPUT = path and feature dictionary

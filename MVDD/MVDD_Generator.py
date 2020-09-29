@@ -477,7 +477,7 @@ def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', 
                                 max_depth=maxLevels, min_samples_leaf=minSamplesPerLeaf)
 
     #Perform training using cross validation
-    dt = trainCrossValidation(xData, yData, dt, numFolds, showIndividualROC, modelName)
+    dt = trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, showIndividualROC, modelName)
 
     #Old cross validation method
     # scoring= ['accuracy', 'precision_weighted', 'recall_weighted', 'f1_weighted', 'roc_auc_ovr_weighted']
@@ -499,7 +499,7 @@ def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', 
 # Performs training of MVDDs
 # INPUT = x and y data, classes predicting, decision tree model, number of cross validation folds, whether to show individual roc graphs and model name
 # OUTPUT = returns trained decision model
-def trainCrossValidation(xData, yData, dt, numFolds, showIndividualROC, modelName):
+def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, showIndividualROC, modelName):
     #make stratified k fold object
     kFold = StratifiedKFold(n_splits=numFolds)
 
@@ -517,7 +517,26 @@ def trainCrossValidation(xData, yData, dt, numFolds, showIndividualROC, modelNam
         y_train, y_test = yData.iloc[train_index], yData.iloc[test_index]
 
         dt.fit(X_train, y_train)
-        y_pred = dt.predict(X_test)
+        y_pred_orig = dt.predict(X_test)
+
+        #Generate a bunch of MVDDs, get best one
+        mvddList = []
+        mvddAcc = []
+        for i in range(1000):
+            mvdd = convertDecisionTreeToMVDD(dt, X_train, classes, learningCriteria)
+            mvddList.append(mvdd)
+            y_pred = mvdd.predictScoreSet(X_train)
+            mvddAcc.append(accuracy_score(y_train,y_pred))
+
+        #get best MVDD
+        maxPos = mvddAcc.index(max(mvddAcc))
+        mvdd = mvddList[maxPos]
+
+        y_pred = mvdd.predictScoreSet(X_test)
+
+        print("Real scrs", np.asarray(y_test))
+        print("DT scores", y_pred_orig)
+        print("MVDD scrs", y_pred)
 
         #get accuracy metrics
         acc.append(accuracy_score(y_test,y_pred))
