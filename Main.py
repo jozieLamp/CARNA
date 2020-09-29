@@ -20,14 +20,6 @@ import Params as params
 #Outcome can be "ALL", "DEATH" "REHOSPITALIZATION" "READMISSION" (passed in all caps)
 def runHemo(paramDict, outcome):
 
-    # #check for strings in paramDict
-    # for p in paramDict:
-    #     if paramDict[p] == "":
-    #         paramDict[p] = 0
-    #     else:
-    #         paramDict[p] = float(paramDict[p])
-
-
     #get outcome
     if outcome == "READMISSION":
         modelName = 'TreeFiles/Hemo_Readmission'
@@ -55,33 +47,15 @@ def runHemo(paramDict, outcome):
     else: #score == 1:
         scorePath = "Returned Score of " + str(score) + ", Risk Level: LOW\nIndicates a < 10% chance of the outcome " + outcome
 
-
-    # stringPath = ""
-    # if path != None:
-    #     path[-2] = '->'
-    #     stringPath = ' and '.join(path)
-    #     print(stringPath)
-
     imageName = modelName + '.png'
 
-    return imageName, score, scorePath #will be displayed on webpage
+    return imageName, score, path #will be displayed on webpage
 
 
 #Expects a param dict of 119 parameters and the specified outcome
 #Returns a text file location to display the graph, a integer score value and a string phenotype to be displayed
 #Outcome can be "ALL", "DEATH" "REHOSPITALIZATION" "READMISSION" (passed in all caps)
 def runAllData(paramDict, outcome):
-    # check for strings in paramDict
-    # for p in paramDict:
-    #     if paramDict[p] == "":
-    #         paramDict[p] = 0
-    #     else:
-    #         paramDict[p] = float(paramDict[p])
-
-    # Convert input into dataframe
-    input = pd.Series(paramDict)
-    input = input.to_frame()
-    input = input.T
 
     # get outcome
     if outcome == "READMISSION":
@@ -97,32 +71,36 @@ def runAllData(paramDict, outcome):
     mvdd = mvGen.loadMVDDFromFile(modelName)
 
     # Predict score
-    score, path = mvdd.predictScore(input)
+    score, path = mvdd.predictScore(paramDict)
 
     if score == 5:
-        stringPath = "Returned Score of " + str(
+        scorePath = "Returned Score of " + str(
             score) + ", Risk Level: HIGH\nIndicates a >= 40% chance of the outcome " + outcome
     elif score == 4:
-        stringPath = "Returned Score of " + str(
+        scorePath = "Returned Score of " + str(
             score) + ", Risk Level: INTERMEDIATE - HIGH\nIndicates a 30-40% chance of the outcome " + outcome
     elif score == 3:
-        stringPath = "Returned Score of " + str(
+        scorePath = "Returned Score of " + str(
             score) + ", Risk Level: INTERMEDIATE\nIndicates a 20-30% chance of the outcome " + outcome
     elif score == 2:
-        stringPath = "Returned Score of " + str(
+        scorePath = "Returned Score of " + str(
             score) + ", Risk Level: LOW - INTERMEDIATE\nIndicates a 10-20% chance of the outcome " + outcome
-    elif score == 1:
-        stringPath = "Returned Score of " + str(
+    else:  # score == 1:
+        scorePath = "Returned Score of " + str(
             score) + ", Risk Level: LOW\nIndicates a < 10% chance of the outcome " + outcome
+
+    imageName = modelName + '.png'
+
+    return imageName, score, path  # will be displayed on webpage
 
 
 def main():
-    paramDict = {"Age": "60", "BPDIAS": "63", "BPSYS": "80", "CI": "2.02", "CO": "4.52", "CPI": "0.5", "PCWP": "10", "EjF": "20", "HRTRT": "30",
+    paramDict = {"Age": "60", "BPDIAS": "63", "BPSYS": "80", "CI": "2.02", "CO": "4.52", "CPI": "0.5", "PCWP": "20", "EjF": "20", "HRTRT": "30",
      "MAP": "110", "MIXED": "", "MPAP": "20", "PAD": "10", "PAMN": "", "PAPP": "", "PAS": "11", "PCWPA": "32", "PCWPMN": "90",
-     "PCWPMod": "", "PP": "", "PPP": "", "PPRatio": "0.9", "RAP": "", "RAT": "", "RATHemo": "10", "SVRHemo": "",
+     "PCWPMod": "20", "PP": "", "PPP": "", "PPRatio": "0.9", "RAP": "", "RAT": "", "RATHemo": "10", "SVRHemo": "",
      "SVR": ""}
 
-    filename, score, path = runHemo(paramDict, "REHOSPITALIZATION")
+    filename, score, path = runHemo(paramDict, "DEATH")
 
 
 

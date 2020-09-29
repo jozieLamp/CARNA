@@ -48,7 +48,7 @@ strict digraph Tree {
 		op="<=",
 		param=0.5,
 		pos="e,1298.1,709.22 2041.2,816.66 1867.4,791.53 1483.7,736.06 1308.1,710.67",
-		style=dashed];
+		style=solid];
 	27	[fillcolor=palegreen,
 		height=1.1528,
 		label="Age\nentropy = 0.892\nsamples = 143\nvalue = [107, 0, 34, 2, 0]\nclass = 1",
@@ -59,7 +59,7 @@ strict digraph Tree {
 		op=">",
 		param=0.5,
 		pos="e,2130,738.27 2130,788.82 2130,776.02 2130,761.73 2130,748.32",
-		style=solid];
+		style=dashed];
 	3	[fillcolor=honeydew,
 		height=1.1528,
 		label="Age\nentropy = 0.412\nsamples = 149\nvalue = [0, 138, 10, 0, 1]\nclass = 2",
@@ -103,7 +103,7 @@ strict digraph Tree {
 		op=">",
 		param=39.5,
 		pos="e,557,470.27 557,520.82 557,508.02 557,493.73 557,480.32",
-		style=solid];
+		style=dashed];
 	6	[fillcolor=honeydew,
 		height=1.1528,
 		label="TOTP\nentropy = 0.773\nsamples = 44\nvalue = [0, 34, 10, 0, 0]\nclass = 2",
@@ -125,7 +125,7 @@ strict digraph Tree {
 		op=">",
 		param=46.5,
 		pos="e,557,336.27 557,386.82 557,374.02 557,359.73 557,346.32",
-		style=solid];
+		style=dashed];
 	7	[fillcolor=honeydew,
 		height=1.1528,
 		label="IDIOPE\nentropy = 0.371\nsamples = 28\nvalue = [0, 26, 2, 0, 0]\nclass = 2",
@@ -202,7 +202,7 @@ strict digraph Tree {
 		op="<=",
 		param=1.5,
 		pos="e,1149.3,470.27 1186.8,520.82 1176.8,507.39 1165.6,492.32 1155.3,478.35",
-		style=solid];
+		style=dashed];
 	24	[fillcolor=honeydew,
 		height=1.1528,
 		label="Race\nentropy = 0.503\nsamples = 36\nvalue = [0, 32, 4, 0, 0]\nclass = 2",
@@ -224,7 +224,7 @@ strict digraph Tree {
 		op="<=",
 		param=0.5,
 		pos="e,1006.8,336.05 1069.1,386.82 1051.9,372.83 1032.5,357.04 1014.8,342.59",
-		style=dashed];
+		style=solid];
 	21	[fillcolor=honeydew,
 		height=1.1528,
 		label="PPP\nentropy = 0.863\nsamples = 28\nvalue = [0, 20, 8, 0, 0]\nclass = 2",
@@ -235,7 +235,7 @@ strict digraph Tree {
 		op=">",
 		param=0.5,
 		pos="e,1121.1,336.27 1119.9,386.82 1120.2,374.02 1120.5,359.73 1120.8,346.32",
-		style=solid];
+		style=dashed];
 	17	[fillcolor=lightyellow,
 		height=1.1528,
 		label="EjF\nentropy = 0.637\nsamples = 31\nvalue = [0, 5, 26, 0, 0]\nclass = 3",
@@ -334,7 +334,7 @@ strict digraph Tree {
 		op="<=",
 		param=57.5,
 		pos="e,2034.6,604.27 2087.5,654.82 2073.2,641.14 2057.1,625.76 2042.3,611.57",
-		style=solid];
+		style=dashed];
 	37	[fillcolor=palegreen,
 		height=1.1528,
 		label="EjF\nentropy = 0.436\nsamples = 78\nvalue = [71, 0, 7, 0, 0]\nclass = 1",
@@ -356,7 +356,7 @@ strict digraph Tree {
 		op="<=",
 		param=5.5,
 		pos="e,1844.6,470.15 1926.6,521 1903.4,506.62 1877.2,490.34 1853.3,475.53",
-		style=solid];
+		style=dashed];
 	32	[fillcolor=lightyellow,
 		height=1.1528,
 		label="TALB\nentropy = 0.993\nsamples = 42\nvalue = [19, 0, 23, 0, 0]\nclass = 3",
@@ -444,7 +444,7 @@ strict digraph Tree {
 		op="<=",
 		param=18.5,
 		pos="e,2268,470.27 2268,520.82 2268,508.02 2268,493.73 2268,480.32",
-		style=dashed];
+		style=solid];
 	41	[fillcolor=palegreen,
 		height=0.94444,
 		label="entropy\nsamples = 52\nvalue = [52, 0, 0, 0, 0]\nclass = 1",
@@ -499,7 +499,7 @@ strict digraph Tree {
 		op=">",
 		param=0.5,
 		pos="e,3333.9,722.7 3075.2,803.03 3147.4,780.63 3250.4,748.61 3324.1,725.72",
-		style=dashed];
+		style=solid];
 	44	[fillcolor=lightcoral,
 		height=1.1528,
 		label="CRT\nentropy = 1.018\nsamples = 78\nvalue = [0, 0, 2, 22, 54]\nclass = 5",
@@ -510,7 +510,7 @@ strict digraph Tree {
 		op="<=",
 		param=0.5,
 		pos="e,2940.9,604.27 2968.1,654.82 2961,641.64 2953.1,626.89 2945.7,613.14",
-		style=dashed];
+		style=solid];
 	53	[fillcolor=lightcoral,
 		height=1.1528,
 		label="Age\nentropy = 0.323\nsamples = 68\nvalue = [0, 4, 0, 0, 64]\nclass = 5",
@@ -521,7 +521,7 @@ strict digraph Tree {
 		op=">",
 		param=0.5,
 		pos="e,3057.7,604.27 3020.2,654.82 3030.2,641.39 3041.4,626.32 3051.7,612.35",
-		style=solid];
+		style=dashed];
 	45	[fillcolor=lightcoral,
 		height=1.1528,
 		label="Age\nentropy = 0.384\nsamples = 40\nvalue = [0, 0, 0, 3, 37]\nclass = 5",
@@ -587,7 +587,7 @@ strict digraph Tree {
 		op=">",
 		param=51.5,
 		pos="e,3033.3,336.05 2969.9,386.82 2987.3,372.83 3007.1,357.04 3025.1,342.59",
-		style=solid];
+		style=dashed];
 	51	[fillcolor=mistyrose,
 		height=0.94444,
 		label="entropy\nsamples = 13\nvalue = [0, 0, 2, 11, 0]\nclass = 4",
@@ -642,7 +642,7 @@ strict digraph Tree {
 		op="<=",
 		param=60.5,
 		pos="e,3415,604.27 3415,654.82 3415,642.02 3415,627.73 3415,614.32",
-		style=solid];
+		style=dashed];
 	62	[fillcolor=mistyrose,
 		height=0.94444,
 		label="entropy\nsamples = 89\nvalue = [0, 0, 0, 89, 0]\nclass = 4",

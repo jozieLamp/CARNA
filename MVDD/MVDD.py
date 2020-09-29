@@ -43,26 +43,6 @@ class MVDD:
         dt = to_pydot(self.dot)
         dt.write_dot(filename + ".dot")
 
-    # Traverses dot graph in MVDD
-    # INPUT = N/A
-    # OUTPUT = N/A
-    def traverseGraph(self):
-        dot = self.dot
-        for n in nx.bfs_edges(dot, 'PCWPMod'):
-            print(n)
-            nodeName = n[0]
-            print(dot.nodes[nodeName])
-
-        print("edges connected to node", dot.edges('PCWPMod'))
-        print(dot.get_edge_data('PP', 'PAPP'))  # get label and style of edge
-
-        # UPDATE LABEL LIKE THIS
-        dot.edges['PP', 'PAPP', 0]['label'] = 'New Label'
-        print("\n\n", dot.edges['PP', 'PAPP', 0])
-
-        # self.saveToFile(dot, "NewTEST")
-        # print(dot.get_edge_data('PP', 'PAPP'))  # get label and style of edge
-
     # Return dictionary of node and number edges
     # INPUT = if want to return terminal nodes
     # OUTPUT = dictionary of node and number edges
@@ -82,7 +62,25 @@ class MVDD:
     # OUTPUT = predicted score and the final path illustrating the used phenotype
     def predictScore(self, paramDict):
 
-        #Convert input into dataframe
+        #Comparison to model only prediction
+        dtScore = self.getModelPrediction(paramDict)
+        print("Decision Tree score:", dtScore)
+
+        #Get all paths through graph
+        allPaths = self.getAllPaths(self.terminalIndices)
+
+        #Predict score and get decision path
+        predScore, path = self.getDecisionPath(allPaths, paramDict)
+        print("\nFinal Score:", predScore)
+        print("Final Path:", path)
+
+        return predScore, path
+
+    # Get prediction from actual decision tree model for comparison (not MVDD)
+    # INPUT = feature dictionary
+    # OUTPUT = predicted score
+    def getModelPrediction(self, paramDict):
+        # Convert input into dataframe
         data = {}
         for p in paramDict:
             if paramDict[p] == "":
@@ -95,76 +93,58 @@ class MVDD:
         xData = input.T
 
         predScore = self.model.predict(xData)[0]
-        print("PREDICTED SCORE", predScore)
-        path = None
+        return predScore
 
-        #path = self.getDecisionPath(self.terminalIndices, predScore, xData)
-
-        # path = None
-        # for p in paths:
-        #     truthVal, score = self.evaluatePathValue(p, xData)
-        #     if score == predScore:
-        #         path = p
-        #         break
-
-        # self.getDecisionPath(xData)
-        # tree_rules = export_text(self.model, feature_names=list(xData))
-        # print(tree_rules)
-
-        allPaths = self.getAllPaths(self.terminalIndices)
-
-        print(paramDict['PCWPMod'])
-
-        self.getDecisionPath(allPaths, paramDict)
-
-        return predScore, path
-
+    # Get decision path used to determine score
+    # INPUT = list of all paths through graph and feature dictionary
+    # OUTPUT = predicted score and final path
     def getDecisionPath(self, allPaths, ftDict):
         truePaths = []
         scores = []
-        for path in allPaths:
+        for path in allPaths: #get all paths that evaluate to true on this data
             truthVal, s = self.evaluatePath(path, ftDict)
             if truthVal:
                 truePaths.append(path)
                 scores.append(s)
 
-        print("TRUE PATHS")
-        for t in range(len(truePaths)):
-            print(truePaths[t])
-            print(scores[t])
+        # print("TRUE PATHS")
+        # for t in range(len(truePaths)):
+        #     print(truePaths[t])
+        #     print(scores[t])
 
-        finalPaths = []
         # Get majority count of score
         counts = collections.Counter(scores)
-        print(counts)
+        # print(counts)
         bestScore = counts.most_common(1)[0][0]
-        print("Best Score", bestScore)
+        # print("Best Score", bestScore)
 
-        #TODO
-        #Now need to get paths that have this score
-        #And return best path with this score
+        #Get paths that have this score
+        pathsWithScore = []
+        for path in truePaths:
+            if path[-1] == bestScore:
+                pathsWithScore.append(path)
 
-        #check if any paths have only 'ANDs'
-        andPaths = []
-        for p in allPaths:
-            if 'OR' not in p:
-                andPaths.append(p)
-
-        if andPaths != []:
-            finalPaths = andPaths
-
-        print("FINAL PATHS")
-        # for p in finalPaths:
+        # print("Paths with Score")
+        # for p in pathsWithScore:
         #     print(p)
 
+        #Check for paths with all ANDs and longest num features
+        finalPath = []
+        for p in pathsWithScore:
+            if ('OR' not in p) and (len(p) > len(finalPath)):
+                finalPath = p
 
+        #No AND path, now pick longest path remaining
+        if finalPath == []:
+            for p in pathsWithScore:
+                if len(p) > len(finalPath):
+                    finalPath = p
 
+        return bestScore, finalPath
 
-
-
-
-
-    #return true or false of ftDict on this path
+    # Evaluate truth value of path given data
+    # INPUT = path and feature dictionary
+    # OUTPUT = truth value - true or false and score of path
     def evaluatePath(self, path, ftDict):
         # print(path)
 
@@ -219,6 +199,9 @@ class MVDD:
         else:
             return value < param
 
+    # Get all paths through graph
+    # INPUT = terminal indices
+    # OUTPUT = list of lists of paths through graph from root to each terminal indice
     def getAllPaths(self, terminalNodes):
 
         paths = []
