@@ -29,6 +29,7 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 import random
 from itertools import permutations
+import itertools
 import re
 from scipy import interp
 from itertools import cycle
@@ -520,17 +521,7 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
         y_pred_orig = dt.predict(X_test)
 
         #Generate a bunch of MVDDs, get best one
-        mvddList = []
-        mvddAcc = []
-        for i in range(1000):
-            mvdd = convertDecisionTreeToMVDD(dt, X_train, classes, learningCriteria)
-            mvddList.append(mvdd)
-            y_pred = mvdd.predictScoreSet(X_train)
-            mvddAcc.append(accuracy_score(y_train,y_pred))
-
-        #get best MVDD
-        maxPos = mvddAcc.index(max(mvddAcc))
-        mvdd = mvddList[maxPos]
+        mvdd = getBestMVDD(dt, X_train, y_train, classes, learningCriteria)
 
         y_pred = mvdd.predictScoreSet(X_test)
 
@@ -571,6 +562,152 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
     print("F1: %0.3f(+/- %0.3f)" % (np.mean(f1), np.std(f1) * 2))
 
     return dt
+
+
+def getBestMVDD(dt, xData, yData, classes, learningCriteria):
+
+    dot_data = tree.export_graphviz(dt,
+                                    feature_names=xData.columns,
+                                    class_names=classes,
+                                    out_file=None,
+                                    filled=True,
+                                    rounded=True)
+    graph = pydotplus.graph_from_dot_data(dot_data)
+    dot = nx.nx_pydot.from_pydot(graph)
+    dot = nx.DiGraph(dot)
+
+    totalEdges = len(dot.edges)
+    percentReqd= round(0.1 * totalEdges) #number of or edges required: > 10% of number total edges
+    print("Must have more than", percentReqd, "Edges")
+
+    # get all combos of edges
+    l = ['solid', 'dashed']
+    edgeIterator = itertools.product(l, repeat=totalEdges)
+
+    mvddList = []
+    mvddAcc = []
+    edgeList = []
+
+    for edgeOpt in edgeIterator:
+        edgeOpt = list(edgeOpt)
+
+        if edgeOpt.count('dashed') > percentReqd:
+            print(edgeOpt)
+
+            mvdd = convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria, edgeOpt)
+
+            mvddList.append(mvdd)
+            y_pred = mvdd.predictScoreSet(xData)
+            acc = accuracy_score(yData, y_pred)
+            print("Accuracy Score", acc)
+            mvddAcc.append(acc)
+            edgeList.append(list(edgeOpt))
+
+    # get best MVDD
+    maxPos = mvddAcc.index(max(mvddAcc))
+    mvdd = mvddList[maxPos]
+    print("BEST EDGE OPTION:", edgeList[maxPos])
+
+    return mvdd
+
+
+# Convert decision tree to MVDD
+# INPUT = decision tree model, xdata, classes and learning criteria used
+# OUTPUT = saves a MVDD graph and returns the new MVDD
+def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria, edgeOpt):
+    # Convert decision tree into dot graph
+    dot_data = tree.export_graphviz(dt,
+                                    feature_names=xData.columns,
+                                    class_names=classes,
+                                    out_file=None,
+                                    filled=True,
+                                    rounded=True)
+    graph = pydotplus.graph_from_dot_data(dot_data)
+
+
+    # Recolor the nodes
+    colors = ('palegreen', 'honeydew', 'lightyellow', 'mistyrose', 'lightcoral')
+    nodes = graph.get_node_list()
+
+    for node in nodes:
+        if node.get_name() not in ('node', 'edge'):
+            vals = dt.tree_.value[int(node.get_name())][0]
+            maxPos = np.argmax(vals)
+            node.set_fillcolor(colors[maxPos])
+
+    # Convert decision tree dot data to decision diagram
+    dot = nx.nx_pydot.from_pydot(graph)
+    dot = nx.DiGraph(dot)
+
+    # Get terminal indices
+    terminalIndices = []
+    for n in dot.nodes:
+        label = dot.nodes[n]['label']
+        label = label.replace("\"", "")
+        labelSplit = label.split('\\n')[0]
+        tokens = labelSplit.split(' ')
+
+        if tokens[0] == learningCriteria:  # NOTE was 'gini'
+            terminalIndices.append(n)
+
+    edgeCount = 0
+
+    for n in dot.nodes:
+        label = dot.nodes[n]['label']
+        label = label.replace("\"", "")
+        labelSplit = label.split('\\n')[0]
+        tokens = labelSplit.split(' ')
+        leftLabel, leftOp, rightLabel, rightOp, param = getLeftRightLabels(tokens)
+        # print(leftOp, leftLabel, rightOp, rightLabel)
+
+        if tokens[0] != 'gini':
+            nodeLabel = re.sub(labelSplit, '', dot.nodes[n]['label'])
+            nodeLabel = nodeLabel.replace("\"", "")
+            nodeLabel = tokens[0] + nodeLabel
+            dot.nodes[n]['label'] = nodeLabel
+
+        if list(dot.edges(n)) != []:
+            leftEdge = list(dot.edges(n))[0]
+            rightEdge = list(dot.edges(n))[1]
+
+            #Assign Left Edge
+            if leftEdge[0] in terminalIndices or leftEdge[1] in terminalIndices:
+                dot.edges[leftEdge[0], leftEdge[1]]['label'] = leftLabel
+                dot.edges[leftEdge[0], leftEdge[1]]['op'] = leftOp
+                dot.edges[leftEdge[0], leftEdge[1]]['param'] = param
+                dot.edges[leftEdge[0], leftEdge[1]]['style'] = 'solid'
+                dot.edges[leftEdge[0], leftEdge[1]]['headlabel'] = ""
+                edgeCount += 1
+
+            else:
+                dot.edges[leftEdge[0], leftEdge[1]]['label'] = leftLabel
+                dot.edges[leftEdge[0], leftEdge[1]]['op'] = leftOp
+                dot.edges[leftEdge[0], leftEdge[1]]['param'] = param
+                dot.edges[leftEdge[0], leftEdge[1]]['style'] = edgeOpt[edgeCount]
+                dot.edges[leftEdge[0], leftEdge[1]]['headlabel'] = ""
+                edgeCount += 1
+
+            #Assign Right Edge
+            if rightEdge[0] in terminalIndices or rightEdge[1] in terminalIndices:
+                dot.edges[rightEdge[0], rightEdge[1]]['label'] = rightLabel
+                dot.edges[rightEdge[0], rightEdge[1]]['op'] = rightOp
+                dot.edges[rightEdge[0], rightEdge[1]]['param'] = param
+                dot.edges[rightEdge[0], rightEdge[1]]['style'] = 'solid'
+                dot.edges[rightEdge[0], rightEdge[1]]['headlabel'] = ""
+                edgeCount += 1
+            else:
+                dot.edges[rightEdge[0], rightEdge[1]]['label'] = rightLabel
+                dot.edges[rightEdge[0], rightEdge[1]]['op'] = rightOp
+                dot.edges[rightEdge[0], rightEdge[1]]['param'] = param
+                dot.edges[rightEdge[0], rightEdge[1]]['style'] = edgeOpt[edgeCount]
+                dot.edges[rightEdge[0], rightEdge[1]]['headlabel'] = ""
+                edgeCount += 1
+
+    # Create MVDD
+    mvdd = MVDD(features=xData.columns, dot=dot, root='0', model=dt)
+    mvdd.terminalIndices = terminalIndices
+
+    return mvdd
 
 #Helper method to train cross validation
 def getDictionaryAverages(dictList, hasList=True):
@@ -680,101 +817,101 @@ def getIndividualROCGraph(y_test, y_score, foldNum, modelName):
     plt.show()
 
 
-# Convert decision tree to MVDD
-# INPUT = decision tree model, xdata, classes and learning criteria used
-# OUTPUT = saves a MVDD graph and returns the new MVDD
-def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria):
-    # Convert decision tree into dot graph
-    dot_data = tree.export_graphviz(dt,
-                                    feature_names=xData.columns,
-                                    class_names=classes,
-                                    out_file=None,
-                                    filled=True,
-                                    rounded=True)
-    graph = pydotplus.graph_from_dot_data(dot_data)
-
-    # Recolor the nodes
-    colors = ('palegreen', 'honeydew', 'lightyellow', 'mistyrose', 'lightcoral')
-    nodes = graph.get_node_list()
-
-    for node in nodes:
-        if node.get_name() not in ('node', 'edge'):
-            vals = dt.tree_.value[int(node.get_name())][0]
-            maxPos = np.argmax(vals)
-            node.set_fillcolor(colors[maxPos])
-
-    # Convert decision tree dot data to decision diagram
-    dot = nx.nx_pydot.from_pydot(graph)
-    dot = nx.DiGraph(dot)
-
-    # Get terminal indices
-    terminalIndices = []
-    for n in dot.nodes:
-        label = dot.nodes[n]['label']
-        label = label.replace("\"", "")
-        labelSplit = label.split('\\n')[0]
-        tokens = labelSplit.split(' ')
-
-        if tokens[0] == learningCriteria:  # NOTE was 'gini'
-            terminalIndices.append(n)
-
-    for n in dot.nodes:
-        label = dot.nodes[n]['label']
-        label = label.replace("\"", "")
-        labelSplit = label.split('\\n')[0]
-        tokens = labelSplit.split(' ')
-        leftLabel, leftOp, rightLabel, rightOp, param = getLeftRightLabels(tokens)
-        # print(leftOp, leftLabel, rightOp, rightLabel)
-
-        if tokens[0] != 'gini':
-            nodeLabel = re.sub(labelSplit, '', dot.nodes[n]['label'])
-            nodeLabel = nodeLabel.replace("\"", "")
-            nodeLabel = tokens[0] + nodeLabel
-            dot.nodes[n]['label'] = nodeLabel
-
-        count = 0
-        for edg in dot.edges(n):
-            if (edg[0] in terminalIndices or edg[1] in terminalIndices) and count == 0:
-                dot.edges[edg[0], edg[1]]['label'] = leftLabel
-                dot.edges[edg[0], edg[1]]['op'] = leftOp
-                dot.edges[edg[0], edg[1]]['param'] = param
-                dot.edges[edg[0], edg[1]]['style'] = 'solid'
-
-                dot.edges[edg[0], edg[1]]['headlabel'] = ""
-
-                count += 1
-            elif (edg[0] in terminalIndices or edg[1] in terminalIndices) and count == 1:
-                dot.edges[edg[0], edg[1]]['label'] = rightLabel
-                dot.edges[edg[0], edg[1]]['op'] = rightOp
-                dot.edges[edg[0], edg[1]]['param'] = param
-                dot.edges[edg[0], edg[1]]['style'] = 'solid'
-
-                dot.edges[edg[0], edg[1]]['headlabel'] = ""
-            elif count == 0:
-                stl = random.choice(['solid', 'dashed'])
-                dot.edges[edg[0], edg[1]]['label'] = leftLabel
-                dot.edges[edg[0], edg[1]]['op'] = leftOp
-                dot.edges[edg[0], edg[1]]['param'] = param
-                dot.edges[edg[0], edg[1]]['style'] = stl
-
-                dot.edges[edg[0], edg[1]]['headlabel'] = ""
-
-                count += 1
-            else:
-                stl = random.choice(['solid', 'dashed'])
-                dot.edges[edg[0], edg[1]]['label'] = rightLabel
-                dot.edges[edg[0], edg[1]]['op'] = rightOp
-                dot.edges[edg[0], edg[1]]['param'] = param
-                dot.edges[edg[0], edg[1]]['style'] = stl
-
-                dot.edges[edg[0], edg[1]]['headlabel'] = ""
-
-    # Create MVDD
-    mvdd = MVDD(features=xData.columns, dot=dot, root='0', model=dt)
-    mvdd.terminalIndices = terminalIndices
-
-    return mvdd
-
+# # Convert decision tree to MVDD
+# # INPUT = decision tree model, xdata, classes and learning criteria used
+# # OUTPUT = saves a MVDD graph and returns the new MVDD
+# def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria):
+#     # Convert decision tree into dot graph
+#     dot_data = tree.export_graphviz(dt,
+#                                     feature_names=xData.columns,
+#                                     class_names=classes,
+#                                     out_file=None,
+#                                     filled=True,
+#                                     rounded=True)
+#     graph = pydotplus.graph_from_dot_data(dot_data)
+#
+#     # Recolor the nodes
+#     colors = ('palegreen', 'honeydew', 'lightyellow', 'mistyrose', 'lightcoral')
+#     nodes = graph.get_node_list()
+#
+#     for node in nodes:
+#         if node.get_name() not in ('node', 'edge'):
+#             vals = dt.tree_.value[int(node.get_name())][0]
+#             maxPos = np.argmax(vals)
+#             node.set_fillcolor(colors[maxPos])
+#
+#     # Convert decision tree dot data to decision diagram
+#     dot = nx.nx_pydot.from_pydot(graph)
+#     dot = nx.DiGraph(dot)
+#
+#     # Get terminal indices
+#     terminalIndices = []
+#     for n in dot.nodes:
+#         label = dot.nodes[n]['label']
+#         label = label.replace("\"", "")
+#         labelSplit = label.split('\\n')[0]
+#         tokens = labelSplit.split(' ')
+#
+#         if tokens[0] == learningCriteria:  # NOTE was 'gini'
+#             terminalIndices.append(n)
+#
+#     for n in dot.nodes:
+#         label = dot.nodes[n]['label']
+#         label = label.replace("\"", "")
+#         labelSplit = label.split('\\n')[0]
+#         tokens = labelSplit.split(' ')
+#         leftLabel, leftOp, rightLabel, rightOp, param = getLeftRightLabels(tokens)
+#         # print(leftOp, leftLabel, rightOp, rightLabel)
+#
+#         if tokens[0] != 'gini':
+#             nodeLabel = re.sub(labelSplit, '', dot.nodes[n]['label'])
+#             nodeLabel = nodeLabel.replace("\"", "")
+#             nodeLabel = tokens[0] + nodeLabel
+#             dot.nodes[n]['label'] = nodeLabel
+#
+#         count = 0
+#         for edg in dot.edges(n):
+#             if (edg[0] in terminalIndices or edg[1] in terminalIndices) and count == 0:
+#                 dot.edges[edg[0], edg[1]]['label'] = leftLabel
+#                 dot.edges[edg[0], edg[1]]['op'] = leftOp
+#                 dot.edges[edg[0], edg[1]]['param'] = param
+#                 dot.edges[edg[0], edg[1]]['style'] = 'solid'
+#
+#                 dot.edges[edg[0], edg[1]]['headlabel'] = ""
+#
+#                 count += 1
+#             elif (edg[0] in terminalIndices or edg[1] in terminalIndices) and count == 1:
+#                 dot.edges[edg[0], edg[1]]['label'] = rightLabel
+#                 dot.edges[edg[0], edg[1]]['op'] = rightOp
+#                 dot.edges[edg[0], edg[1]]['param'] = param
+#                 dot.edges[edg[0], edg[1]]['style'] = 'solid'
+#
+#                 dot.edges[edg[0], edg[1]]['headlabel'] = ""
+#             elif count == 0:
+#                 stl = random.choice(['solid', 'dashed'])
+#                 dot.edges[edg[0], edg[1]]['label'] = leftLabel
+#                 dot.edges[edg[0], edg[1]]['op'] = leftOp
+#                 dot.edges[edg[0], edg[1]]['param'] = param
+#                 dot.edges[edg[0], edg[1]]['style'] = stl
+#
+#                 dot.edges[edg[0], edg[1]]['headlabel'] = ""
+#
+#                 count += 1
+#             else:
+#                 stl = random.choice(['solid', 'dashed'])
+#                 dot.edges[edg[0], edg[1]]['label'] = rightLabel
+#                 dot.edges[edg[0], edg[1]]['op'] = rightOp
+#                 dot.edges[edg[0], edg[1]]['param'] = param
+#                 dot.edges[edg[0], edg[1]]['style'] = stl
+#
+#                 dot.edges[edg[0], edg[1]]['headlabel'] = ""
+#
+#     # Create MVDD
+#     mvdd = MVDD(features=xData.columns, dot=dot, root='0', model=dt)
+#     mvdd.terminalIndices = terminalIndices
+#
+#     return mvdd
+#
 
 
 # Helper methods

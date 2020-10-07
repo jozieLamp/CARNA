@@ -59,7 +59,7 @@ strict digraph Tree {
 		op=">",
 		param=26.5,
 		pos="e,674.5,1006.3 674.5,1056.8 674.5,1044 674.5,1029.7 674.5,1016.3",
-		style=solid];
+		style=dashed];
 	4	[fillcolor=palegreen,
 		height=1.1528,
 		label="PAD\ngini = 0.461\nsamples = 27\nvalue = [19, 4, 4, 0, 0]\nclass = 1",
@@ -81,7 +81,7 @@ strict digraph Tree {
 		op=">",
 		param=0.497,
 		pos="e,674.5,872.27 674.5,922.82 674.5,910.02 674.5,895.73 674.5,882.32",
-		style=solid];
+		style=dashed];
 	5	[fillcolor=palegreen,
 		height=1.1528,
 		label="MAP\ngini = 0.287\nsamples = 23\nvalue = [19, 4, 0, 0, 0]\nclass = 1",
@@ -92,7 +92,7 @@ strict digraph Tree {
 		op="<=",
 		param=29.0,
 		pos="e,344.26,738.05 406.57,788.82 389.4,774.83 370.03,759.04 352.29,744.59",
-		style=dashed];
+		style=solid];
 	10	[fillcolor=lightyellow,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 4\nvalue = [0, 0, 4, 0, 0]\nclass = 3",
@@ -114,7 +114,7 @@ strict digraph Tree {
 		op="<=",
 		param=148.5,
 		pos="e,241.29,604.27 270.77,654.82 263.08,641.64 254.47,626.89 246.45,613.14",
-		style=dashed];
+		style=solid];
 	9	[fillcolor=honeydew,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 3\nvalue = [0, 3, 0, 0, 0]\nclass = 2",
@@ -169,7 +169,7 @@ strict digraph Tree {
 		op=">",
 		param=2.5,
 		pos="e,744.99,738.27 705.94,788.82 716.31,775.39 727.96,760.32 738.75,746.35",
-		style=dashed];
+		style=solid];
 	14	[fillcolor=honeydew,
 		height=1.1528,
 		label="BPSYS\ngini = 0.068\nsamples = 85\nvalue = [3, 82, 0, 0, 0]\nclass = 2",
@@ -180,7 +180,7 @@ strict digraph Tree {
 		op="<=",
 		param=63.5,
 		pos="e,635.33,604.15 713.91,655 691.79,640.68 666.74,624.48 643.94,609.73",
-		style=dashed];
+		style=solid];
 	19	[fillcolor=honeydew,
 		height=1.1528,
 		label="PCWPMN\ngini = 0.483\nsamples = 22\nvalue = [0, 13, 9, 0, 0]\nclass = 2",
@@ -191,7 +191,7 @@ strict digraph Tree {
 		op=">",
 		param=63.5,
 		pos="e,776.5,604.27 776.5,654.82 776.5,642.02 776.5,627.73 776.5,614.32",
-		style=dashed];
+		style=solid];
 	15	[fillcolor=honeydew,
 		height=1.1528,
 		label="SVR\ngini = 0.49\nsamples = 7\nvalue = [3, 4, 0, 0, 0]\nclass = 2",
@@ -246,7 +246,7 @@ strict digraph Tree {
 		op="<=",
 		param=12.5,
 		pos="e,749.55,470.27 764.48,520.82 760.66,507.9 756.39,493.45 752.4,479.92",
-		style=solid];
+		style=dashed];
 	23	[fillcolor=lightyellow,
 		height=1.1528,
 		label="SVRHemo\ngini = 0.198\nsamples = 9\nvalue = [0, 1, 8, 0, 0]\nclass = 3",
@@ -323,7 +323,7 @@ strict digraph Tree {
 		op=">",
 		param=29.5,
 		pos="e,2351.8,976.03 1586.8,1085.3 1763.3,1060.1 2166.8,1002.5 2341.9,977.45",
-		style=solid];
+		style=dashed];
 	28	[fillcolor=palegreen,
 		height=1.1528,
 		label="MPAP\ngini = 0.5\nsamples = 10\nvalue = [5, 5, 0, 0, 0]\nclass = 1",
@@ -334,7 +334,7 @@ strict digraph Tree {
 		op="<=",
 		param=52.0,
 		pos="e,1424.8,872.27 1467.3,922.82 1455.9,909.27 1443.1,894.04 1431.3,879.96",
-		style=solid];
+		style=dashed];
 	33	[fillcolor=lightyellow,
 		height=1.1528,
 		label="PAD\ngini = 0.308\nsamples = 108\nvalue = [3, 10, 89, 0, 6]\nclass = 3",
@@ -411,7 +411,7 @@ strict digraph Tree {
 		op=">",
 		param=35.5,
 		pos="e,1811.8,738.15 1735.9,789 1757.3,774.68 1781.5,758.48 1803.5,743.73",
-		style=solid];
+		style=dashed];
 	35	[fillcolor=lightyellow,
 		height=1.1528,
 		label="MAP\ngini = 0.114\nsamples = 84\nvalue = [3, 2, 79, 0, 0]\nclass = 3",
@@ -433,7 +433,7 @@ strict digraph Tree {
 		op=">",
 		param=5.3,
 		pos="e,1702.5,604.27 1687.5,654.82 1691.3,641.9 1695.6,627.45 1699.6,613.92",
-		style=dashed];
+		style=solid];
 	36	[fillcolor=palegreen,
 		height=1.1528,
 		label="HRTRT\ngini = 0.375\nsamples = 4\nvalue = [3, 0, 1, 0, 0]\nclass = 1",
@@ -488,7 +488,7 @@ strict digraph Tree {
 		op="<=",
 		param=0.544,
 		pos="e,1538,336.27 1546,386.82 1544,374.02 1541.7,359.73 1539.6,346.32",
-		style=solid];
+		style=dashed];
 	45	[fillcolor=lightyellow,
 		height=1.1528,
 		label="SVRHemo\ngini = 0.375\nsamples = 4\nvalue = [0, 1, 3, 0, 0]\nclass = 3",
@@ -499,7 +499,7 @@ strict digraph Tree {
 		op=">",
 		param=0.544,
 		pos="e,1649.9,336.27 1596,386.82 1610.7,373.02 1627.3,357.48 1642.6,343.18",
-		style=solid];
+		style=dashed];
 	41	[fillcolor=lightyellow,
 		height=1.1528,
 		label="PAPP\ngini = 0.278\nsamples = 6\nvalue = [0, 1, 5, 0, 0]\nclass = 3",
@@ -576,7 +576,7 @@ strict digraph Tree {
 		op="<=",
 		param=21.0,
 		pos="e,1809.2,470.27 1756.7,520.82 1770.9,507.14 1786.9,491.76 1801.6,477.57",
-		style=solid];
+		style=dashed];
 	52	[fillcolor=lightyellow,
 		height=1.1528,
 		label="CO\ngini = 0.46\nsamples = 10\nvalue = [0, 2, 7, 0, 1]\nclass = 3",
@@ -587,7 +587,7 @@ strict digraph Tree {
 		op=">",
 		param=21.0,
 		pos="e,2097.5,441.56 1784.8,524.45 1787.7,523.23 1790.6,522.08 1793.5,521 1892,484.3 2010.5,458.17 2087.4,443.47",
-		style=solid];
+		style=dashed];
 	50	[fillcolor=honeydew,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 6\nvalue = [0, 6, 0, 0, 0]\nclass = 2",
@@ -653,7 +653,7 @@ strict digraph Tree {
 		op=">",
 		param=12.5,
 		pos="e,2197.9,202.27 2181.1,252.82 2185.4,239.9 2190.2,225.45 2194.7,211.92",
-		style=dashed];
+		style=solid];
 	56	[fillcolor=lightyellow,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 1, 0, 0]\nclass = 3",
@@ -708,7 +708,7 @@ strict digraph Tree {
 		op="<=",
 		param=77.0,
 		pos="e,2425.5,872.27 2425.5,922.82 2425.5,910.02 2425.5,895.73 2425.5,882.32",
-		style=dashed];
+		style=solid];
 	72	[fillcolor=lightcoral,
 		height=1.1528,
 		label="CO\ngini = 0.139\nsamples = 40\nvalue = [0, 0, 3, 0, 37]\nclass = 5",
@@ -730,7 +730,7 @@ strict digraph Tree {
 		op="<=",
 		param=84.0,
 		pos="e,2370.9,738.27 2401.2,788.82 2393.3,775.64 2384.4,760.89 2376.2,747.14",
-		style=dashed];
+		style=solid];
 	67	[fillcolor=lightyellow,
 		height=1.1528,
 		label="PCWPA\ngini = 0.49\nsamples = 7\nvalue = [0, 0, 4, 0, 3]\nclass = 3",
@@ -741,7 +741,7 @@ strict digraph Tree {
 		op=">",
 		param=84.0,
 		pos="e,2480.1,738.27 2449.8,788.82 2457.7,775.64 2466.6,760.89 2474.8,747.14",
-		style=solid];
+		style=dashed];
 	65	[fillcolor=palegreen,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 4\nvalue = [4, 0, 0, 0, 0]\nclass = 1",
