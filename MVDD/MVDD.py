@@ -3,7 +3,7 @@ HemoPheno4HF
 SCRIPT DESCRIPTION: Multi Valued Decision Diagram Object Class
 CODE DEVELOPED BY: Josephine Lamp
 ORGANIZATION: University of Virginia, Charlottesville, VA
-LAST UPDATED: 8/28/2020
+LAST UPDATED: 10/14/2020
 '''
 
 import pydot
@@ -140,53 +140,6 @@ class MVDD:
         bestScore = finalPath[-1]
         return bestScore, finalPath
 
-
-    # # Get decision path used to determine score
-    # # INPUT = list of all paths through graph and feature dictionary
-    # # OUTPUT = predicted score and final path
-    # def getDecisionPath(self, allPaths, ftDict):
-    #     truePaths = []
-    #     scores = []
-    #     for path in allPaths: #get all paths that evaluate to true on this data
-    #         truthVal, s = self.evaluatePath(path, ftDict)
-    #         if truthVal:
-    #             truePaths.append(path)
-    #             scores.append(s)
-    #
-    #     # print("TRUE PATHS")
-    #     # for t in range(len(truePaths)):
-    #     #     print(truePaths[t])
-    #     #     print(scores[t])
-    #
-    #     # Get majority count of score
-    #     counts = collections.Counter(scores)
-    #     # print(counts)
-    #     bestScore = counts.most_common(1)[0][0]
-    #     # print("Best Score", bestScore)
-    #
-    #     #Get paths that have this score
-    #     pathsWithScore = []
-    #     for path in truePaths:
-    #         if path[-1] == bestScore:
-    #             pathsWithScore.append(path)
-    #
-    #     # print("Paths with Score")
-    #     # for p in pathsWithScore:
-    #     #     print(p)
-    #
-    #     #Check for paths with all ANDs and longest num features
-    #     finalPath = []
-    #     for p in pathsWithScore:
-    #         if ('OR' not in p) and (len(p) > len(finalPath)):
-    #             finalPath = p
-    #
-    #     #No AND path, now pick longest path remaining
-    #     if finalPath == []:
-    #         for p in pathsWithScore:
-    #             if len(p) > len(finalPath):
-    #                 finalPath = p
-    #
-    #     return bestScore, finalPath
 
     # Evaluate truth value of path given data
     # INPUT = path and feature dictionary
