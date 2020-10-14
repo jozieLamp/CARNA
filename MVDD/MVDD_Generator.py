@@ -478,14 +478,15 @@ def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', 
                                 max_depth=maxLevels, min_samples_leaf=minSamplesPerLeaf)
 
     #Perform training using cross validation
-    dt = trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, showIndividualROC, modelName)
+    dt, mvdd = trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, showIndividualROC, modelName)
 
+    #TODO- to delete this part
     #Old cross validation method
     # scoring= ['accuracy', 'precision_weighted', 'recall_weighted', 'f1_weighted', 'roc_auc_ovr_weighted']
     # scores = cross_validate(dt, xData, yData, cv=numFolds, scoring=scoring)
 
     #Convert decision tree to MVDD
-    mvdd = convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria)
+    # mvdd = convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria)
 
     #Save model to file
     pickle.dump(mvdd, open('TreeFiles/' + modelName+'.sav', 'wb'))
@@ -503,6 +504,9 @@ def generateTreeCrossValidation(xData, yData, classes, learningCriteria='gini', 
 def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, showIndividualROC, modelName):
     #make stratified k fold object
     kFold = StratifiedKFold(n_splits=numFolds)
+
+    bestMVDD = None
+    bestAcc = 0
 
     acc = []
     recall = []
@@ -523,14 +527,20 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
         #Generate a bunch of MVDDs, get best one
         mvdd = getBestMVDD(dt, X_train, y_train, classes, learningCriteria)
 
+        #Get predictions
         y_pred = mvdd.predictScoreSet(X_test)
 
-        print("Real scrs", np.asarray(y_test))
-        print("DT scores", y_pred_orig)
-        print("MVDD scrs", y_pred)
+        mvddAcc = accuracy_score(y_test,y_pred)
+        print("Accuracy DT:", accuracy_score(y_test, y_pred_orig))
+        print("Accuracy MVDD:", mvddAcc)
+
+        #Update best MVDD
+        if mvddAcc > bestAcc:
+            bestAcc = mvddAcc
+            bestMVDD = mvdd
 
         #get accuracy metrics
-        acc.append(accuracy_score(y_test,y_pred))
+        acc.append(mvddAcc)
         recall.append(recall_score(y_test,y_pred,average='weighted'))
         f1.append(f1_score(y_test,y_pred,average='weighted'))
         precision.append(precision_score(y_test,y_pred,average='weighted'))
@@ -561,7 +571,7 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
     print("Recall: %0.3f(+/- %0.3f)" % (np.mean(recall), np.std(recall) * 2))
     print("F1: %0.3f(+/- %0.3f)" % (np.mean(f1), np.std(f1) * 2))
 
-    return dt
+    return dt, bestMVDD
 
 
 def getBestMVDD(dt, xData, yData, classes, learningCriteria):
@@ -577,8 +587,31 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
     dot = nx.DiGraph(dot)
 
     totalEdges = len(dot.edges)
-    percentReqd= round(0.1 * totalEdges) #number of or edges required: > 10% of number total edges
-    print("Must have more than", percentReqd, "Edges")
+
+    # Get terminal indices
+    terminalIndices = []
+    for n in dot.nodes:
+        label = dot.nodes[n]['label']
+        label = label.replace("\"", "")
+        labelSplit = label.split('\\n')[0]
+        tokens = labelSplit.split(' ')
+
+        if tokens[0] == learningCriteria:  # NOTE was 'gini'
+            terminalIndices.append(n)
+
+    # get count of non-terminal indices
+    numTermEdges = 0
+    for d in dot.edges:
+        if d[0] in terminalIndices or d[1] in terminalIndices:
+            numTermEdges += 1
+    print("\nTotal edges:", totalEdges, "Nonterminal Edge", totalEdges - numTermEdges)
+
+    totalEdges = totalEdges - numTermEdges
+
+    percentReqdMin= round(0.3 * totalEdges) #number of or edges required: > 10% of number total edges
+    percentReqdMax= round(0.6 * totalEdges) #number of or edges required: < 60% of number total edges
+
+    print("Must have more than", percentReqdMin, "and less than", percentReqdMax,"OR Edges")
 
     # get all combos of edges
     l = ['solid', 'dashed']
@@ -588,25 +621,34 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
     mvddAcc = []
     edgeList = []
 
+    totalCount = 0
+    usededges = 0
+
     for edgeOpt in edgeIterator:
+        totalCount += 1
         edgeOpt = list(edgeOpt)
 
-        if edgeOpt.count('dashed') > percentReqd:
-            print(edgeOpt)
+        if edgeOpt.count('dashed') > percentReqdMin and edgeOpt.count('dashed') < percentReqdMax:
+            # print(edgeOpt)
+            usededges += 1
 
             mvdd = convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria, edgeOpt)
 
             mvddList.append(mvdd)
             y_pred = mvdd.predictScoreSet(xData)
             acc = accuracy_score(yData, y_pred)
-            print("Accuracy Score", acc)
+            # print("Accuracy Score", acc)
             mvddAcc.append(acc)
-            edgeList.append(list(edgeOpt))
+            edgeList.append(edgeOpt)
+
+        #break condition
+        if usededges > 1000: #1000000:
+            break
+
 
     # get best MVDD
     maxPos = mvddAcc.index(max(mvddAcc))
     mvdd = mvddList[maxPos]
-    print("BEST EDGE OPTION:", edgeList[maxPos])
 
     return mvdd
 
@@ -677,7 +719,6 @@ def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria, edgeOpt):
                 dot.edges[leftEdge[0], leftEdge[1]]['param'] = param
                 dot.edges[leftEdge[0], leftEdge[1]]['style'] = 'solid'
                 dot.edges[leftEdge[0], leftEdge[1]]['headlabel'] = ""
-                edgeCount += 1
 
             else:
                 dot.edges[leftEdge[0], leftEdge[1]]['label'] = leftLabel
@@ -694,7 +735,6 @@ def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria, edgeOpt):
                 dot.edges[rightEdge[0], rightEdge[1]]['param'] = param
                 dot.edges[rightEdge[0], rightEdge[1]]['style'] = 'solid'
                 dot.edges[rightEdge[0], rightEdge[1]]['headlabel'] = ""
-                edgeCount += 1
             else:
                 dot.edges[rightEdge[0], rightEdge[1]]['label'] = rightLabel
                 dot.edges[rightEdge[0], rightEdge[1]]['op'] = rightOp
