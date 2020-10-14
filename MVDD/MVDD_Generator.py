@@ -642,13 +642,14 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
             edgeList.append(edgeOpt)
 
         #break condition
-        if usededges > 1000: #1000000:
+        if usededges > 10000: #1000000:
             break
 
 
     # get best MVDD
     maxPos = mvddAcc.index(max(mvddAcc))
     mvdd = mvddList[maxPos]
+    print("Best edge set:", edgeList[maxPos])
 
     return mvdd
 
