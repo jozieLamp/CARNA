@@ -31,7 +31,6 @@ import random
 from itertools import permutations
 import itertools
 import re
-from scipy import interp
 from itertools import cycle
 from sklearn.preprocessing import label_binarize
 from sklearn.metrics import roc_curve, auc
@@ -203,22 +202,23 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
         edgeOpt = list(edgeOpt)
 
         if edgeOpt.count('dashed') > percentReqdMin and edgeOpt.count('dashed') < percentReqdMax:
-            half = int(len(edgeOpt) / 2)
-            if 'dashed' in edgeOpt[:half] and 'dashed' in edgeOpt[half:]:  # check to make sure edge opt in both front and back of list
-                # print(edgeOpt)
-                usededges += 1
+            # half = int(len(edgeOpt) / 2)
+            # if 'dashed' in edgeOpt[:half] and 'dashed' in edgeOpt[half:]:  # check to make sure edge opt in both front and back of list
 
-                mvdd = convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria, edgeOpt)
+            # print(edgeOpt)
+            usededges += 1
 
-                mvddList.append(mvdd)
-                y_pred = mvdd.predictScoreSet(xData)
-                acc = accuracy_score(yData, y_pred)
-                # print("Accuracy Score", acc)
-                mvddAcc.append(acc)
-                edgeList.append(edgeOpt)
+            mvdd = convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria, edgeOpt)
+
+            mvddList.append(mvdd)
+            y_pred = mvdd.predictScoreSet(xData)
+            acc = accuracy_score(yData, y_pred)
+            # print("Accuracy Score", acc)
+            mvddAcc.append(acc)
+            edgeList.append(edgeOpt)
 
         #break condition to reduce number of exhuastive generations run
-        if usededges > 10000: #1000000:
+        if usededges > 50000: #1000000:
             break
 
 
@@ -226,6 +226,7 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
     maxPos = mvddAcc.index(max(mvddAcc))
     mvdd = mvddList[maxPos]
     print("Best edge set:", edgeList[maxPos])
+    print("total count ", totalCount, "used edges", usededges)
 
     return mvdd
 
