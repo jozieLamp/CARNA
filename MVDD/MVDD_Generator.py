@@ -204,7 +204,7 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
 
         if edgeOpt.count('dashed') > percentReqdMin and edgeOpt.count('dashed') < percentReqdMax:
             half = int(len(edgeOpt) / 2)
-            if 'dashed' in edgeOpt[:half] and 'dashed' in edgeOpt[half:]: #check to make sure edge opt in both front and back of list
+            if 'dashed' in edgeOpt[:half] and 'dashed' in edgeOpt[half:]:  # check to make sure edge opt in both front and back of list
                 # print(edgeOpt)
                 usededges += 1
 
@@ -218,7 +218,7 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
                 edgeList.append(edgeOpt)
 
         #break condition to reduce number of exhuastive generations run
-        if usededges > 100000: #1000000:
+        if usededges > 10000: #1000000:
             break
 
 
