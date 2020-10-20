@@ -26,9 +26,11 @@ from MVDD.MVDD import MVDD
 import Params as params
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from scipy import interp
 import numpy as np
 import random
-from itertools import permutations
+from itertools import permutations, combinations
+from more_itertools import distinct_permutations
 import itertools
 import re
 from itertools import cycle
@@ -186,49 +188,62 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
 
     print("Must have more than", percentReqdMin, "and less than", percentReqdMax,"OR Edges")
 
-    # get all combos of edges
-    l = ['solid', 'dashed']
-    edgeIterator = itertools.product(l, repeat=totalEdges)
-
     mvddList = []
     mvddAcc = []
     edgeList = []
 
-    totalCount = 0
-    usededges = 0
+    # get all combos of edges
+    edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=100000, sampleSize=10000)
 
-    for edgeOpt in edgeIterator:
-        totalCount += 1
-        edgeOpt = list(edgeOpt)
+    #Exhaustive sample of MVDD edges to try, and get best resulting MVDD
+    for edgeOpt in edgeOptions:
+        # print(edgeOpt)
+        mvdd = convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria, edgeOpt)
 
-        if edgeOpt.count('dashed') > percentReqdMin and edgeOpt.count('dashed') < percentReqdMax:
-            # half = int(len(edgeOpt) / 2)
-            # if 'dashed' in edgeOpt[:half] and 'dashed' in edgeOpt[half:]:  # check to make sure edge opt in both front and back of list
-
-            # print(edgeOpt)
-            usededges += 1
-
-            mvdd = convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria, edgeOpt)
-
-            mvddList.append(mvdd)
-            y_pred = mvdd.predictScoreSet(xData)
-            acc = accuracy_score(yData, y_pred)
-            # print("Accuracy Score", acc)
-            mvddAcc.append(acc)
-            edgeList.append(edgeOpt)
-
-        #break condition to reduce number of exhuastive generations run
-        if usededges > 50000: #1000000:
-            break
-
+        mvddList.append(mvdd)
+        y_pred = mvdd.predictScoreSet(xData)
+        acc = accuracy_score(yData, y_pred)
+        # print("Accuracy Score", acc)
+        mvddAcc.append(acc)
+        edgeList.append(edgeOpt)
 
     # get best MVDD
     maxPos = mvddAcc.index(max(mvddAcc))
     mvdd = mvddList[maxPos]
     print("Best edge set:", edgeList[maxPos])
-    print("total count ", totalCount, "used edges", usededges)
 
     return mvdd
+
+def genEdgeCombos(minEdges, maxEdges, totalNumEdges, combinationSize, sampleSize):
+    edgeCombos = []
+    totalPerms = 0
+
+    numEdges = minEdges
+
+    while numEdges < maxEdges:
+        lst = []
+        for n in range(totalNumEdges):
+            if n <= numEdges:
+                lst.append('dashed')
+            else:
+                lst.append('solid')
+
+        #get all combos of this size list
+        count = 0
+        perm = distinct_permutations(lst)
+        for p in perm:
+            edgeCombos.append(list(p))
+            count += 1
+            totalPerms += 1
+
+            if count > combinationSize:
+                break
+
+        numEdges += 1
+
+    sample = random.sample(edgeCombos, sampleSize)
+
+    return sample
 
 
 # Convert decision tree to MVDD
