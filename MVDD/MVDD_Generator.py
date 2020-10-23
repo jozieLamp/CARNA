@@ -224,9 +224,9 @@ def genEdgeCombos(minEdges, maxEdges, totalNumEdges, combinationSize, sampleSize
         lst = []
         for n in range(totalNumEdges):
             if n <= numEdges:
-                lst.append('dashed')
+                lst.insert(0, 'dashed')
             else:
-                lst.append('solid')
+                lst.insert(0, 'solid')
 
         #get all combos of this size list
         count = 0
