@@ -241,9 +241,11 @@ def genEdgeCombos(minEdges, maxEdges, totalNumEdges, combinationSize, sampleSize
 
         numEdges += 1
 
-    sample = random.sample(edgeCombos, sampleSize)
-
-    return sample
+    if sampleSize == combinationSize:
+        return edgeCombos
+    else:
+        sample = random.sample(edgeCombos, sampleSize)
+        return sample
 
 
 # Convert decision tree to MVDD
