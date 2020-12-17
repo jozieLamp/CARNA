@@ -123,8 +123,6 @@ class MVDD:
                 truePaths.append(path)
                 scores.append(s)
 
-
-
         #Check for paths with all ANDs and longest num features
         finalPath = []
         for p in truePaths:

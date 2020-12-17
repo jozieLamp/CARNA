@@ -95,12 +95,15 @@ def runAllData(paramDict, outcome):
 
 
 def main():
-    paramDict = {"Age": "60", "BPDIAS": "63", "BPSYS": "80", "CI": "2.02", "CO": "4.52", "CPI": "0.5", "PCWP": "20", "EjF": "20", "HRTRT": "30",
-     "MAP": "110", "MIXED": "", "MPAP": "20", "PAD": "10", "PAMN": "", "PAPP": "", "PAS": "11", "PCWPA": "32", "PCWPMN": "90",
-     "PCWPMod": "20", "PP": "", "PPP": "", "PPRatio": "0.9", "RAP": "", "RAT": "", "RATHemo": "10", "SVRHemo": "",
-     "SVR": ""}
+    paramDict = {'Age': "60", 'Gender': "1", 'Race': "1", 'EjF': "20", 'RAP': "", 'PAS': "11", 'PAD': "10", 'PAMN': "", 'PCWP': "20",
+    'CO': "4.52", 'CI': "2.02", 'MIXED': "", 'BPSYS': "80", 'BPDIAS': "63", 'HRTRT': "70", 'MAP': "110", 'MPAP': "20", 'CPI': "0.5",
+    'PP': "", 'PPP': "", 'PAPP': "", 'SVR': "", 'RAT': "10", 'PPRatio': "0.9", 'PAPi': "", 'SAPi': "", 'CPP': "",
+    'PRAPRat': ""}
 
     filename, score, path = runHemo(paramDict, "DEATH")
+
+    print("Score", score)
+    print("Path", path)
 
 
 
