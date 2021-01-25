@@ -91,6 +91,17 @@ class MVDD:
 
         return np.asarray(predScores)
 
+    # Predicts a set of scores from a dataframe of values for testing purposes using Decision Tree (NOT MVDD)
+    # INPUT = dataframe of x values
+    # OUTPUT = numpy nd array of predicted scores
+    def predictDTScoreSet(self, xData):
+        predScores = []
+        for index, row in xData.iterrows():
+            dictVals = row.to_dict()
+            ps = int(self.getModelPrediction(dictVals))
+            predScores.append(ps)
+
+        return np.asarray(predScores)
 
     # Get prediction from actual decision tree model for comparison (not MVDD)
     # INPUT = feature dictionary
