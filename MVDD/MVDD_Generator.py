@@ -193,7 +193,7 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
     edgeList = []
 
     # get all combos of edges
-    edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=10, sampleSize=10) #combinationSize=100000, sampleSize=50000) #changing stuff here
+    edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=100, sampleSize=100) #combinationSize=100000, sampleSize=50000) #changing stuff here
 
     #Exhaustive sample of MVDD edges to try, and get best resulting MVDD
     for edgeOpt in edgeOptions:
@@ -223,7 +223,7 @@ def genEdgeCombos(minEdges, maxEdges, totalNumEdges, combinationSize, sampleSize
 
     numEdges = minEdges
 
-    while numEdges < maxEdges:
+    while numEdges <= maxEdges:
         lst = []
         for n in range(totalNumEdges):
             if n <= numEdges:
