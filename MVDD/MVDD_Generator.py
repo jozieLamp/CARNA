@@ -99,6 +99,7 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
 
         #Generate a bunch of MVDDs, get best one
         mvdd = getBestMVDD(dt, X_train, y_train, classes, learningCriteria)
+        mvdd.saveToFile('TreeFiles/MVDD_train'+ str(count), 'png')
 
         #Get predictions
         y_pred = mvdd.predictScoreSet(X_test)
@@ -494,6 +495,22 @@ def findBestModelParams(xData, yData, params):
 
     y_true, y_pred = yData, gs.predict(xData)
     print(classification_report(y_true, y_pred))
+
+
+def featureSelection(xData, yData):
+    numFts = 28
+
+    #Pearson's Correlation
+    corList = []
+    # calculate the correlation with y for each feature
+    for i in xData.columns.tolist():
+        cor = np.corrcoef(xData[i], yData)[0, 1]
+        corList.append([i, abs(cor)])
+
+    pearson = pd.DataFrame(data=corList, columns=['Feature', 'Support'])
+    pearson = pearson.sort_values("Support", ascending=False)
+
+    return pearson
 
 # Generate a random MVDD from a starting list of nodes
 # INPUT = list of feature nodes, and the maximum number of branches allowed from each node
