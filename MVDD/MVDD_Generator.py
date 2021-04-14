@@ -20,6 +20,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn import tree
 import pickle
 import pydotplus
+import graphviz
 import collections
 from networkx.drawing.nx_pydot import *
 from MVDD.MVDD import MVDD
@@ -99,7 +100,7 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
 
         #Generate a bunch of MVDDs, get best one
         mvdd = getBestMVDD(dt, X_train, y_train, classes, learningCriteria)
-        mvdd.saveToFile('TreeFiles/MVDD_train'+ str(count), 'png')
+        mvdd.saveToFile('TreeFiles/' + modelName + 'MVDD_train'+ str(count), 'png')
 
         #Get predictions
         y_pred = mvdd.predictScoreSet(X_test)
