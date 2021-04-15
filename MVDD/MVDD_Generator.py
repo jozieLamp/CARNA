@@ -78,6 +78,8 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
     #make stratified k fold object
     kFold = StratifiedKFold(n_splits=numFolds)
 
+    myfile = open(modelName + "_Out.txt", 'w')
+
     bestMVDD = None
     bestAcc = 0
 
@@ -100,6 +102,10 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
 
         #Generate a bunch of MVDDs, get best one
         mvdd = getBestMVDD(dt, X_train, y_train, classes, learningCriteria)
+
+        # Save model to file
+        pickle.dump(mvdd, open('TreeFiles/' + modelName + 'MVDD_train'+ str(count)+'.sav', 'wb'))
+        mvdd.saveDotFile('TreeFiles/' + modelName + 'MVDD_train'+ str(count))
         mvdd.saveToFile('TreeFiles/' + modelName + 'MVDD_train'+ str(count), 'png')
 
         #Get predictions
@@ -108,6 +114,10 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
         mvddAcc = accuracy_score(y_test,y_pred)
         print("Accuracy DT:", accuracy_score(y_test, y_pred_orig))
         print("Accuracy MVDD:", mvddAcc)
+        myfile.write("Model kfold train" + str(count) + "\n")
+        myfile.write("Accuracy DT: " + str(accuracy_score(y_test, y_pred_orig)) + "\n")
+        myfile.write("Accuracy MVDD: " + str(mvddAcc) + "\n\n")
+
 
         #Update best MVDD
         if mvddAcc > bestAcc:
@@ -140,11 +150,19 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
 
     getAverageROCGraph(aveFPR, aveTPR, ave_roc_auc, modelName)
 
-    print("*****Averaged Final Classification Results*****")
+    print("\n*****Averaged Final Classification Results*****")
     print("Accuracy: %0.3f(+/- %0.3f)" % (np.mean(acc), np.std(acc) * 2))
     print("Precision: %0.3f(+/- %0.3f)" % (np.mean(precision), np.std(precision) * 2))
     print("Recall: %0.3f(+/- %0.3f)" % (np.mean(recall), np.std(recall) * 2))
     print("F1: %0.3f(+/- %0.3f)" % (np.mean(f1), np.std(f1) * 2))
+
+    myfile.write("\n*****Averaged Final Classification Results*****\n")
+    myfile.write("Accuracy: %0.3f(+/- %0.3f)\n" % (np.mean(acc), np.std(acc) * 2))
+    myfile.write("Precision: %0.3f(+/- %0.3f)\n" % (np.mean(precision), np.std(precision) * 2))
+    myfile.write("Recall: %0.3f(+/- %0.3f)\n" % (np.mean(recall), np.std(recall) * 2))
+    myfile.write("F1: %0.3f(+/- %0.3f)\n" % (np.mean(f1), np.std(f1) * 2))
+
+    myfile.close()
 
     return dt, bestMVDD
 
