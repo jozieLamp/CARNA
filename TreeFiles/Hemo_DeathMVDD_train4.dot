@@ -59,7 +59,7 @@ strict digraph Tree {
 		op=">",
 		param=102.5,
 		pos="e,1421.7,872.27 1418.3,922.82 1419.1,910.02 1420.1,895.73 1421,882.32",
-		style=dashed];
+		style=solid];
 	3	[fillcolor=honeydew,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 22\nvalue = [0, 22, 0, 0, 0]\nclass = 2",
@@ -224,7 +224,7 @@ strict digraph Tree {
 		op="<=",
 		param=0.732,
 		pos="e,887.49,470.27 934.59,520.82 921.97,507.27 907.78,492.04 894.66,477.96",
-		style=dashed];
+		style=solid];
 	22	[fillcolor=lightcoral,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 4\nvalue = [0, 0, 0, 0, 4]\nclass = 5",
@@ -257,7 +257,7 @@ strict digraph Tree {
 		op=">",
 		param=27.5,
 		pos="e,858.48,336.27 853.51,386.82 854.77,374.02 856.17,359.73 857.5,346.32",
-		style=solid];
+		style=dashed];
 	20	[fillcolor=lightyellow,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 15\nvalue = [0, 0, 15, 0, 0]\nclass = 3",
@@ -290,7 +290,7 @@ strict digraph Tree {
 		op="<=",
 		param=0.629,
 		pos="e,1424.5,738.27 1424.5,788.82 1424.5,776.02 1424.5,761.73 1424.5,748.32",
-		style=dashed];
+		style=solid];
 	39	[fillcolor=lightyellow,
 		height=1.1528,
 		label="PAS\ngini = 0.048\nsamples = 82\nvalue = [0, 0, 80, 0, 2]\nclass = 3",
@@ -356,7 +356,7 @@ strict digraph Tree {
 		op="<=",
 		param=30.0,
 		pos="e,1191.5,336.27 1191.5,386.82 1191.5,374.02 1191.5,359.73 1191.5,346.32",
-		style=solid];
+		style=dashed];
 	30	[fillcolor=lightcoral,
 		height=1.1528,
 		label="PAPP\ngini = 0.142\nsamples = 13\nvalue = [0, 0, 1, 0, 12]\nclass = 5",
@@ -422,7 +422,7 @@ strict digraph Tree {
 		op="<=",
 		param=104.5,
 		pos="e,1516.1,470.27 1516.9,520.82 1516.7,508.02 1516.5,493.73 1516.3,480.32",
-		style=dashed];
+		style=solid];
 	38	[fillcolor=lightcoral,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 0, 0, 1]\nclass = 5",
@@ -466,7 +466,7 @@ strict digraph Tree {
 		op="<=",
 		param=30.5,
 		pos="e,1835.5,604.27 1835.5,654.82 1835.5,642.02 1835.5,627.73 1835.5,614.32",
-		style=solid];
+		style=dashed];
 	43	[fillcolor=lightyellow,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 78\nvalue = [0, 0, 78, 0, 0]\nclass = 3",

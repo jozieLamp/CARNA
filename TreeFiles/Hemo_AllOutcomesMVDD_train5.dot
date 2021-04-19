@@ -24,7 +24,7 @@ strict digraph Tree {
 		op="<=",
 		param=1.5,
 		pos="e,1028.6,872.27 1063.5,922.82 1054.3,909.52 1044,894.6 1034.4,880.74",
-		style=dashed];
+		style=solid];
 	34	[fillcolor=mistyrose,
 		height=1.1528,
 		label="BPSYS\ngini = 0.219\nsamples = 88\nvalue = [11, 0, 0, 77, 0]\nclass = 4",
@@ -48,7 +48,7 @@ strict digraph Tree {
 		op="<=",
 		param=105.5,
 		pos="e,801.52,737.02 913.36,789 880.87,773.9 843.85,756.69 810.75,741.31",
-		style=dashed];
+		style=solid];
 	21	[fillcolor=honeydew,
 		height=1.1528,
 		label="CPI\ngini = 0.162\nsamples = 101\nvalue = [0, 92, 0, 0, 9]\nclass = 2",
@@ -59,7 +59,7 @@ strict digraph Tree {
 		op=">",
 		param=105.5,
 		pos="e,1008.8,738.27 1004.2,788.82 1005.4,776.02 1006.7,761.73 1007.9,748.32",
-		style=dashed];
+		style=solid];
 	3	[fillcolor=lightyellow,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 22\nvalue = [0, 0, 22, 0, 0]\nclass = 3",
@@ -92,7 +92,7 @@ strict digraph Tree {
 		op="<=",
 		param=0.732,
 		pos="e,312.03,442.64 635.43,524.52 632.1,523.29 628.78,522.11 625.5,521 523.09,486.44 401.2,459.93 321.96,444.55",
-		style=solid];
+		style=dashed];
 	12	[fillcolor=honeydew,
 		height=1.1528,
 		label="BPSYS\ngini = 0.393\nsamples = 26\nvalue = [0, 19, 0, 0, 7]\nclass = 2",
@@ -103,7 +103,7 @@ strict digraph Tree {
 		op=">",
 		param=0.732,
 		pos="e,716.5,470.27 716.5,520.82 716.5,508.02 716.5,493.73 716.5,480.32",
-		style=dashed];
+		style=solid];
 	6	[fillcolor=lightcoral,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 83\nvalue = [0, 0, 0, 0, 83]\nclass = 5",
@@ -125,7 +125,7 @@ strict digraph Tree {
 		op=">",
 		param=0.596,
 		pos="e,238.5,336.27 238.5,386.82 238.5,374.02 238.5,359.73 238.5,346.32",
-		style=dashed];
+		style=solid];
 	8	[fillcolor=lightcoral,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 9\nvalue = [0, 0, 0, 0, 9]\nclass = 5",
@@ -180,7 +180,7 @@ strict digraph Tree {
 		op="<=",
 		param=92.5,
 		pos="e,604.26,336.05 666.57,386.82 649.4,372.83 630.03,357.04 612.29,342.59",
-		style=solid];
+		style=dashed];
 	18	[fillcolor=honeydew,
 		height=1.1528,
 		label="HRTRT\ngini = 0.111\nsamples = 17\nvalue = [0, 16, 0, 0, 1]\nclass = 2",
@@ -191,7 +191,7 @@ strict digraph Tree {
 		op=">",
 		param=92.5,
 		pos="e,716.5,336.27 716.5,386.82 716.5,374.02 716.5,359.73 716.5,346.32",
-		style=dashed];
+		style=solid];
 	14	[fillcolor=lightcoral,
 		height=1.1528,
 		label="CI\ngini = 0.245\nsamples = 7\nvalue = [0, 1, 0, 0, 6]\nclass = 5",
@@ -202,7 +202,7 @@ strict digraph Tree {
 		op="<=",
 		param=7.967,
 		pos="e,445.03,202.05 505.81,252.82 489.06,238.83 470.17,223.04 452.86,208.59",
-		style=solid];
+		style=dashed];
 	17	[fillcolor=honeydew,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 2\nvalue = [0, 2, 0, 0, 0]\nclass = 2",

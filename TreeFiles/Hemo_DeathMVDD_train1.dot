@@ -103,7 +103,7 @@ strict digraph Tree {
 		op=">",
 		param=0.688,
 		pos="e,474.5,470.27 474.5,520.82 474.5,508.02 474.5,493.73 474.5,480.32",
-		style=solid];
+		style=dashed];
 	6	[fillcolor=lightcoral,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 75\nvalue = [0, 0, 0, 0, 75]\nclass = 5",
@@ -169,7 +169,7 @@ strict digraph Tree {
 		op=">",
 		param=1.473,
 		pos="e,530.48,336.27 499.46,386.82 507.55,373.64 516.6,358.89 525.04,345.14",
-		style=dashed];
+		style=solid];
 	13	[fillcolor=lightcoral,
 		height=1.1528,
 		label="CI\ngini = 0.444\nsamples = 9\nvalue = [0, 0, 3, 0, 6]\nclass = 5",
@@ -246,7 +246,7 @@ strict digraph Tree {
 		op="<=",
 		param=0.621,
 		pos="e,1117.5,604.27 1117.5,654.82 1117.5,642.02 1117.5,627.73 1117.5,614.32",
-		style=dashed];
+		style=solid];
 	31	[fillcolor=lightyellow,
 		height=1.1528,
 		label="PAS\ngini = 0.027\nsamples = 73\nvalue = [0, 0, 72, 0, 1]\nclass = 3",
@@ -268,7 +268,7 @@ strict digraph Tree {
 		op="<=",
 		param=112.5,
 		pos="e,1060.8,470.27 1092.2,520.82 1084,507.64 1074.9,492.89 1066.3,479.14",
-		style=dashed];
+		style=solid];
 	28	[fillcolor=lightyellow,
 		height=1.1528,
 		label="SVR\ngini = 0.208\nsamples = 17\nvalue = [0, 0, 15, 0, 2]\nclass = 3",
@@ -279,7 +279,7 @@ strict digraph Tree {
 		op=">",
 		param=112.5,
 		pos="e,1174.9,470.27 1143.1,520.82 1151.4,507.52 1160.8,492.6 1169.5,478.74",
-		style=solid];
+		style=dashed];
 	22	[fillcolor=lightcoral,
 		height=1.1528,
 		label="CO\ngini = 0.165\nsamples = 11\nvalue = [0, 0, 1, 0, 10]\nclass = 5",
@@ -290,7 +290,7 @@ strict digraph Tree {
 		op="<=",
 		param=0.52,
 		pos="e,926.73,336.05 987.11,386.82 970.47,372.83 951.7,357.04 934.5,342.59",
-		style=dashed];
+		style=solid];
 	25	[fillcolor=lightyellow,
 		height=1.1528,
 		label="RAT\ngini = 0.375\nsamples = 8\nvalue = [0, 0, 6, 0, 2]\nclass = 3",
@@ -301,7 +301,7 @@ strict digraph Tree {
 		op=">",
 		param=0.52,
 		pos="e,1039,336.27 1037,386.82 1037.5,374.02 1038.1,359.73 1038.6,346.32",
-		style=solid];
+		style=dashed];
 	23	[fillcolor=lightcoral,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 10\nvalue = [0, 0, 0, 0, 10]\nclass = 5",
@@ -378,7 +378,7 @@ strict digraph Tree {
 		op="<=",
 		param=11.5,
 		pos="e,1522.5,470.27 1522.5,520.82 1522.5,508.02 1522.5,493.73 1522.5,480.32",
-		style=solid];
+		style=dashed];
 	35	[fillcolor=lightyellow,
 		height=0.94444,
 		label="gini = 0.0\nsamples = 71\nvalue = [0, 0, 71, 0, 0]\nclass = 3",
