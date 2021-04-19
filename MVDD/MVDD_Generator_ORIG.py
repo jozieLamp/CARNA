@@ -213,7 +213,7 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
     edgeList = []
 
     # get all combos of edges
-    edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=500, sampleSize=100) #combinationSize=100000, sampleSize=50000) #changing stuff here
+    edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=5, sampleSize=1) #combinationSize=100000, sampleSize=50000) #changing stuff here
 
     #Exhaustive sample of MVDD edges to try, and get best resulting MVDD
     for edgeOpt in edgeOptions:
@@ -239,42 +239,30 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
 # OUTPUT = returns a sample of edge combinations for the MVDD
 def genEdgeCombos(minEdges, maxEdges, totalNumEdges, combinationSize, sampleSize):
     edgeCombos = []
-    # totalPerms = 0
+    totalPerms = 0
 
     numEdges = minEdges
 
     while numEdges <= maxEdges:
-        for c in range(combinationSize):
-            lst = ['solid'] * totalNumEdges
+        lst = []
+        for n in range(totalNumEdges):
+            if n <= numEdges:
+                lst.insert(0, 'dashed')
+            else:
+                lst.insert(0, 'solid')
 
-            for n in range(numEdges):
-                randPos = random.randint(0, totalNumEdges-1)
-                lst[randPos] = 'dashed'
+        #get all combos of this size list
+        count = 0
+        perm = distinct_permutations(lst)
+        for p in perm:
+            edgeCombos.append(list(p))
+            count += 1
+            totalPerms += 1
 
-            edgeCombos.append(lst)
+            if count > combinationSize:
+                break
 
         numEdges += 1
-
-    # while numEdges <= maxEdges:
-    #     lst = []
-    #     for n in range(totalNumEdges):
-    #         if n <= numEdges:
-    #             lst.insert(0, 'dashed')
-    #         else:
-    #             lst.insert(0, 'solid')
-    #
-    #     #get all combos of this size list
-    #     count = 0
-    #     perm = distinct_permutations(lst)
-    #     for p in perm:
-    #         edgeCombos.append(list(p))
-    #         count += 1
-    #         totalPerms += 1
-    #
-    #         if count > combinationSize:
-    #             break
-    #
-    #     numEdges += 1
 
     if sampleSize == combinationSize or sampleSize >= totalNumEdges:
         return edgeCombos
@@ -432,8 +420,7 @@ def getClassROC(y_test, y_score):
 # OUTPUT = saves an roc graph
 def getAverageROCGraph(fpr, tpr, roc_auc, modelName):
     plt.figure(figsize=(10, 8))
-    # colors = cycle(['aqua', 'darkorange', 'cornflowerblue', 'palegreen', 'mistyrose'])
-    colors = cycle(['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple'])
+    colors = cycle(['aqua', 'darkorange', 'cornflowerblue', 'palegreen', 'mistyrose'])
     for i, color in zip(range(5), colors):
         plt.plot(fpr[i], tpr[i], color=color, lw=2,
                  label='ROC Class {0} (area = {1:0.2f})'
@@ -471,8 +458,7 @@ def getIndividualROCGraph(y_test, y_score, foldNum, modelName):
     mean_tpr /= 5
 
     plt.figure(figsize=(10, 8))
-    # colors = cycle(['aqua', 'darkorange', 'cornflowerblue','palegreen', 'mistyrose'])
-    colors = cycle(['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple'])
+    colors = cycle(['aqua', 'darkorange', 'cornflowerblue','palegreen', 'mistyrose'])
     for i, color in zip(range(5), colors):
         plt.plot(fpr[i], tpr[i], color=color, lw=2,
                  label='ROC Class {0} (area = {1:0.2f})'
