@@ -83,14 +83,20 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
     bestMVDD = None
     bestAcc = 0
 
-    acc = []
-    recall = []
-    f1 = []
-    precision = []
-
     fprList = []
     tprList = []
     rocList = []
+
+    TPRList = []
+    TNRList = []
+    PPVList = []
+    NPVList = []
+    FPRList = []
+    FNRList = []
+    FDRList = []
+    ACCList = []
+    AUCList = []
+
     count = 1
     for train_index, test_index in kFold.split(xData, yData):
         X_train, X_test = xData.iloc[train_index], xData.iloc[test_index]
@@ -111,24 +117,40 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
         #Get predictions
         y_pred = mvdd.predictScoreSet(X_test)
 
-        mvddAcc = accuracy_score(y_test,y_pred)
-        print("Accuracy DT:", accuracy_score(y_test, y_pred_orig))
+        #Get Accuracy + Confusion Matrix metrics
+        FP = confusion_matrix(y_test,y_pred).sum(axis=0) - np.diag(confusion_matrix(y_test,y_pred))
+        FN = confusion_matrix(y_test,y_pred).sum(axis=1) - np.diag(confusion_matrix(y_test,y_pred))
+        TP = np.diag(confusion_matrix(y_test,y_pred))
+        TN = confusion_matrix(y_test,y_pred).sum() - (FP + FN + TP)
+
+        # Sensitivity, hit rate, recall, or true positive rate
+        TPRList.append(TP / (TP + FN))
+        # Specificity or true negative rate
+        TNRList.append(TN / (TN + FP))
+        # Precision or positive predictive value
+        PPVList.append(TP / (TP + FP))
+        # Negative predictive value
+        NPVList.append(TN / (TN + FN))
+        # Fall out or false positive rate
+        FPRList.append(FP / (FP + TN))
+        # False negative rate
+        FNRList.append(FN / (TP + FN))
+        # False discovery rate
+        FDRList.append(FP / (TP + FP))
+        # Overall accuracy
+        mvddAcc = (TP + TN) / (TP + FP + FN + TN)
+        ACCList.append(mvddAcc)
+
         print("Accuracy MVDD:", mvddAcc)
+        print("Averaged acc for all 5 classes:", np.mean(mvddAcc))
+
         myfile.write("Model kfold train" + str(count) + "\n")
-        myfile.write("Accuracy DT: " + str(accuracy_score(y_test, y_pred_orig)) + "\n")
         myfile.write("Accuracy MVDD: " + str(mvddAcc) + "\n\n")
 
-
         #Update best MVDD
-        if mvddAcc > bestAcc:
-            bestAcc = mvddAcc
+        if np.mean(mvddAcc) > bestAcc:
+            bestAcc = np.mean(mvddAcc)
             bestMVDD = mvdd
-
-        #get accuracy metrics
-        acc.append(mvddAcc)
-        recall.append(recall_score(y_test,y_pred,average='weighted'))
-        f1.append(f1_score(y_test,y_pred,average='weighted'))
-        precision.append(precision_score(y_test,y_pred,average='weighted'))
 
         #calculate average roc across all classes
         y_score = label_binarize(y_pred, classes=[1,2,3,4,5])
@@ -137,6 +159,8 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
         fprList.append(fpr)
         tprList.append(tpr)
         rocList.append(roc_auc)
+
+        AUCList.append(list(roc_auc.values()))
 
         #show individual fold roc curves
         if showIndividualROC:
@@ -151,16 +175,24 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
     getAverageROCGraph(aveFPR, aveTPR, ave_roc_auc, modelName)
 
     print("\n*****Averaged Final Classification Results*****")
-    print("Accuracy: %0.3f(+/- %0.3f)" % (np.mean(acc), np.std(acc) * 2))
-    print("Precision: %0.3f(+/- %0.3f)" % (np.mean(precision), np.std(precision) * 2))
-    print("Recall: %0.3f(+/- %0.3f)" % (np.mean(recall), np.std(recall) * 2))
-    print("F1: %0.3f(+/- %0.3f)" % (np.mean(f1), np.std(f1) * 2))
+    print("Sensitivity (TPR): %0.3f(±%0.3f)" % (np.mean(TPRList), np.std(TPRList) * 2))
+    print("Specificity (TNR): %0.3f(±%0.3f)" % (np.mean(TNRList), np.std(TNRList) * 2))
+    print("Precision (PPV): %0.3f(±%0.3f)" % (np.mean(PPVList), np.std(PPVList) * 2))
+    print("Negative Predictive Value (NPV): %0.3f(±%0.3f)" % (np.mean(NPVList), np.std(NPVList) * 2))
+    print("FPR: %0.3f(±%0.3f)" % (np.mean(FPRList), np.std(FPRList) * 2))
+    print("FNR: %0.3f(±%0.3f)" % (np.mean(FNRList), np.std(FNRList) * 2))
+    print("Accuracy: %0.3f(±%0.3f)" % (np.mean(ACCList), np.std(ACCList) * 2))
+    print("Averaged AUC: %0.3f(±%0.3f)" % (np.mean(AUCList), np.std(AUCList) * 2))
 
     myfile.write("\n*****Averaged Final Classification Results*****\n")
-    myfile.write("Accuracy: %0.3f(+/- %0.3f)\n" % (np.mean(acc), np.std(acc) * 2))
-    myfile.write("Precision: %0.3f(+/- %0.3f)\n" % (np.mean(precision), np.std(precision) * 2))
-    myfile.write("Recall: %0.3f(+/- %0.3f)\n" % (np.mean(recall), np.std(recall) * 2))
-    myfile.write("F1: %0.3f(+/- %0.3f)\n" % (np.mean(f1), np.std(f1) * 2))
+    myfile.write("Sensitivity (TPR): %0.3f(±%0.3f)\n" % (np.mean(TPRList), np.std(TPRList) * 2))
+    myfile.write("Specificity (TNR): %0.3f(±%0.3f)\n" % (np.mean(TNRList), np.std(TNRList) * 2))
+    myfile.write("Precision (PPV): %0.3f(±%0.3f)\n" % (np.mean(PPVList), np.std(PPVList) * 2))
+    myfile.write("Negative Predictive Value (NPV): %0.3f(±%0.3f)\n" % (np.mean(NPVList), np.std(NPVList) * 2))
+    myfile.write("FPR: %0.3f(±%0.3f)\n" % (np.mean(FPRList), np.std(FPRList) * 2))
+    myfile.write("FNR: %0.3f(±%0.3f)\n" % (np.mean(FNRList), np.std(FNRList) * 2))
+    myfile.write("Accuracy: %0.3f(±%0.3f)\n" % (np.mean(ACCList), np.std(ACCList) * 2))
+    myfile.write("Averaged AUC: %0.3f(±%0.3f)\n" % (np.mean(AUCList), np.std(AUCList) * 2))
 
     myfile.close()
 
@@ -213,7 +245,7 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
     edgeList = []
 
     # get all combos of edges
-    edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=100, sampleSize=100) #combinationSize=100000, sampleSize=50000) #changing stuff here
+    edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=5, sampleSize=5) #combinationSize=100000, sampleSize=50000) #changing stuff here
 
     #Exhaustive sample of MVDD edges to try, and get best resulting MVDD
     for edgeOpt in edgeOptions:
@@ -239,7 +271,6 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
 # OUTPUT = returns a sample of edge combinations for the MVDD
 def genEdgeCombos(minEdges, maxEdges, totalNumEdges, combinationSize, sampleSize):
     edgeCombos = []
-    # totalPerms = 0
 
     numEdges = minEdges
 
@@ -254,27 +285,6 @@ def genEdgeCombos(minEdges, maxEdges, totalNumEdges, combinationSize, sampleSize
             edgeCombos.append(lst)
 
         numEdges += 1
-
-    # while numEdges <= maxEdges:
-    #     lst = []
-    #     for n in range(totalNumEdges):
-    #         if n <= numEdges:
-    #             lst.insert(0, 'dashed')
-    #         else:
-    #             lst.insert(0, 'solid')
-    #
-    #     #get all combos of this size list
-    #     count = 0
-    #     perm = distinct_permutations(lst)
-    #     for p in perm:
-    #         edgeCombos.append(list(p))
-    #         count += 1
-    #         totalPerms += 1
-    #
-    #         if count > combinationSize:
-    #             break
-    #
-    #     numEdges += 1
 
     if sampleSize == combinationSize or sampleSize >= totalNumEdges:
         return edgeCombos
@@ -432,18 +442,21 @@ def getClassROC(y_test, y_score):
 # OUTPUT = saves an roc graph
 def getAverageROCGraph(fpr, tpr, roc_auc, modelName):
     plt.figure(figsize=(10, 8))
+    # plt.rc('font', size=14)
+    plt.rcParams.update({'font.size': 18})
     # colors = cycle(['aqua', 'darkorange', 'cornflowerblue', 'palegreen', 'mistyrose'])
     colors = cycle(['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple'])
     for i, color in zip(range(5), colors):
         plt.plot(fpr[i], tpr[i], color=color, lw=2,
-                 label='ROC Class {0} (area = {1:0.2f})'
+                 label='Class {0} AUC = {1:0.2f})'
                        ''.format(i + 1, roc_auc[i]))
+
     plt.plot([0, 1], [0, 1], 'k--', lw=2)
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Averaged ROC Curve for Each Score Classification')
+    plt.xlabel('1 - Specificity (False Positive Rate)')
+    plt.ylabel('Sensitivity (True Positive Rate)')
+    # plt.title('Averaged ROC Curve for Each Score Classification')
     plt.legend(loc="lower right")
     plt.savefig("Graphs/"+ modelName + "Averaged_ROC.png")
     plt.show()
@@ -452,7 +465,6 @@ def getAverageROCGraph(fpr, tpr, roc_auc, modelName):
 # INPUT = x and y data the fold number and the model name
 # OUTPUT = saves an roc graph
 def getIndividualROCGraph(y_test, y_score, foldNum, modelName):
-
     fpr = dict()
     tpr = dict()
     roc_auc = dict()
@@ -471,18 +483,19 @@ def getIndividualROCGraph(y_test, y_score, foldNum, modelName):
     mean_tpr /= 5
 
     plt.figure(figsize=(10, 8))
+    plt.rcParams.update({'font.size': 18})
     # colors = cycle(['aqua', 'darkorange', 'cornflowerblue','palegreen', 'mistyrose'])
     colors = cycle(['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple'])
     for i, color in zip(range(5), colors):
         plt.plot(fpr[i], tpr[i], color=color, lw=2,
-                 label='ROC Class {0} (area = {1:0.2f})'
+                 label='Class {0} AUC = {1:0.2f})'
                  ''.format(i+1, roc_auc[i]))
     plt.plot([0, 1], [0, 1], 'k--', lw=2)
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('ROC Curve for Each Score Classification Fold ' + str(foldNum))
+    plt.xlabel('1 - Specificity (False Positive Rate)')
+    plt.ylabel('Sensitivity (True Positive Rate)')
+    # plt.title('ROC Curve for Each Score Classification Fold ' + str(foldNum))
     plt.legend(loc="lower right")
 
     plt.savefig("Graphs/" + modelName + "ROC for Fold " + str(foldNum) + ".png")
