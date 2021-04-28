@@ -1,0 +1,40 @@
+
+Total edges: 38 Nonterminal Edge 18
+Must have more than 5 and less than 11 OR Edges
+Best edge set: ['solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed']
+Accuracy MVDD: [1.        0.9047619 1.        1.        0.9047619]
+Averaged acc for all 5 classes: 0.9619047619047618
+
+Total edges: 40 Nonterminal Edge 19
+Must have more than 6 and less than 11 OR Edges
+Best edge set: ['solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'solid', 'solid', 'dashed', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid']
+Accuracy MVDD: [1.         0.85714286 1.         1.         0.85714286]
+Averaged acc for all 5 classes: 0.9428571428571428
+
+Total edges: 44 Nonterminal Edge 21
+Must have more than 6 and less than 13 OR Edges
+Best edge set: ['solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'dashed']
+Accuracy MVDD: [1.         0.88095238 1.         1.         0.88095238]
+Averaged acc for all 5 classes: 0.9523809523809523
+
+Total edges: 46 Nonterminal Edge 22
+Must have more than 7 and less than 13 OR Edges
+Best edge set: ['solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'dashed', 'dashed', 'dashed', 'solid']
+Accuracy MVDD: [1.         0.90361446 1.         1.         0.90361446]
+Averaged acc for all 5 classes: 0.9614457831325302
+
+Total edges: 36 Nonterminal Edge 17
+Must have more than 5 and less than 10 OR Edges
+Best edge set: ['solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid']
+Accuracy MVDD: [1.         0.90361446 1.         1.         0.90361446]
+Averaged acc for all 5 classes: 0.9614457831325302
+
+*****Averaged Final Classification Results*****
+Sensitivity (TPR): 0.935(±0.184)
+Specificity (TNR): 0.967(±0.093)
+Precision (PPV): 0.937(±0.171)
+Negative Predictive Value (NPV): 0.968(±0.090)
+FPR: 0.033(±0.093)
+FNR: 0.065(±0.184)
+Accuracy: 0.956(±0.110)
+Averaged AUC: 0.951(±0.125)
