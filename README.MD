@@ -1,4 +1,4 @@
-# HemoPheno4HF  
+# CARNA
 
 ### Intelligently Characterizing Patient Hemodynamic Phenotypes for Advanced Heart Failure in the ESCAPE Trial Using Learned Multi Valued Decision Diagrams  
 
