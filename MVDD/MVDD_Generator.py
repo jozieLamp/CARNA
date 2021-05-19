@@ -118,10 +118,24 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
         y_pred = mvdd.predictScoreSet(X_test)
 
         #Get Accuracy + Confusion Matrix metrics
-        FP = confusion_matrix(y_test,y_pred).sum(axis=0) - np.diag(confusion_matrix(y_test,y_pred))
-        FN = confusion_matrix(y_test,y_pred).sum(axis=1) - np.diag(confusion_matrix(y_test,y_pred))
-        TP = np.diag(confusion_matrix(y_test,y_pred))
-        TN = confusion_matrix(y_test,y_pred).sum() - (FP + FN + TP)
+        cm = confusion_matrix(y_test,y_pred)
+
+        #check for missing scores
+        if len(set(y_test)) != 5:
+            missing = np.setdiff1d([1,2,3,4,5], list(set(y_test)))
+            missing = missing[0]-1
+
+            cmList = cm.tolist()
+            for row in cmList:
+                row.insert(missing, 0)
+
+            cm = np.array(cmList)
+            cm = np.insert(cm, missing, np.array([0, 0, 0, 0, 0]), 0)
+
+        FP = cm.sum(axis=0) - np.diag(cm)
+        FN = cm.sum(axis=1) - np.diag(cm)
+        TP = np.diag(cm)
+        TN = cm.sum() - (FP + FN + TP)
 
         # Sensitivity, hit rate, recall, or true positive rate
         TPRList.append(TP / (TP + FN))
@@ -174,25 +188,26 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
 
     getAverageROCGraph(aveFPR, aveTPR, ave_roc_auc, modelName)
 
+
     print("\n*****Averaged Final Classification Results*****")
-    print("Sensitivity (TPR): %0.3f(±%0.3f)" % (np.mean(TPRList), np.std(TPRList) * 2))
-    print("Specificity (TNR): %0.3f(±%0.3f)" % (np.mean(TNRList), np.std(TNRList) * 2))
-    print("Precision (PPV): %0.3f(±%0.3f)" % (np.mean(PPVList), np.std(PPVList) * 2))
-    print("Negative Predictive Value (NPV): %0.3f(±%0.3f)" % (np.mean(NPVList), np.std(NPVList) * 2))
-    print("FPR: %0.3f(±%0.3f)" % (np.mean(FPRList), np.std(FPRList) * 2))
-    print("FNR: %0.3f(±%0.3f)" % (np.mean(FNRList), np.std(FNRList) * 2))
-    print("Accuracy: %0.3f(±%0.3f)" % (np.mean(ACCList), np.std(ACCList) * 2))
-    print("Averaged AUC: %0.3f(±%0.3f)" % (np.mean(AUCList), np.std(AUCList) * 2))
+    print("Sensitivity (TPR): %0.3f(±%0.3f)" % (np.nanmean(TPRList), np.nanstd(TPRList) * 2))
+    print("Specificity (TNR): %0.3f(±%0.3f)" % (np.nanmean(TNRList), np.nanstd(TNRList) * 2))
+    print("Precision (PPV): %0.3f(±%0.3f)" % (np.nanmean(PPVList), np.nanstd(PPVList) * 2))
+    print("Negative Predictive Value (NPV): %0.3f(±%0.3f)" % (np.nanmean(NPVList), np.nanstd(NPVList) * 2))
+    print("FPR: %0.3f(±%0.3f)" % (np.nanmean(FPRList), np.nanstd(FPRList) * 2))
+    print("FNR: %0.3f(±%0.3f)" % (np.nanmean(FNRList), np.nanstd(FNRList) * 2))
+    print("Accuracy: %0.3f(±%0.3f)" % (np.nanmean(ACCList), np.nanstd(ACCList) * 2))
+    print("Averaged AUC: %0.3f(±%0.3f)" % (np.nanmean(AUCList), np.nanstd(AUCList) * 2))
 
     myfile.write("\n*****Averaged Final Classification Results*****\n")
-    myfile.write("Sensitivity (TPR): %0.3f(±%0.3f)\n" % (np.mean(TPRList), np.std(TPRList) * 2))
-    myfile.write("Specificity (TNR): %0.3f(±%0.3f)\n" % (np.mean(TNRList), np.std(TNRList) * 2))
-    myfile.write("Precision (PPV): %0.3f(±%0.3f)\n" % (np.mean(PPVList), np.std(PPVList) * 2))
-    myfile.write("Negative Predictive Value (NPV): %0.3f(±%0.3f)\n" % (np.mean(NPVList), np.std(NPVList) * 2))
-    myfile.write("FPR: %0.3f(±%0.3f)\n" % (np.mean(FPRList), np.std(FPRList) * 2))
-    myfile.write("FNR: %0.3f(±%0.3f)\n" % (np.mean(FNRList), np.std(FNRList) * 2))
-    myfile.write("Accuracy: %0.3f(±%0.3f)\n" % (np.mean(ACCList), np.std(ACCList) * 2))
-    myfile.write("Averaged AUC: %0.3f(±%0.3f)\n" % (np.mean(AUCList), np.std(AUCList) * 2))
+    myfile.write("Sensitivity (TPR): %0.3f(±%0.3f)\n" % (np.nanmean(TPRList), np.nanstd(TPRList) * 2))
+    myfile.write("Specificity (TNR): %0.3f(±%0.3f)\n" % (np.nanmean(TNRList), np.nanstd(TNRList) * 2))
+    myfile.write("Precision (PPV): %0.3f(±%0.3f)\n" % (np.nanmean(PPVList), np.nanstd(PPVList) * 2))
+    myfile.write("Negative Predictive Value (NPV): %0.3f(±%0.3f)\n" % (np.nanmean(NPVList), np.nanstd(NPVList) * 2))
+    myfile.write("FPR: %0.3f(±%0.3f)\n" % (np.nanmean(FPRList), np.nanstd(FPRList) * 2))
+    myfile.write("FNR: %0.3f(±%0.3f)\n" % (np.nanmean(FNRList), np.nanstd(FNRList) * 2))
+    myfile.write("Accuracy: %0.3f(±%0.3f)\n" % (np.nanmean(ACCList), np.nanstd(ACCList) * 2))
+    myfile.write("Averaged AUC: %0.3f(±%0.3f)\n" % (np.nanmean(AUCList), np.nanstd(AUCList) * 2))
 
     myfile.close()
 
@@ -245,7 +260,7 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
     edgeList = []
 
     # get all combos of edges
-    edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=300, sampleSize=150) #combinationSize=100000, sampleSize=50000) #changing stuff here
+    edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=2, sampleSize=2) #combinationSize=100000, sampleSize=50000) #changing stuff here
 
     #Exhaustive sample of MVDD edges to try, and get best resulting MVDD
     for edgeOpt in edgeOptions:
