@@ -1,0 +1,40 @@
+
+Total edges: 172 Nonterminal Edge 85
+Must have more than 26 and less than 51 OR Edges
+Best edge set: ['solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'solid', 'dashed', 'dashed', 'solid', 'dashed', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'dashed', 'dashed', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'dashed']
+Accuracy MVDD: [1.         0.97752809 0.75842697 0.76966292 1.        ]
+Averaged acc for all 5 classes: 0.9011235955056179
+
+Total edges: 152 Nonterminal Edge 75
+Must have more than 22 and less than 45 OR Edges
+Best edge set: ['solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'dashed', 'dashed']
+Accuracy MVDD: [1.         0.96067416 0.69101124 0.69662921 1.        ]
+Averaged acc for all 5 classes: 0.8696629213483146
+
+Total edges: 160 Nonterminal Edge 79
+Must have more than 24 and less than 47 OR Edges
+Best edge set: ['solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'dashed', 'dashed', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'dashed', 'solid', 'dashed']
+Accuracy MVDD: [1.         0.97752809 0.76966292 0.79775281 0.99438202]
+Averaged acc for all 5 classes: 0.907865168539326
+
+Total edges: 154 Nonterminal Edge 76
+Must have more than 23 and less than 46 OR Edges
+Best edge set: ['dashed', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'dashed', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'solid', 'dashed', 'solid', 'dashed', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'solid']
+Accuracy MVDD: [0.99438202 0.97752809 0.37640449 0.43820225 0.96629213]
+Averaged acc for all 5 classes: 0.750561797752809
+
+Total edges: 146 Nonterminal Edge 72
+Must have more than 22 and less than 43 OR Edges
+Best edge set: ['solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'dashed', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'dashed', 'dashed', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'dashed', 'dashed', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'dashed', 'solid', 'solid', 'dashed', 'dashed', 'solid', 'dashed', 'solid', 'solid', 'dashed', 'dashed', 'solid', 'dashed', 'solid', 'dashed', 'solid']
+Accuracy MVDD: [1.         0.97175141 0.6779661  0.72881356 0.96610169]
+Averaged acc for all 5 classes: 0.8689265536723163
+
+*****Averaged Final Classification Results*****
+Sensitivity (TPR): 0.495(±0.803)
+Specificity (TNR): 0.878(±0.440)
+Precision (PPV): 0.655(±0.529)
+Negative Predictive Value (NPV): 0.889(±0.304)
+FPR: 0.122(±0.440)
+FNR: 0.505(±0.803)
+Accuracy: 0.860(±0.355)
+Averaged AUC: 0.675(±0.343)
