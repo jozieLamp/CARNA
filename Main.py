@@ -12,7 +12,6 @@ import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
 from networkx.drawing.nx_pydot import *
-import Params as params
 
 
 #Expects param dict of 27 parameters, and select one of 4 outcomes

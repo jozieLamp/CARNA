@@ -24,7 +24,6 @@ import graphviz
 import collections
 from networkx.drawing.nx_pydot import *
 from MVDD.MVDD import MVDD
-import Params as params
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from scipy import interp
