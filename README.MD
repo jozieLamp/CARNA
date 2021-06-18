@@ -1,6 +1,6 @@
 # CARNA
 
-### Intelligently Characterizing Patient Hemodynamic Phenotypes for Advanced Heart Failure in the ESCAPE Trial Using Learned Multi Valued Decision Diagrams  
+### Characterizing Advanced heart failure Risk and hemodyNAmic phenotypes using learned multi valued decision diagrams  
 
 *Josephine Lamp<sup>1</sup>, Yuxin Wu<sup>1</sup>, Steven Lamp<sup>2</sup>, Lu Feng<sup>1</sup>, Sula Mazimba<sup>3</sup>*  
 <sup>1</sup>Department of Computer Science, University of Virginia, Charlottesville, VA, USA  
