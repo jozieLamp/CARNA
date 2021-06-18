@@ -8,11 +8,11 @@
 <sup>3</sup>Department of Cardiovascular Medicine, University of Virginia, Charlottesville, VA, USA  
 
 -------
-**Core Code Repository: https://github.com/jozieLamp/HemoPheno4HF  
+**Core Code Repository: https://github.com/jozieLamp/CARNA
 Live Web Server with Risk Prediction: http://hemopheno.pythonanywhere.com/**
 
 ## Project Description:  
-HemoPheno4HF is an open source risk stratification and phenotyping tool for hemodynamic phenotypes in advanced heart failure.
+CARNA is an open source risk stratification and phenotyping tool for hemodynamic phenotypes in advanced heart failure.
 Explicitly, our tool provides a hemodynamic risk score that takes in single point of care measures as input, 
 and uses a diverse set of features (including invasive and composite hemodynamics and other clinical measures) 
 to return a score of 1 to 5, indicating the probability of a specified outcome, such as mortality, rehospitalization, 
@@ -92,10 +92,6 @@ These can be easily installed into a Python environment such as by using PyCharm
     - Preprocessed Data: Preprocessed data with derived supervised score labels as well as a Data Dictionary for ease of understanding feature abbreviations.
 - Graphs:
     - Output directory for the generated graphs from training including the 5 fold ROC scores
-- HemoPheno4HFServerMASTER
-    - Contains all code used to devlop and deploy the risk score live web interface
-- Legacy_Code:
-    - Old code versions retained for nostalgia purposes. (Most likely you should not be using anything in this folder as 90+% of it does not work.)
 - MVDD:
     - MVDD: MVDD Object class that stores the details about the MVDD structure
     - MVDD_Generator: Script to train, build and visualize the MVDDs
