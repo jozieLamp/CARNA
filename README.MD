@@ -1,4 +1,4 @@
-# CARNA
+# <img src="CARNA Logo.png" width="150"> CARNA
 ### Characterizing Advanced heart failure Risk and hemodyNAmic phenotypes using learned multi valued decision diagrams  
 
 *Josephine Lamp<sup>1</sup>, Yuxin Wu<sup>1</sup>, Steven Lamp<sup>1</sup>, Lu Feng<sup>1</sup>, Sula Mazimba<sup>2</sup>*  
