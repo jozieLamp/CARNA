@@ -1,0 +1,13 @@
+django
+gunicorn
+django_on_heroku
+numpy
+networkx
+sklearn
+pydotplus
+matplotlib
+pandas
+pydot
+graphviz
+more_itertools
+statistics

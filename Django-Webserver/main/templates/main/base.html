@@ -1,0 +1,288 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HemoPheno4HF</title>
+	<link rel="stylesheet" type="text/css" href='{% static "css/style.css" %}?{% now "U" %}'/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script>
+		function fillfields(mode) {
+			if (mode == 'low') {
+				document.getElementById("age").value = 69;
+				document.getElementById("ef").value = 20;
+				document.getElementById("rap").value = 10;
+				document.getElementById("pas").value = 40;
+				document.getElementById("pad").value = 20;
+				document.getElementById("pamn").value = 27;
+				document.getElementById("pcwp_mn").value = 20;
+				document.getElementById("co").value = 4.52;
+				document.getElementById("ci").value = 2.02;
+				document.getElementById("mixed").value = 60
+				document.getElementById("map").value = 122;
+				document.getElementById("mpap").value = 53.33333333;
+				document.getElementById("cpi").value = 0.5643016;
+				document.getElementById("pp").value = 17;
+				document.getElementById("ppp").value = 0.2125;
+				document.getElementById("papp").value = 0.5;
+				document.getElementById("svr").value = 1982.300885;
+				document.getElementById("rat").value = 0.555555556;
+				document.getElementById("pprat").value = 0.242857143;
+			}
+			else if (mode == 'medium') {
+				document.getElementById("age").value = 66;
+				document.getElementById("ef").value = 12;
+				document.getElementById("rap").value = 10;
+				document.getElementById("pas").value = 50;
+				document.getElementById("pad").value = 25;
+				document.getElementById("pamn").value = 33;
+				document.getElementById("pcwp_mn").value = 25;
+				document.getElementById("co").value = 2.72;
+				document.getElementById("ci").value = 1.43;
+				document.getElementById("mixed").value = 58;
+				document.getElementById("map").value = 121.3333333;
+				document.getElementById("mpap").value = 66.6666667;
+				document.getElementById("cpi").value = 0.384715447;
+				document.getElementById("pp").value = 43;
+				document.getElementById("ppp").value = 0.477777778;
+				document.getElementById("papp").value = 0.5;
+				document.getElementById("svr").value = 3274.509804;
+				document.getElementById("rat").value = 0.4;
+				document.getElementById("pprat").value = 0.661538462;
+			}
+			else if (mode == 'high') {
+				document.getElementById("age").value = 88;
+				document.getElementById("ef").value = 25;
+				document.getElementById("rap").value = 24;
+				document.getElementById("pas").value = 42;
+				document.getElementById("pad").value = 24;
+				document.getElementById("pamn").value = 30;
+				document.getElementById("pcwp_mn").value = 36;
+				document.getElementById("co").value = 2.2;
+				document.getElementById("ci").value = 1.6;
+				document.getElementById("mixed").value = 80;
+				document.getElementById("map").value = 171.3333333;
+				document.getElementById("mpap").value = 58;
+				document.getElementById("cpi").value = 0.607834442;
+				document.getElementById("pp").value = 28;
+				document.getElementById("ppp").value = 0.245614035;
+				document.getElementById("papp").value = 0.428571429;
+				document.getElementById("svr").value = 5357.575758;
+				document.getElementById("rat").value = 0.666666667;
+				document.getElementById("pprat").value = 0.266666667;
+			}
+		}
+
+		function calc_comp() {
+			var sys = parseInt(document.getElementById("sys").value);
+			var dia = parseInt(document.getElementById("dia").value);
+			var pas = parseInt(document.getElementById("pas").value); 
+			var pad = parseInt(document.getElementById("pad").value);
+			var pp = 0;
+			var rap = parseInt(document.getElementById("rap").value);
+			var ci = parseInt(document.getElementById("ci").value)
+			var co = parseInt(document.getElementById("co").value);
+			var pcwp = parseInt(document.getElementById("pcwp_mn").value);
+			var hr = parseInt(document.getElementById("hr").value);
+			var map = 0;
+
+			document.getElementById("map").value = sys+(2*dia)/3;
+			map = sys+(2*dia)/3;
+			document.getElementById("mpap").value = pas+(2*pad)/3;
+			document.getElementById("pp").value = sys-dia;
+			pp = sys-dia;
+			document.getElementById("ppp").value = pp/sys;
+			document.getElementById("cpi").value = (ci*map)/451;
+			document.getElementById("papp").value = (pas-pad)/pas;
+			document.getElementById("svr").value = 80*(map-rap)/co;
+			document.getElementById("rat").value = rap/pcwp;
+			document.getElementById("pprat").value = (sys-dia)/hr;
+			document.getElementById("papi").value = (pas-pad)/rap;
+			document.getElementById("sapi").value = (sys-dia)/pcwp;
+			document.getElementById("cpp").value = dia-pcwp;
+			document.getElementById("praprat").value = pp/rap;
+		}
+	</script> 
+</head>
+
+<body>
+	<div class="nav">
+		<h1>HemoPheno4HF <span style="float: right; font-weight: lighter; font-size: 20px"><a href="{% url 'index' %}">invasive</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'all' %}">all</a></span></h1>
+	</div>
+
+	<div class="main">
+		<h1>Invasive Hemodynamic Phenotyping</h1>
+		<p>HemoPheno4HF is an open source risk stratification and phenotyping tool for hemodynamic phenotypes in advanced heart failure. This tool uses invasive hemodynamic parameters to provide a hemodynamic risk score of 1 to 5, indicating the probability of a specified outcome. For example, a risk score of 5 (high) may indicate the patient has a greater than 40% probability of the specified outcome, whereas a score of 1 (low) may indicate a less than 10% probability of the outcome.
+			<br/><br/>
+			Please enter the wanted parameters below, and select the appropriate outcome you wish to generate a score for. You may also auto-fill example parameters using the provided buttons. Any terms can be hovered over to show the acronym spelled out, should there be confusion or uncertainty.
+			<br/><br/>
+			More information: https://github.com/jozieLamp/HemoPheno4HF</p>
+		<hr>
+
+
+		<form method="post" action="external">
+			{% csrf_token %}
+			<h2>Example Datasets</h2>
+			<div class="examples">
+				<input type="button" value="Low Risk" style="width: 100px" onclick="fillfields('low')"> 
+				<input type="button" value="Medium Risk" style="width: 100px" onclick="fillfields('medium')">
+				<input type="button" value="High Risk" style="width: 100px" onclick="fillfields('high')">
+			</div>
+			<h2>Patient Parameters</h2>
+			<div class="col_1">
+			<h4>Demographics</h4>
+				<div class="age">
+					<label for="age">Age</label>
+					<input type="number" id="age" name="age" min=18 max=150 style="width: 50px; float: right;">
+				</div>
+
+				<div class="ef">
+					<label for="ef">Ejection Fraction</label>
+					<input type="number" id="ef" name="ef" min=0 max=100 style="width: 50px; float: right;">
+				</div>
+			<h4>Heart Rate and Blood Pressure</h4>
+				<div class="hr">
+					<label for="hr">Heart Rate</label>
+					<input type="number" id="hr" name="hr" min=20 max=220 style="width: 50px; float: right;">
+				</div>
+
+				<div class="dia">
+					<label for="dia">BP Diastolic (mmHg)</label>
+					<input type="number" id="dia" name="dia" min=50 max=200 style="width: 50px; float: right;">
+				</div>
+
+				<div class="sys">
+					<label for="sys">BP Systolic (mmHg)</label>
+					<input type="number" id="sys" name="sys" min=50 max=200 style="width: 50px; float: right;">
+				</div>
+		</div>
+		<div class="col_2">
+			<h4>Hemodynamics</h4>
+			<div class="rap">
+				<span title="Right Atrial Pressure"><label for="rap">RAP (mmHg)</label></span>
+				<input type="number" id="rap" name="rap" min=0 max=100 step="0.0000000001" style="width: 50px; float: right;">
+			</div>
+
+			<div class="pas">
+				<span title="Pulmonary Artery Pressure Systolic"><label for="pas">PAS (mmHg)</label></span>
+				<input type="number" id="pas" name="pas" min=0 max=100 step="0.0000000001" style="width: 50px; float: right;">
+			</div>
+
+			<div class="pad">
+				<span title="Pulmonary Artery Pressure Diastolic"><label for="pad">PAD (mmHg)</label></span>
+				<input type="number" id="pad" name="pad" min=0 max=100 step="0.0000000001" style="width: 50px; float: right;">
+			</div>
+
+			<div class="pamn">
+				<span title="Mean Pulmonary Pressure"><label for="pamn">PAMN (mmHg)</label></span>
+				<input type="number" id="pamn" name="pamn" min=0 max=100 step="0.0000000001" style="width: 50px; float: right;">
+			</div>
+
+			<div class="pcwp_mn">
+				<span title="Pulmonary Capillary Wedge Pressure Mean"><label for="pcwp">PCWP Mean (mmHg)</label></span>
+				<input type="number" id="pcwp_mn" name="pcwp_mn" max=100 step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="co">
+				<span title="Cardiac Output"><label for="co">CO (L/min)</label></span>
+				<input type="number" id="co" name="co" step="0.0000000001" min=0 max=10 style="width: 50px; float: right;">
+			</div>
+
+			<div class="ci">
+				<span title="Cardiac Index"><label for="ci">CI (L/min/m2)</label></span>
+				<input type="number" id="ci" name="ci" step="0.0000000001" min=0 max=10 style="width: 50px; float: right;">
+			</div>
+
+			<div class="mixed">
+				<span title="Mixed Venous O2"><label for="mixed">Mixed VO2</label></span>
+				<input type="number" id="mixed" name="mixed" step="0.0000000001" min=0 max=100 style="width: 50px; float: right;">
+			</div>
+			<input type="button" value="CALCULATE COMPOSITE" style="width: 100%" onclick="calc_comp()">
+		</div>
+		<div class="col_3">
+			<h4>Composite</h4>
+			<div class="map">
+				<span title="Mean Arterial Pressure"><label for="map">MAP (mmHg)</label></span>
+				<input type="number" id="map" name="map" step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="mpap">
+				<span title="Mean Pulmonary Artery Pressure"><label for="mpap">Mean PAP (mmHg)</label></span>
+				<input type="number" id="mpap" name="mpap" step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="cpi">
+				<span title="Cardiac Power Index"><label for="cpi">CPI (W/m2)</label></span>
+				<input type="number" id="cpi" name="cpi" step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="pp">
+				<span title="Systemic Pulse Pressure (Left Side)"><label for="pp">PP (mmHg)</label></span>
+				<input type="number" id="pp" name="pp" step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="ppp">
+				<span title="Systemic Arterial Proportional Pulse Pressure"><label for="ppp">PPP (mmHg)</label></span>
+				<input type="number" id="ppp" name="ppp" step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="papp">
+				<span title="Pulmonary Arterial Proportional Pulse Pressure (Right Side)"><label for="papp">PAPP (mmHg)</label></span>
+				<input type="number" id="papp" name="papp" step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="svr">
+				<span title="Systemic Vascular Resistance"><label for="svr">SVR</label></span>
+				<input type="number" id="svr" name="svr" step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="rat">
+				<span title="Ratio of RAP to PCWP"><label for="mixed">RAP / PCWP</label></span>
+				<input type="number" id="rat" name="rat" step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="pprat">
+				<span title="Ratio of PP / HR"><label for="pprat">PPRatio</label></span>
+				<input type="number" id="pprat" name="pprat" step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="papi">
+			<span title="Pulmonary Artery Pulsality Index"><label for="papi">PAPi</label></span>
+				<input type="number" id="papi" name="papi" step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="sapi">
+				<span title="Systemic Arterial Pulsatility Index"><label for="sapi">SAPi</label></span>
+				<input type="number" id="sapi" name="sapi" step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="cpp">
+				<span title="Coronary Perfusion Pressure"><label for="sapi">CPP (mmHg)</label></span>
+				<input type="number" id="cpp" name="cpp" step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="praprat">
+				<span title="Ratio of PP / RAP"><label for="praprat">PRAPRAT</label></span>
+				<input type="number" id="praprat" name="praprat" step="0.0000000001" min=0 style="width: 50px; float: right;">
+			</div>
+		</div>
+		<div class="col_4">
+			<input type="reset" value="CLEAR FIELDS" style="width: 100%">
+			<hr>
+			<h4><center>Compute Outcomes for...</center></h4>
+			<input type="radio" id="death" value="death" name="testparam">
+			<label for="testparam">Death</label><br/>
+			<input type="radio" id="rehospitaization" value="rehospitalization" name="testparam">
+			<label for="testparam">Rehospitalization</label><br/>
+			<input type="radio" id="readmission" value="readmissino" name="testparam">
+			<label for="testparam">Readmission</label><br/>
+			<input type="radio" id="all" value="all" name="testparam">
+			<label for="testparam">All</label><br/><br/>
+
+			<input type="submit" value="SUBMIT" style="width: 100%">
+
+		</div>
+		</span>
+	</form>
+	</div>
+
+</body>

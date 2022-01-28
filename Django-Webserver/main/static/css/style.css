@@ -1,0 +1,103 @@
+html {
+	background-color: #2C0703;
+	font-family: Tahoma, Geneva, sans-serif;
+}
+
+body {
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 0px;
+}
+
+.nav {
+	background-color: #890620;
+	color: #FFFFFF;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	border-radius: 25px 25px 0px 0px;
+}
+
+.main {
+	display: block;
+	background-color: #ececec;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	height: 850px;
+	border-radius: 0px 0px 25px 25px;
+
+}
+
+.main_all {
+	display: block;
+	background-color: #ececec;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	height: 1050px;
+	border-radius: 0px 0px 25px 25px;	
+}
+
+.main_results {
+	display: block;
+	background-color: #ececec;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	height: 300px;
+	border-radius: 0px 0px 25px 25px;	
+}
+
+h1, h2, h4, p {
+	padding: 10px 25px 10px 25px;
+	margin: 0;
+}
+
+.main h2, .main_all h2 {
+	color: #890620;
+}
+
+.main h4, .main_all h4 {
+	color: #B6465F;
+	font-weight: normal;
+}
+
+.input, .procedures, .conditions, .medications {
+	padding-left: 25px;
+}
+
+.col_1, .col_2, .col_3, .col_4 {
+	background-color: #ececec;
+	width: 24%;
+	float: left;
+	padding-right:1%;
+}
+
+.examples, .age, .ef, .hr, .dia, .sys, .rap, .pas, .pad, .pamn, .pcwp, .pcwp_mn, .co, .ci, .mixed,
+.map, .mpap, .cpi, .pp, .ppp, .papp, .svr, .rat, .pprat, .papi, .sapi, .cpp, .praprat{
+	margin-left: 25px;
+	margin-bottom: 10px;
+}
+
+.weight, .bmi, .ejf, .nyha, .mlhfs, .initial, .total, .alb, .alt, .ast, .bun, .crt, .dial, .hec,
+.hem, .pla, .pot, .sod, .talb, .totp, .wbc {
+	margin-left: 25px;
+	margin-bottom: 10px;
+}
+
+a:link, a:visited { 
+	color: white;
+	text-decoration: none;
+}
+
+.col_1_2 {
+	background-color: #C4C4C4;
+	width: 24%;
+	float: left;
+	padding-right:1%;
+}
+
+.col_2_2 {
+	background-color: #C4C4C4;
+	width: 74%;
+	float: left;
+	padding-right:1%;
+}

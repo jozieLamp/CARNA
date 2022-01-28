@@ -1,0 +1,435 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HemoPheno4HF</title>
+	<link rel="stylesheet" type="text/css" href='{% static "css/style.css" %}?{% now "U" %}'/>
+	<style>
+		.main {
+			height: 850px;
+		}
+	</style>
+	<script>
+		function fillfields(mode) {
+			if (mode == 'low') {
+				document.getElementById("age").value = 48;
+				document.getElementById("weight").value = 52.9;
+				document.getElementById("bmi").value = 22.01873049;
+				document.getElementById("bmi").value = 22.01873049;
+				document.getElementById("initial").value = 4;
+				document.getElementById("total").value = 4;
+				document.getElementById("bmi").value = 22.01873049;
+				document.getElementById("nyha").value = 4;
+				document.getElementById("mlhfs").value = 82;
+				document.getElementById("af").checked = false;
+				document.getElementById("alche").checked = false;
+				document.getElementById("angp").checked = false;
+				document.getElementById("arrh").checked = false;
+				document.getElementById("carrest").checked = false;
+				document.getElementById("cvd").checked = false;
+				document.getElementById("copd").checked = false;
+				document.getElementById("depr").checked = false;
+				document.getElementById("diab").checked = false;
+				document.getElementById("gout").checked = false;
+				document.getElementById("hept").checked = false;
+				document.getElementById("htn").checked = false;
+				document.getElementById("malig").checked = true;
+				document.getElementById("renal").checked = false;
+				document.getElementById("smoking").checked = false;
+				document.getElementById("sterd").checked = false;
+				document.getElementById("stroke").checked = false;
+				document.getElementById("vahd").checked = false;
+				document.getElementById("vf").checked = false;
+				document.getElementById("vhd").checked = false;
+				document.getElementById("vt").checked = false;
+				document.getElementById("isch").checked = false;
+				document.getElementById("nonisch").checked = true;
+				document.getElementById("cabg").checked = false;
+				document.getElementById("htrans").checked = true;
+				document.getElementById("icd").checked = false;
+				document.getElementById("pace").checked = false;
+				document.getElementById("alb").value = 0;
+				document.getElementById("alt").value = 0;
+				document.getElementById("ast").value = 0;
+				document.getElementById("bun").value = 0;
+				document.getElementById("crt").value = 0.5;
+				document.getElementById("dial").value = 0;
+				document.getElementById("hec").value = 39.2;
+				document.getElementById("hem").value = 13.2;
+				document.getElementById("pla").value = 261;
+				document.getElementById("pot").value = 4.7;
+				document.getElementById("sod").value = 0;
+				document.getElementById("talb").value = 0;
+				document.getElementById("totp").value = 0;
+				document.getElementById("wbc").value = 7.3;
+				document.getElementById("ace").checked = true;
+				document.getElementById("bet").checked = true;
+				document.getElementById("nit").checked = false;
+				document.getElementById("diur").checked = true;
+				document.getElementById("ejf").value = 20;
+				document.getElementById("dia").value = 78;
+				document.getElementById("sys").value = 130;
+				document.getElementById("hr").value = 64;
+			}
+			else if (mode == 'medium') {
+				document.getElementById("age").value = 65;
+				document.getElementById("weight").value = 91.36363636;
+				document.getElementById("bmi").value = 29.83302412;
+				document.getElementById("initial").value = 0;
+				document.getElementById("total").value = 63;
+				document.getElementById("nyha").value = 4;
+				document.getElementById("mlhfs").value = 62;
+				document.getElementById("af").checked = false;
+				document.getElementById("alche").checked = false;
+				document.getElementById("angp").checked = true;
+				document.getElementById("arrh").checked = false;
+				document.getElementById("carrest").checked = false;
+				document.getElementById("cvd").checked = false;
+				document.getElementById("copd").checked = false;
+				document.getElementById("depr").checked = true;
+				document.getElementById("diab").checked = true;
+				document.getElementById("gout").checked = true;
+				document.getElementById("hept").checked = false;
+				document.getElementById("htn").checked = false;
+				document.getElementById("malig").checked = false;
+				document.getElementById("renal").checked = false;
+				document.getElementById("smoking").checked = false;
+				document.getElementById("sterd").checked = true;
+				document.getElementById("stroke").checked = false;
+				document.getElementById("vahd").checked = false;
+				document.getElementById("vf").checked = false;
+				document.getElementById("vhd").checked = false;
+				document.getElementById("vt").checked = false;
+				document.getElementById("isch").checked = true;
+				document.getElementById("nonisch").checked = false;
+				document.getElementById("cabg").checked = true;
+				document.getElementById("htrans").checked = true;
+				document.getElementById("icd").checked = false;
+				document.getElementById("pace").checked = true;
+				document.getElementById("alb").value = 4;
+				document.getElementById("alt").value = 26;
+				document.getElementById("ast").value = 29;
+				document.getElementById("bun").value = 37;
+				document.getElementById("crt").value = 1.5;
+				document.getElementById("dial").value = 0.3;
+				document.getElementById("hec").value = 40.8;
+				document.getElementById("hem").value = 13.9;
+				document.getElementById("pla").value = 127;
+				document.getElementById("pot").value = 4.4;
+				document.getElementById("sod").value = 140;
+				document.getElementById("talb").value = 1.3;
+				document.getElementById("totp").value = 7.8;
+				document.getElementById("wbc").value = 8;
+				document.getElementById("ace").checked = true;
+				document.getElementById("bet").checked = true;
+				document.getElementById("nit").checked = false;
+				document.getElementById("diur").checked = true;
+				document.getElementById("ejf").value = 20;
+				document.getElementById("dia").value = 60;
+				document.getElementById("sys").value = 94;
+				document.getElementById("hr").value = 64;
+			}
+			else if (mode == 'high') {
+				document.getElementById("age").value = 88;
+				document.getElementById("weight").value = 62.27272727;
+				document.getElementById("bmi").value = 22.87336172;
+				document.getElementById("initial").value = 4;
+				document.getElementById("total").value = 22;
+				document.getElementById("nyha").value = 4;
+				document.getElementById("mlhfs").value = 70;
+				document.getElementById("af").checked = false;
+				document.getElementById("alche").checked = false;
+				document.getElementById("angp").checked = false;
+				document.getElementById("arrh").checked = false;
+				document.getElementById("carrest").checked = false;
+				document.getElementById("cvd").checked = false;
+				document.getElementById("copd").checked = false;
+				document.getElementById("depr").checked = false;
+				document.getElementById("diab").checked = false;
+				document.getElementById("gout").checked = false;
+				document.getElementById("hept").checked = false;
+				document.getElementById("htn").checked = false;
+				document.getElementById("malig").checked = false;
+				document.getElementById("renal").checked = false;
+				document.getElementById("smoking").checked = false;
+				document.getElementById("sterd").checked = false;
+				document.getElementById("stroke").checked = false;
+				document.getElementById("vahd").checked = false;
+				document.getElementById("vf").checked = false;
+				document.getElementById("vhd").checked = false;
+				document.getElementById("vt").checked = false;
+				document.getElementById("isch").checked = false;
+				document.getElementById("nonisch").checked = true;
+				document.getElementById("cabg").checked = false;
+				document.getElementById("htrans").checked = true;
+				document.getElementById("icd").checked = false;
+				document.getElementById("pace").checked = false;
+				document.getElementById("alb").value = 0;
+				document.getElementById("alt").value = 43;
+				document.getElementById("ast").value = 28;
+				document.getElementById("bun").value = 16;
+				document.getElementById("crt").value = 1.1;
+				document.getElementById("dial").value = 0.09;
+				document.getElementById("hec").value = 49.2;
+				document.getElementById("hem").value = 15.8;
+				document.getElementById("pla").value = 245;
+				document.getElementById("pot").value = 4.7;
+				document.getElementById("sod").value = 141;
+				document.getElementById("talb").value = 0.4;
+				document.getElementById("totp").value = 8.3;
+				document.getElementById("wbc").value = 4.6;
+				document.getElementById("ace").checked = true;
+				document.getElementById("bet").checked = true;
+				document.getElementById("nit").checked = false;
+				document.getElementById("diur").checked = true;
+				document.getElementById("ejf").value = 20;
+				document.getElementById("dia").value = 71;
+				document.getElementById("sys").value = 111;
+				document.getElementById("hr").value = 78;
+			}
+		}
+	</script>
+</head>
+
+<body>
+	<div class="nav">
+		<h1>HemoPheno4HF <span style="float: right; font-weight: lighter; font-size: 20px"><a href="{% url 'index' %}">invasive</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'all' %}">all</a></span></h1>
+	</div>
+
+	<div class="main_all">
+		<h1>All Hemodynamic Phenotyping</h1>
+		<p>HemoPheno4HF is an open source risk stratification and phenotyping tool for hemodynamic phenotypes in advanced heart failure. This tool uses a variety of medical parameters to provide a hemodynamic risk score of 1 to 5, indicating the probability of a specified outcome. For example, a risk score of 5 (high) may indicate the patient has a greater than 40% probability of the specified outcome, whereas a score of 1 (low) may indicate a less than 10% probability of the outcome.
+			<br/><br/>
+			Please enter the wanted parameters below, and select the appropriate outcome you wish to generate a score for. You may also auto-fill example parameters using the provided buttons. Any terms can be hovered over to show the acronym spelled out, should there be confusion or uncertainty.
+			<br/><br/>
+			More information: https://github.com/jozieLamp/HemoPheno4HF</p>
+		<hr>
+		<h2>Example Datasets</h2>
+			<div class="examples">
+				<input type="button" value="Low Risk" style="width: 100px" onclick="fillfields('low')"> 
+				<input type="button" value="Medium Risk" style="width: 100px" onclick="fillfields('medium')">
+				<input type="button" value="High Risk" style="width: 100px" onclick="fillfields('high')">
+			</div>
+		<h2>Patient Parameters</h2>
+		<form>
+		<div class="col_1">
+			<h4>Demographics</h4>
+			<div class="age">
+				<label for="age">Age</label>
+				<input type="number" id="age" name="age" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="weight">
+				<label for="weight">Weight (Kg)</label>
+				<input type="number" id="weight" name="weight" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="bmi">
+				<label for="bmi">BMI</label>
+				<input type="number" id="bmi" name="bmi" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="ejf">
+				<label for="ejf">Ejection Fraction</label>
+				<input type="number" id="ejf" name="ejf" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="nyha">
+				<label for="nyha">NYHA</label>
+				<input type="number" id="nyha" name="nyha" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="mlhfs">
+				<label for="mlhfs">MLHFS</label>
+				<input type="number" id="mlhfs" name="mlhfs" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<h4>Hospital Days</h4>
+			<div class="initial">
+				<label for="initial">Initial Days</label>
+				<input type="number" id="initial" name="initial" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="total">
+				<label for="total">Total Days</label>
+				<input type="number" id="total" name="total" min=0 style="width: 50px; float: right;">
+			</div>
+			<h4>Devices & Procedures</h4>
+			<div class="procedures">
+				<input type="checkbox" id="cabg" name="cabg" value="cabg">
+				<span title="Coronary Artery Bypass Grafting"><label for="cabg">CABG</label></span><br/>
+				<input type="checkbox" id="htrans" name="htrans" value="htrans">
+				<label for="htrans">Heart Transplant</label><br>
+				<input type="checkbox" id="icd" name="icd" value="icd">
+				<span title="Implantable Cardiac Defibrillator"><label for="icd">ICD</label></span><br/>
+				<input type="checkbox" id="pace" name="pace" value="pace">
+				<label for="pace">Pacemaker</label><br>
+			</div>
+		</div>
+
+		<div class="col_2">
+			<h4>Conditions</h4>
+			<div class="conditions">
+				<input type="checkbox" id="isch" name="isch" value="isch">
+				<label for="isch">Ischemic Heart Disease</label><br>
+				<input type="checkbox" id="nonisch" name="nonisch" value="nonisch">
+				<label for="nonisch">Nonischemic Heart Disease</label><br>
+				<input type="checkbox" id="af" name="af" value="af">
+				<label for="af">Atrial Fibrillation</label><br>
+				<input type="checkbox" id="alche" name="alche" value="alche">
+				<label for="alche">Alcoholism</label><br>
+				<input type="checkbox" id="angp" name="angp" value="angp">
+				<label for="angp">Angina Pectoris</label><br>
+				<input type="checkbox" id="arrh" name="arrh" value="arrh">
+				<label for="arrh">Arrhythmias</label><br>
+				<input type="checkbox" id="carrest" name="carrest" value="carrest">
+				<label for="carrest">Cardiac Arrest</label><br>
+				<input type="checkbox" id="cvd" name="cvd" value="cvd">
+				<label for="cvd">Cerebrovascular Disease</label><br>
+				<input type="checkbox" id="copd" name="copd" value="copd">
+				<label for="copd">COPD</label><br>
+				<input type="checkbox" id="depr" name="depr" value="depr">
+				<label for="depr">Depression</label><br>
+				<input type="checkbox" id="diab" name="diab" value="diab">
+				<label for="diab">Diabetes</label><br>
+				<input type="checkbox" id="gout" name="gout" value="gout">
+				<label for="gout">Gout</label><br>
+				<input type="checkbox" id="hept" name="hept" value="hept">
+				<label for="hept">Hepatic Disease</label><br>
+				<input type="checkbox" id="htn" name="htn" value="htn">
+				<label for="htn">Hypertension</label><br>
+				<input type="checkbox" id="malig" name="malig" value="malig">
+				<label for="malig">Malignancy</label><br>
+				<input type="checkbox" id="renal" name="renal" value="renal">
+				<label for="renal">Renal Insufficiency</label><br>
+				<input type="checkbox" id="smoking" name="smoking" value="smoking">
+				<label for="smoking">Cigarette Smoking</label><br>
+				<input type="checkbox" id="sterd" name="sterd" value="sterd">
+				<label for="sterd">Chronic Steroid Use</label><br>
+				<input type="checkbox" id="stroke" name="stroke" value="stroke">
+				<label for="stroke">Stroke</label><br>
+				<input type="checkbox" id="vahd" name="vahd" value="vahd">
+				<label for="vahd">Vascular Heart Disease</label><br>
+				<input type="checkbox" id="vf" name="vf" value="vf">
+				<label for="vf">Ventricular Fabrillation</label><br>
+				<input type="checkbox" id="vhd" name="vhd" value="vhd">
+				<label for="vhd">Valvular Heart Disease</label><br>
+				<input type="checkbox" id="vt" name="vt" value="vt">
+				<label for="vt">Ventricular Tachycardia</label><br>
+			</div>
+
+			<h4>Heart Rate and Blood Pressure</h4>
+				<div class="hr">
+					<label for="hr">Heart Rate</label>
+					<input type="number" id="hr" name="hr" min=0 style="width: 50px; float: right;">
+				</div>
+
+				<div class="dia">
+					<label for="dia">BP Diastolic</label>
+					<input type="number" id="dia" name="dia" min=0 style="width: 50px; float: right;">
+				</div>
+
+				<div class="sys">
+					<label for="sys">BP Systolic</label>
+					<input type="number" id="sys" name="sys" min=0 style="width: 50px; float: right;">
+				</div>
+		</div>
+
+		<div class="col_3">
+			<h4>Labs</h4>
+			<div class="alb">
+					<label for="alb">Albumin</label>
+					<input type="number" id="alb" name="alb" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="alt">
+					<label for="alt">ALT/SGPT</label>
+					<input type="number" id="alt" name="alt" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="ast">
+					<label for="ast">AST/SGOT</label>
+					<input type="number" id="ast" name="ast" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="bun">
+					<label for="bun">Blood Urea Nitrogen</label>
+					<input type="number" id="bun" name="bun" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="crt">
+					<label for="crt">Creatine</label>
+					<input type="number" id="crt" name="crt" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="dial">
+					<label for="dial">Direct Bilirubin</label>
+					<input type="number" id="dial" name="dial" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="hec">
+					<label for="hec">Hematocrit</label>
+					<input type="number" id="hec" name="hec" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="hem">
+					<label for="hem">Hemoglobin</label>
+					<input type="number" id="hem" name="hem" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="pla">
+					<label for="pla">Platelets</label>
+					<input type="number" id="pla" name="pla" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="pot">
+					<label for="pot">Potassium</label>
+					<input type="number" id="pot" name="pot" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="sod">
+					<label for="sod">Sodium</label>
+					<input type="number" id="sod" name="sod" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="talb">
+					<label for="talb">Total Bilirubin</label>
+					<input type="number" id="talb" name="talb" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="totp">
+					<label for="totp">Total Protein</label>
+					<input type="number" id="totp" name="totp" min=0 style="width: 50px; float: right;">
+			</div>
+
+			<div class="wbc">
+					<label for="wbc">White Blood Cells</label>
+					<input type="number" id="wbc" name="wbc" min=0 style="width: 50px; float: right;">
+			</div>
+			<h4>Medications</h4>
+			<div class="medications">
+				<input type="checkbox" id="ace" name="ace" value="ace">
+				<label for="ace">ACE Inhibitor</label><br>
+				<input type="checkbox" id="bet" name="et" value="bet">
+				<label for="bet">Beta Blocker</label><br>
+				<input type="checkbox" id="nit" name="nit" value="nit">
+				<label for="nit">Vasodilators/Nitrates</label><br>
+				<input type="checkbox" id="diur" name="diur" value="diur">
+				<label for="diur">Diurectics</label><br>
+			</div>
+		</div>
+
+		<div class="col_4">
+			<input type="reset" value="CLEAR FIELDS" style="width: 100%">
+			<hr>
+			<h4><center>Compute Outcomes</center></h4>
+			<input type="submit" value="DEATH" style="width: 100%"><br/>
+			<input type="submit" value="REHOSPITALIZATION" style="width: 100%"><br/>
+			<input type="submit" value="READMISSION" style="width: 100%"><br/>
+			<input type="submit" value="ALL" style="width: 100%">
+		</div>
+		</span>
+	</form>
+	</div>
+
+</body>

@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HemoPheno4HF</title>
+	<link rel="stylesheet" type="text/css" href='{% static "css/style.css" %}?{% now "U" %}'/>
+</head>
+
+<body>
+	<div class="nav">
+		<h1>HemoPheno4HF <span style="float: right; font-weight: lighter; font-size: 20px"><a href="{% url 'index' %}">invasive</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'all' %}">all</a></span></h1>
+	</div>
+
+	<div class="main_results">
+
+		<h1>Results: {{score}} - {{chance}} <span style="font-size: 40px; color: {{color}}">•</span></h1>
+		<p>{{desc}}</p>
+		{{data}}
+		<hr>
+		<center>
+		<h2>Tree Path</h2>
+		{{path}}
+
+		<p>View <a href="AllData_AllOutcomes.png" style="color: #B6465F">Tree Graph</a> to understand this score</p>
+		</div>
+		</center>
+	</div>
+
+</body>
