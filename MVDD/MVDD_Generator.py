@@ -77,7 +77,7 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
     #make stratified k fold object
     kFold = StratifiedKFold(n_splits=numFolds)
 
-    myfile = open(modelName + "_Out.txt", 'w')
+    myfile = open("Results/" + modelName + "_Out.txt", 'w')
 
     bestMVDD = None
     bestAcc = 0
@@ -187,7 +187,6 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
 
     getAverageROCGraph(aveFPR, aveTPR, ave_roc_auc, modelName)
 
-
     print("\n*****Averaged Final Classification Results*****")
     print("Sensitivity (TPR): %0.3f(±%0.3f)" % (np.nanmean(TPRList), np.nanstd(TPRList) * 2))
     print("Specificity (TNR): %0.3f(±%0.3f)" % (np.nanmean(TNRList), np.nanstd(TNRList) * 2))
@@ -216,21 +215,26 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
 # INPUT = decision tree model, x and y data, classes predicting, learning criteria
 # OUTPUT = returns best MVDD model
 def getBestMVDD(dt, xData, yData, classes, learningCriteria):
-
     dot_data = tree.export_graphviz(dt,
                                     feature_names=xData.columns,
                                     class_names=classes,
                                     out_file=None,
                                     filled=True,
                                     rounded=True)
+
     graph = pydotplus.graph_from_dot_data(dot_data)
     dot = nx.nx_pydot.from_pydot(graph)
     dot = nx.DiGraph(dot)
+
+    #Fix bug where adding \n char as node
+    if "\\n" in dot.nodes:
+        dot.remove_node("\\n")
 
     totalEdges = len(dot.edges)
 
     # Get terminal indices
     terminalIndices = []
+
     for n in dot.nodes:
         label = dot.nodes[n]['label']
         label = label.replace("\"", "")
@@ -326,7 +330,7 @@ def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria, edgeOpt):
     nodes = graph.get_node_list()
 
     for node in nodes:
-        if node.get_name() not in ('node', 'edge'):
+        if node.get_name() not in ('node', 'edge', '"\\n"'):
             vals = dt.tree_.value[int(node.get_name())][0]
             maxPos = np.argmax(vals)
             node.set_fillcolor(colors[maxPos])
@@ -334,6 +338,10 @@ def convertDecisionTreeToMVDD(dt, xData, classes, learningCriteria, edgeOpt):
     # Convert decision tree dot data to decision diagram
     dot = nx.nx_pydot.from_pydot(graph)
     dot = nx.DiGraph(dot)
+
+    # Fix bug where adding \n char as node
+    if "\\n" in dot.nodes:
+        dot.remove_node("\\n")
 
     # Get terminal indices
     terminalIndices = []
@@ -514,7 +522,6 @@ def getIndividualROCGraph(y_test, y_score, foldNum, modelName):
 
     plt.savefig("Graphs/" + modelName + "ROC for Fold " + str(foldNum) + ".png")
     plt.show()
-
 
 # Helper methods
 def getLeftRightLabels(tokens):

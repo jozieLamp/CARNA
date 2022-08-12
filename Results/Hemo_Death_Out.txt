@@ -1,25 +1,16 @@
 Model kfold train1
-Accuracy MVDD: [1.         1.         0.92857143 1.         0.92857143]
+Accuracy MVDD: [0.77511962 0.92344498 0.63636364 0.784689   0.92344498]
 
 Model kfold train2
-Accuracy MVDD: [1.         1.         0.91666667 1.         0.91666667]
-
-Model kfold train3
-Accuracy MVDD: [1.         1.         0.88095238 1.         0.88095238]
-
-Model kfold train4
-Accuracy MVDD: [1.         1.         0.92771084 1.         0.92771084]
-
-Model kfold train5
-Accuracy MVDD: [1.         1.         0.89156627 1.         0.89156627]
+Accuracy MVDD: [0.72727273 0.88516746 0.57416268 0.85645933 0.94258373]
 
 
 *****Averaged Final Classification Results*****
-Sensitivity (TPR): 0.946(±0.152)
-Specificity (TNR): 0.973(±0.077)
-Precision (PPV): 0.947(±0.142)
-Negative Predictive Value (NPV): 0.973(±0.074)
-FPR: 0.027(±0.077)
-FNR: 0.054(±0.152)
-Accuracy: 0.964(±0.092)
-Averaged AUC: 0.959(±0.105)
+Sensitivity (TPR): 0.386(±0.686)
+Specificity (TNR): 0.855(±0.398)
+Precision (PPV): 0.394(±0.597)
+Negative Predictive Value (NPV): 0.873(±0.139)
+FPR: 0.145(±0.398)
+FNR: 0.614(±0.686)
+Accuracy: 0.803(±0.241)
+Averaged AUC: 0.620(±0.259)
