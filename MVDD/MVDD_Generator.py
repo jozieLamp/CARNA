@@ -120,7 +120,7 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
         cm = confusion_matrix(y_test,y_pred)
 
         #check for missing scores
-        if len(set(y_test)) != 5:
+        if len(set(y_test)) != 5 and len(cm[0]) != 5:
             missing = np.setdiff1d([1,2,3,4,5], list(set(y_test)))
             missing = missing[0]-1
 
@@ -263,7 +263,9 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
     edgeList = []
 
     # get all combos of edges
-    edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=5000, sampleSize=1000)#combinationSize=500, sampleSize=350) #combinationSize=100000, sampleSize=50000) #changing stuff here
+    # was 100000 and 50000 for old one ...
+    # was 10000 and 5000
+    edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=10, sampleSize=5)#combinationSize=500, sampleSize=350) #combinationSize=100000, sampleSize=50000) #changing stuff here
 
     #Exhaustive sample of MVDD edges to try, and get best resulting MVDD
     for edgeOpt in edgeOptions:
