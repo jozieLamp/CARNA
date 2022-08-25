@@ -187,6 +187,48 @@ def trainCrossValidation(xData, yData, dt, numFolds, classes, learningCriteria, 
 
     getAverageROCGraph(aveFPR, aveTPR, ave_roc_auc, modelName)
 
+    myfile.write("Per Fold Lists")
+    myfile.write("\nSensitivity List\n")
+    myfile.write('\n'.join(str(ls) for ls in TPRList))
+    myfile.write("\n")
+
+    myfile.write("\nSpecificity List\n")
+    myfile.write('\n'.join(str(ls) for ls in TNRList))
+    myfile.write("\n")
+
+    myfile.write("\nPPV List\n")
+    myfile.write('\n'.join(str(ls) for ls in PPVList))
+    myfile.write("\n")
+
+    myfile.write("\nNPV List\n")
+    myfile.write('\n'.join(str(ls) for ls in NPVList))
+    myfile.write("\n")
+
+    myfile.write("\nFPR List\n")
+    myfile.write('\n'.join(str(ls) for ls in FPRList))
+    myfile.write("\n")
+
+    myfile.write("\nFNR List\n")
+    myfile.write('\n'.join(str(ls) for ls in FNRList))
+    myfile.write("\n")
+
+    myfile.write("\nAccuracy List\n")
+    myfile.write('\n'.join(str(ls) for ls in ACCList))
+    myfile.write("\n")
+
+    # Averaged AUC across all classes PER Fold
+    rocAvgs = []
+    for l in AUCList:
+        rocAvgs.append(np.nanmean(l))
+    myfile.write("\nAUC Averaged across all classes PER fold\n")
+    myfile.write(','.join(str(ls) for ls in rocAvgs))
+    myfile.write("\n")
+
+    # Compete AUC output for all folds and classes
+    myfile.write("\nAUC List for all folds and classes\n")
+    myfile.write('\n'.join(str(ls) for ls in AUCList))
+    myfile.write("\n")
+
     print("\n*****Averaged Final Classification Results*****")
     print("Sensitivity (TPR): %0.3f(±%0.3f)" % (np.nanmean(TPRList), np.nanstd(TPRList) * 2))
     print("Specificity (TNR): %0.3f(±%0.3f)" % (np.nanmean(TNRList), np.nanstd(TNRList) * 2))
@@ -265,7 +307,7 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
     # get all combos of edges
     # was 100000 and 50000 for old one ...
     # was 10000 and 5000
-    edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=10, sampleSize=5)#combinationSize=500, sampleSize=350) #combinationSize=100000, sampleSize=50000) #changing stuff here
+    edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=10000, sampleSize=5000)#combinationSize=500, sampleSize=350) #combinationSize=100000, sampleSize=50000) #changing stuff here
 
     #Exhaustive sample of MVDD edges to try, and get best resulting MVDD
     for edgeOpt in edgeOptions:
