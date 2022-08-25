@@ -51,6 +51,18 @@ def trainCrossVal(xData, yData, model, numFolds, modelName, showIndividualROC=Tr
         # Get Accuracy + Confusion Matrix metrics
         cm = confusion_matrix(y_test ,y_pred)
 
+        # check for missing scores
+        if len(set(y_test)) != 5 and len(cm[0]) != 5:
+            missing = np.setdiff1d([1, 2, 3, 4, 5], list(set(y_test)))
+            missing = missing[0] - 1
+
+            cmList = cm.tolist()
+            for row in cmList:
+                row.insert(missing, 0)
+
+            cm = np.array(cmList)
+            cm = np.insert(cm, missing, np.array([0, 0, 0, 0, 0]), 0)
+
         FP = cm.sum(axis=0) - np.diag(cm)
         FN = cm.sum(axis=1) - np.diag(cm)
         TP = np.diag(cm)
@@ -96,12 +108,10 @@ def trainCrossVal(xData, yData, model, numFolds, modelName, showIndividualROC=Tr
 
     #     getAverageROCGraph(aveFPR, aveTPR, ave_roc_auc, modelName)
 
-    #     print("tpr list", TPRList)
-
     # Get full metrics
     n = len(xData)
 
-    metricLst = [ np.nanmean(TPRList), np.nanstd(TPRList) * 2, CI(np.nanmean(TPRList), n),
+    metricLst = [modelName, np.nanmean(TPRList), np.nanstd(TPRList) * 2, CI(np.nanmean(TPRList), n),
                   np.nanmean(TNRList), np.nanstd(TNRList) * 2, CI(np.nanmean(TNRList), n),
                   np.nanmean(PPVList), np.nanstd(PPVList) * 2, CI(np.nanmean(PPVList), n),
                   np.nanmean(NPVList), np.nanstd(NPVList) * 2, CI(np.nanmean(NPVList), n),
@@ -110,14 +120,14 @@ def trainCrossVal(xData, yData, model, numFolds, modelName, showIndividualROC=Tr
                   np.nanmean(ACCList), np.nanstd(ACCList) * 2, CI(np.nanmean(ACCList), n),
                   np.nanmean(AUCList), np.nanstd(AUCList) * 2, CI(np.nanmean(AUCList), n) ]
 
-    return metricLst
+    return model, metricLst
 
 
 # Validation Method
-def performValidation(model, data, realScores, aucName):
+def performValidation(model, data, labels, modelName):
     y_pred = model.predict(data)
-    print("y_pred", y_pred)
-    y_test = realScores
+    # print("y_pred", y_pred)
+    y_test = labels
 
     FP = confusion_matrix(y_test ,y_pred).sum(axis=0) - np.diag(confusion_matrix(y_test ,y_pred))
     FN = confusion_matrix(y_test ,y_pred).sum(axis=1) - np.diag(confusion_matrix(y_test ,y_pred))
@@ -151,46 +161,54 @@ def performValidation(model, data, realScores, aucName):
 
     # ROC AUC Score
     y_score = label_binarize(y_pred, classes=[1 ,2 ,3 ,4 ,5])
-    y_test = label_binarize(realScores, classes=[1 ,2 ,3 ,4 ,5])
+    y_test = label_binarize(labels, classes=[1 ,2 ,3 ,4 ,5])
     fpr, tpr, roc_auc = mvGen.getClassROC(y_test ,y_score)
 
     aucVal = np.array(list(roc_auc.values()))
     aucVal = aucVal[~np.isnan(aucVal)]
 
-    # Compute micro-average ROC curve and ROC area
-    fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), y_score.ravel())
-    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+    # # Compute micro-average ROC curve and ROC area
+    # fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), y_score.ravel())
+    # roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
 
-    # Plot and save averaged AUC graph
-    plt.figure(figsize=(10, 8))
-    plt.rcParams.update({'font.size': 18})
-    plt.plot(fpr["micro"], tpr["micro"],
-             label='Averaged AUC: {0:0.3f}'
-                   ''.format(roc_auc["micro"]))
-
-    plt.plot([0, 1], [0, 1], 'k--', lw=2)
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    plt.xlabel('1 - Specificity (False Positive Rate)')
-    plt.ylabel('Sensitivity (True Positive Rate)')
-    plt.legend(loc="lower right")
-    plt.savefig("Graphs/ "+ aucName + "Single_Averaged_AUC.png")
-
-    # Plot class by class ROC
-    mvGen.getAverageROCGraph(fpr, tpr, roc_auc, aucName)
+    # # Plot and save averaged AUC graph
+    # plt.figure(figsize=(10, 8))
+    # plt.rcParams.update({'font.size': 18})
+    # plt.plot(fpr["micro"], tpr["micro"],
+    #          label='Averaged AUC: {0:0.3f}'
+    #                ''.format(roc_auc["micro"]))
+    #
+    # plt.plot([0, 1], [0, 1], 'k--', lw=2)
+    # plt.xlim([0.0, 1.0])
+    # plt.ylim([0.0, 1.05])
+    # plt.xlabel('1 - Specificity (False Positive Rate)')
+    # plt.ylabel('Sensitivity (True Positive Rate)')
+    # plt.legend(loc="lower right")
+    # plt.savefig("Graphs/ "+ aucName + "Single_Averaged_AUC.png")
 
 
-    print("Sensitivity (TPR): %0.3f(±%0.3f)" % (np.mean(TPR), np.std(TPR) * 2))
-    print("Specificity (TNR): %0.3f(±%0.3f)" % (np.mean(TNR), np.std(TNR) * 2))
-    print("Precision (PPV): %0.3f(±%0.3f)" % (np.mean(PPV), np.std(PPV) * 2))
-    print("Negative Predictive Value (NPV): %0.3f(±%0.3f)" % (np.mean(NPV), np.std(NPV) * 2))
-    print("FPR: %0.3f(±%0.3f)" % (np.mean(FPR), np.std(FPR) * 2))
-    print("FNR: %0.3f(±%0.3f)" % (np.mean(FNR), np.std(FNR) * 2))
-    print("Accuracy: %0.3f(±%0.3f)" % (np.mean(ACC), np.std(ACC) * 2))
-    print("Averaged AUC: %0.3f(±%0.3f)" % (np.mean(aucVal), np.std(aucVal) * 2))
-    print("Micro AUC: %0.3f" % (roc_auc["micro"]))
+    # print("Sensitivity (TPR): %0.3f(±%0.3f)" % (np.mean(TPR), np.std(TPR) * 2))
+    # print("Specificity (TNR): %0.3f(±%0.3f)" % (np.mean(TNR), np.std(TNR) * 2))
+    # print("Precision (PPV): %0.3f(±%0.3f)" % (np.mean(PPV), np.std(PPV) * 2))
+    # print("Negative Predictive Value (NPV): %0.3f(±%0.3f)" % (np.mean(NPV), np.std(NPV) * 2))
+    # print("FPR: %0.3f(±%0.3f)" % (np.mean(FPR), np.std(FPR) * 2))
+    # print("FNR: %0.3f(±%0.3f)" % (np.mean(FNR), np.std(FNR) * 2))
+    # print("Accuracy: %0.3f(±%0.3f)" % (np.mean(ACC), np.std(ACC) * 2))
+    # print("Averaged AUC: %0.3f(±%0.3f)" % (np.mean(aucVal), np.std(aucVal) * 2))
+    # # print("Micro AUC: %0.3f" % (roc_auc["micro"]))
 
-    return tpr, fpr, roc_auc
+    n = len(data)
+
+    metricLst = [modelName, np.nanmean(TPR), np.nanstd(TPR) * 2, CI(np.nanmean(TPR), n),
+                 np.nanmean(TNR), np.nanstd(TNR) * 2, CI(np.nanmean(TNR), n),
+                 np.nanmean(PPV), np.nanstd(PPV) * 2, CI(np.nanmean(PPV), n),
+                 np.nanmean(NPV), np.nanstd(NPV) * 2, CI(np.nanmean(NPV), n),
+                 np.nanmean(FPR), np.nanstd(FPR) * 2, CI(np.nanmean(FPR), n),
+                 np.nanmean(FNR), np.nanstd(FNR) * 2, CI(np.nanmean(FNR), n),
+                 np.nanmean(ACC), np.nanstd(ACC) * 2, CI(np.nanmean(ACC), n),
+                 np.nanmean(aucVal), np.nanstd(aucVal) * 2, CI(np.nanmean(aucVal), n)]
+
+    return metricLst
 
 
 # Helper functions
