@@ -1,0 +1,283 @@
+strict digraph Tree {
+	graph [bb="0,0,1475.5,738"];
+	node [color=black,
+		fontname=helvetica,
+		label="\N",
+		shape=box,
+		style="filled, rounded"
+	];
+	edge [fontname=helvetica];
+	0	[fillcolor=palegreen,
+		height=1.1528,
+		label="TotalHospDays\ngini = 0.063\nsamples = 710\nvalue = [687, 9, 7, 6, 1]\nclass = 1",
+		pos="726.5,696.5",
+		width=2.5694];
+	1	[fillcolor=honeydew,
+		height=1.1528,
+		label="MAP\ngini = 0.602\nsamples = 17\nvalue = [1, 8, 7, 1, 0]\nclass = 2",
+		pos="630.5,562.5",
+		width=2.3194];
+	0 -> 1	[label="<= 0.5",
+		labelangle=45,
+		labeldistance=2.5,
+		lp="707.5,629.5",
+		op="<=",
+		param=0.5,
+		pos="e,660.15,604.27 696.91,654.82 687.24,641.52 676.39,626.6 666.31,612.74",
+		style=solid];
+	10	[fillcolor=palegreen,
+		height=1.1528,
+		label="DIUR\ngini = 0.02\nsamples = 693\nvalue = [686, 1, 0, 5, 1]\nclass = 1",
+		pos="824.5,562.5",
+		width=2.5694];
+	0 -> 10	[label="> 0.5",
+		labelangle=-45,
+		labeldistance=2.5,
+		lp="798.5,629.5",
+		op=">",
+		param=0.5,
+		pos="e,794.23,604.27 756.7,654.82 766.67,641.39 777.86,626.32 788.23,612.35",
+		style=solid];
+	2	[fillcolor=honeydew,
+		height=1.1528,
+		label="CABG\ngini = 0.446\nsamples = 11\nvalue = [1, 8, 1, 1, 0]\nclass = 2",
+		pos="446.5,428.5",
+		width=2.3194];
+	1 -> 2	[label="<= 178.167",
+		lp="583.5,495.5",
+		op="<=",
+		param=178.167,
+		pos="e,496.01,470.08 565.36,520.72 556.57,514.9 547.75,508.89 539.5,503 527.8,494.64 515.55,485.37 503.94,476.31",
+		style=solid];
+	9	[fillcolor=lightyellow,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 6\nvalue = [0, 0, 6, 0, 0]\nclass = 3",
+		pos="631.5,428.5",
+		width=2.3194];
+	1 -> 9	[label="> 178.167",
+		lp="669.5,495.5",
+		op=">",
+		param=178.167,
+		pos="e,631.25,462.74 630.81,520.82 630.92,505.68 631.05,488.44 631.17,473.05",
+		style=solid];
+	3	[fillcolor=honeydew,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 8\nvalue = [0, 8, 0, 0, 0]\nclass = 2",
+		pos="266.5,294.5",
+		width=2.3194];
+	2 -> 3	[label="<= 0.5",
+		lp="388.5,361.5",
+		op="<=",
+		param=0.5,
+		pos="e,311.54,328.53 391.03,386.82 368.3,370.15 342.12,350.95 319.64,334.47",
+		style=solid];
+	4	[fillcolor=palegreen,
+		height=1.1528,
+		label="ALB\ngini = 0.667\nsamples = 3\nvalue = [1, 0, 1, 1, 0]\nclass = 1",
+		pos="451.5,294.5",
+		width=2.3194];
+	2 -> 4	[label="> 0.5",
+		lp="469.5,361.5",
+		op=">",
+		param=0.5,
+		pos="e,449.96,336.27 448.04,386.82 448.53,374.02 449.07,359.73 449.58,346.32",
+		style=dashed];
+	5	[fillcolor=palegreen,
+		height=1.1528,
+		label="BUN\ngini = 0.5\nsamples = 2\nvalue = [1, 0, 0, 1, 0]\nclass = 1",
+		pos="266.5,160.5",
+		width=2.3194];
+	4 -> 5	[label="<= 2.35",
+		lp="396,227.5",
+		op="<=",
+		param=2.35,
+		pos="e,323.47,202.15 394.74,253 374.85,238.81 352.37,222.77 331.84,208.12",
+		style=solid];
+	8	[fillcolor=lightyellow,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 1, 0, 0]\nclass = 3",
+		pos="451.5,160.5",
+		width=2.3194];
+	4 -> 8	[label="> 2.35",
+		lp="476,227.5",
+		op=">",
+		param=2.35,
+		pos="e,451.5,194.74 451.5,252.82 451.5,237.68 451.5,220.44 451.5,205.05",
+		style=solid];
+	6	[fillcolor=mistyrose,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 0, 1, 0]\nclass = 4",
+		pos="83.5,34",
+		width=2.3194];
+	5 -> 6	[label="<= 20.0",
+		lp="211,93.5",
+		op="<=",
+		param=20.0,
+		pos="e,132.1,68.065 206.83,118.91 185.56,104.44 161.68,88.185 140.63,73.864",
+		style=solid];
+	7	[fillcolor=palegreen,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [1, 0, 0, 0, 0]\nclass = 1",
+		pos="268.5,34",
+		width=2.3194];
+	5 -> 7	[label="> 20.0",
+		lp="293,93.5",
+		op=">",
+		param=20.0,
+		pos="e,267.96,68.379 267.15,118.73 267.36,105.86 267.59,91.597 267.8,78.541",
+		style=solid];
+	11	[fillcolor=palegreen,
+		height=1.1528,
+		label="MLHFS\ngini = 0.414\nsamples = 27\nvalue = [20, 1, 0, 5, 1]\nclass = 1",
+		pos="824.5,428.5",
+		width=2.4444];
+	10 -> 11	[label="<= 0.5",
+		lp="850.5,495.5",
+		op="<=",
+		param=0.5,
+		pos="e,824.5,470.27 824.5,520.82 824.5,508.02 824.5,493.73 824.5,480.32",
+		style=solid];
+	24	[fillcolor=palegreen,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 666\nvalue = [666, 0, 0, 0, 0]\nclass = 1",
+		pos="1022.5,428.5",
+		width=2.5694];
+	10 -> 24	[label="> 0.5",
+		lp="949.5,495.5",
+		op=">",
+		param=0.5,
+		pos="e,972.82,462.62 885.25,521 910.37,504.25 939.37,484.92 964.22,468.35",
+		style=solid];
+	12	[fillcolor=mistyrose,
+		height=1.1528,
+		label="TotalHospDays\ngini = 0.56\nsamples = 5\nvalue = [1, 0, 0, 3, 1]\nclass = 4",
+		pos="823.5,294.5",
+		width=2.3194];
+	11 -> 12	[label="<= 57.0",
+		lp="855,361.5",
+		op="<=",
+		param=57.0,
+		pos="e,823.81,336.27 824.19,386.82 824.09,374.02 823.99,359.73 823.88,346.32",
+		style=dashed];
+	17	[fillcolor=palegreen,
+		height=1.1528,
+		label="HTRANS\ngini = 0.244\nsamples = 22\nvalue = [19, 1, 0, 2, 0]\nclass = 1",
+		pos="1012.5,294.5",
+		width=2.4444];
+	11 -> 17	[label="> 57.0",
+		lp="949,361.5",
+		op=">",
+		param=57.0,
+		pos="e,954.6,336.15 882.18,387 902.48,372.75 925.45,356.62 946.38,341.92",
+		style=solid];
+	13	[fillcolor=palegreen,
+		height=1.1528,
+		label="BPDIAS\ngini = 0.5\nsamples = 2\nvalue = [1, 0, 0, 0, 1]\nclass = 1",
+		pos="639.5,160.5",
+		width=2.3194];
+	12 -> 13	[label="<= 7.0",
+		lp="763.5,227.5",
+		op="<=",
+		param=7.0,
+		pos="e,696.17,202.15 767.04,253 747.27,238.81 724.9,222.77 704.48,208.12",
+		style=solid];
+	16	[fillcolor=mistyrose,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 3\nvalue = [0, 0, 0, 3, 0]\nclass = 4",
+		pos="824.5,160.5",
+		width=2.3194];
+	12 -> 16	[label="> 7.0",
+		lp="844.5,227.5",
+		op=">",
+		param=7.0,
+		pos="e,824.25,194.74 823.81,252.82 823.92,237.68 824.05,220.44 824.17,205.05",
+		style=solid];
+	14	[fillcolor=lightcoral,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 0, 0, 1]\nclass = 5",
+		pos="456.5,34",
+		width=2.3194];
+	13 -> 14	[label="<= 30.0",
+		lp="584,93.5",
+		op="<=",
+		param=30.0,
+		pos="e,505.1,68.065 579.83,118.91 558.56,104.44 534.68,88.185 513.63,73.864",
+		style=solid];
+	15	[fillcolor=palegreen,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [1, 0, 0, 0, 0]\nclass = 1",
+		pos="641.5,34",
+		width=2.3194];
+	13 -> 15	[label="> 30.0",
+		lp="666,93.5",
+		op=">",
+		param=30.0,
+		pos="e,640.96,68.379 640.15,118.73 640.36,105.86 640.59,91.597 640.8,78.541",
+		style=solid];
+	18	[fillcolor=honeydew,
+		height=1.1528,
+		label="Wt\ngini = 0.5\nsamples = 2\nvalue = [0, 1, 0, 1, 0]\nclass = 2",
+		pos="1010.5,160.5",
+		width=2.3194];
+	17 -> 18	[label="<= 0.5",
+		lp="1038.5,227.5",
+		op="<=",
+		param=0.5,
+		pos="e,1011.1,202.27 1011.9,252.82 1011.7,240.02 1011.5,225.73 1011.3,212.32",
+		style=solid];
+	21	[fillcolor=palegreen,
+		height=1.1528,
+		label="EjF\ngini = 0.095\nsamples = 20\nvalue = [19, 0, 0, 1, 0]\nclass = 1",
+		pos="1199.5,160.5",
+		width=2.4444];
+	17 -> 21	[label="> 0.5",
+		lp="1132.5,227.5",
+		op=">",
+		param=0.5,
+		pos="e,1141.9,202.15 1069.9,253 1090.1,238.75 1112.9,222.62 1133.7,207.92",
+		style=solid];
+	19	[fillcolor=mistyrose,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 0, 1, 0]\nclass = 4",
+		pos="827.5,34",
+		width=2.3194];
+	18 -> 19	[label="<= 38.85",
+		lp="959.5,93.5",
+		op="<=",
+		param=38.85,
+		pos="e,876.1,68.065 950.83,118.91 929.56,104.44 905.68,88.185 884.63,73.864",
+		style=solid];
+	20	[fillcolor=honeydew,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [0, 1, 0, 0, 0]\nclass = 2",
+		pos="1012.5,34",
+		width=2.3194];
+	18 -> 20	[label="> 38.85",
+		lp="1041.5,93.5",
+		op=">",
+		param=38.85,
+		pos="e,1012,68.379 1011.2,118.73 1011.4,105.86 1011.6,91.597 1011.8,78.541",
+		style=solid];
+	22	[fillcolor=mistyrose,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 0, 1, 0]\nclass = 4",
+		pos="1198.5,34",
+		width=2.3194];
+	21 -> 22	[label="<= 10.0",
+		lp="1230,93.5",
+		op="<=",
+		param=10.0,
+		pos="e,1198.8,68.379 1199.2,118.73 1199.1,105.86 1199,91.597 1198.8,78.541",
+		style=solid];
+	23	[fillcolor=palegreen,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 19\nvalue = [19, 0, 0, 0, 0]\nclass = 1",
+		pos="1387.5,34",
+		width=2.4444];
+	21 -> 23	[label="> 10.0",
+		lp="1335,93.5",
+		op=">",
+		param=10.0,
+		pos="e,1337.6,68.065 1260.8,118.91 1282.7,104.37 1307.4,88.04 1329.1,73.673",
+		style=solid];
+}

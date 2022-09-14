@@ -1,0 +1,217 @@
+strict digraph Tree {
+	graph [bb="0,0,1210,738"];
+	node [color=black,
+		fontname=helvetica,
+		label="\N",
+		shape=box,
+		style="filled, rounded"
+	];
+	edge [fontname=helvetica];
+	0	[fillcolor=lightcoral,
+		height=1.1528,
+		label="TotalHospDays\ngini = 0.063\nsamples = 710\nvalue = [1, 9, 6, 7, 687]\nclass = 5",
+		pos="547.5,696.5",
+		width=2.5694];
+	1	[fillcolor=honeydew,
+		height=1.1528,
+		label="MAP\ngini = 0.547\nsamples = 17\nvalue = [0, 9, 0, 7, 1]\nclass = 2",
+		pos="451.5,562.5",
+		width=2.3194];
+	0 -> 1	[label="<= 0.5",
+		labelangle=45,
+		labeldistance=2.5,
+		lp="528.5,629.5",
+		op="<=",
+		param=0.5,
+		pos="e,481.15,604.27 517.91,654.82 508.24,641.52 497.39,626.6 487.31,612.74",
+		style=solid];
+	6	[fillcolor=lightcoral,
+		height=1.1528,
+		label="POT\ngini = 0.02\nsamples = 693\nvalue = [1, 0, 6, 0, 686]\nclass = 5",
+		pos="645.5,562.5",
+		width=2.5694];
+	0 -> 6	[label="> 0.5",
+		labelangle=-45,
+		labeldistance=2.5,
+		lp="619.5,629.5",
+		op=">",
+		param=0.5,
+		pos="e,615.23,604.27 577.7,654.82 587.67,641.39 598.86,626.32 609.23,612.35",
+		style=solid];
+	2	[fillcolor=honeydew,
+		height=1.1528,
+		label="TOTP\ngini = 0.18\nsamples = 10\nvalue = [0, 9, 0, 0, 1]\nclass = 2",
+		pos="268.5,428.5",
+		width=2.3194];
+	1 -> 2	[label="<= 182.333",
+		lp="404.5,495.5",
+		op="<=",
+		param=182.333,
+		pos="e,317.43,470.12 386.33,520.76 377.55,514.94 368.74,508.92 360.5,503 348.9,494.67 336.77,485.41 325.28,476.35",
+		style=solid];
+	5	[fillcolor=mistyrose,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 7\nvalue = [0, 0, 0, 7, 0]\nclass = 4",
+		pos="453.5,428.5",
+		width=2.3194];
+	1 -> 5	[label="> 182.333",
+		lp="491.5,495.5",
+		op=">",
+		param=182.333,
+		pos="e,453,462.74 452.12,520.82 452.35,505.68 452.61,488.44 452.84,473.05",
+		style=solid];
+	3	[fillcolor=lightcoral,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 0, 0, 1]\nclass = 5",
+		pos="83.5,294.5",
+		width=2.3194];
+	2 -> 3	[label="<= 3.25",
+		lp="213,361.5",
+		op="<=",
+		param=3.25,
+		pos="e,129.91,328.62 211.74,387 188.37,370.33 161.41,351.09 138.26,334.57",
+		style=solid];
+	4	[fillcolor=honeydew,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 9\nvalue = [0, 9, 0, 0, 0]\nclass = 2",
+		pos="268.5,294.5",
+		width=2.3194];
+	2 -> 4	[label="> 3.25",
+		lp="293,361.5",
+		op=">",
+		param=3.25,
+		pos="e,268.5,328.74 268.5,386.82 268.5,371.68 268.5,354.44 268.5,339.05",
+		style=solid];
+	7	[fillcolor=lightcoral,
+		height=1.1528,
+		label="ACE\ngini = 0.397\nsamples = 22\nvalue = [0, 0, 6, 0, 16]\nclass = 5",
+		pos="642.5,428.5",
+		width=2.4444];
+	6 -> 7	[label="<= 1.05",
+		lp="675,495.5",
+		op="<=",
+		param=1.05,
+		pos="e,643.43,470.27 644.58,520.82 644.28,508.02 643.96,493.73 643.65,480.32",
+		style=solid];
+	14	[fillcolor=lightcoral,
+		height=1.1528,
+		label="SOD\ngini = 0.003\nsamples = 671\nvalue = [1, 0, 0, 0, 670]\nclass = 5",
+		pos="840.5,428.5",
+		width=2.5694];
+	6 -> 14	[label="> 1.05",
+		lp="774,495.5",
+		op=">",
+		param=1.05,
+		pos="e,780.45,470.15 705.33,521 726.38,506.75 750.2,490.62 771.92,475.92",
+		style=solid];
+	8	[fillcolor=lightyellow,
+		height=1.1528,
+		label="MLHFS\ngini = 0.48\nsamples = 10\nvalue = [0, 0, 6, 0, 4]\nclass = 3",
+		pos="453.5,294.5",
+		width=2.3194];
+	7 -> 8	[label="<= 0.5",
+		lp="580.5,361.5",
+		op="<=",
+		param=0.5,
+		pos="e,511.71,336.15 584.51,387 564.11,372.75 541.02,356.62 519.97,341.92",
+		style=solid];
+	13	[fillcolor=lightcoral,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 12\nvalue = [0, 0, 0, 0, 12]\nclass = 5",
+		pos="642.5,294.5",
+		width=2.4444];
+	7 -> 13	[label="> 0.5",
+		lp="662.5,361.5",
+		op=">",
+		param=0.5,
+		pos="e,642.5,328.74 642.5,386.82 642.5,371.68 642.5,354.44 642.5,339.05",
+		style=solid];
+	9	[fillcolor=lightyellow,
+		height=1.1528,
+		label="DEPR\ngini = 0.245\nsamples = 7\nvalue = [0, 0, 6, 0, 1]\nclass = 3",
+		pos="335.5,160.5",
+		width=2.3194];
+	8 -> 9	[label="<= 87.0",
+		lp="429,227.5",
+		op="<=",
+		param=87.0,
+		pos="e,371.95,202.27 417.13,252.82 405.02,239.27 391.41,224.04 378.82,209.96",
+		style=dashed];
+	12	[fillcolor=lightcoral,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 3\nvalue = [0, 0, 0, 0, 3]\nclass = 5",
+		pos="520.5,160.5",
+		width=2.3194];
+	8 -> 12	[label="> 87.0",
+		lp="514,227.5",
+		op=">",
+		param=87.0,
+		pos="e,503.63,194.74 474.15,252.82 482.06,237.24 491.09,219.45 499.07,203.73",
+		style=solid];
+	10	[fillcolor=lightyellow,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 6\nvalue = [0, 0, 6, 0, 0]\nclass = 3",
+		pos="243.5,34",
+		width=2.3194];
+	9 -> 10	[label="<= 0.5",
+		lp="318.5,93.5",
+		op="<=",
+		param=0.5,
+		pos="e,268.17,68.379 305.38,118.73 295.39,105.23 284.28,90.181 274.25,76.611",
+		style=solid];
+	11	[fillcolor=lightcoral,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 0, 0, 1]\nclass = 5",
+		pos="428.5,34",
+		width=2.3194];
+	9 -> 11	[label="> 0.5",
+		lp="410.5,93.5",
+		op=">",
+		param=0.5,
+		pos="e,403.57,68.379 365.95,118.73 376.04,105.23 387.28,90.181 397.42,76.611",
+		style=solid];
+	15	[fillcolor=lightcoral,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 665\nvalue = [0, 0, 0, 0, 665]\nclass = 5",
+		pos="840.5,294.5",
+		width=2.5694];
+	14 -> 15	[label="<= 145.5",
+		lp="875.5,361.5",
+		op="<=",
+		param=145.5,
+		pos="e,840.5,328.74 840.5,386.82 840.5,371.68 840.5,354.44 840.5,339.05",
+		style=solid];
+	16	[fillcolor=lightcoral,
+		height=1.1528,
+		label="HTRANS\ngini = 0.278\nsamples = 6\nvalue = [1, 0, 0, 0, 5]\nclass = 5",
+		pos="1034.5,294.5",
+		width=2.3194];
+	14 -> 16	[label="> 145.5",
+		lp="972.5,361.5",
+		op=">",
+		param=145.5,
+		pos="e,974.75,336.15 900.02,387 920.97,372.75 944.67,356.62 966.27,341.92",
+		style=solid];
+	17	[fillcolor=palegreen,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [1, 0, 0, 0, 0]\nclass = 1",
+		pos="941.5,160.5",
+		width=2.3194];
+	16 -> 17	[label="<= 0.5",
+		lp="1017.5,227.5",
+		op="<=",
+		param=0.5,
+		pos="e,964.92,194.74 1005.8,252.82 994.76,237.1 982.09,219.11 970.94,203.29",
+		style=solid];
+	18	[fillcolor=lightcoral,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 5\nvalue = [0, 0, 0, 0, 5]\nclass = 5",
+		pos="1126.5,160.5",
+		width=2.3194];
+	16 -> 18	[label="> 0.5",
+		lp="1102.5,227.5",
+		op=">",
+		param=0.5,
+		pos="e,1103.3,194.74 1062.9,252.82 1073.8,237.1 1086.3,219.11 1097.4,203.29",
+		style=solid];
+}

@@ -1,0 +1,261 @@
+strict digraph Tree {
+	graph [bb="0,0,1308,738"];
+	node [color=black,
+		fontname=helvetica,
+		label="\N",
+		shape=box,
+		style="filled, rounded"
+	];
+	edge [fontname=helvetica];
+	0	[fillcolor=palegreen,
+		height=1.1528,
+		label="TotalHospDays\ngini = 0.066\nsamples = 710\nvalue = [686, 10, 6, 7, 1]\nclass = 1",
+		pos="722.5,696.5",
+		width=2.6944];
+	1	[fillcolor=honeydew,
+		height=1.1528,
+		label="MAP\ngini = 0.539\nsamples = 16\nvalue = [0, 9, 6, 1, 0]\nclass = 2",
+		pos="626.5,562.5",
+		width=2.3194];
+	0 -> 1	[label="<= 0.5",
+		labelangle=45,
+		labeldistance=2.5,
+		lp="703.5,629.5",
+		op="<=",
+		param=0.5,
+		pos="e,656.15,604.27 692.91,654.82 683.24,641.52 672.39,626.6 662.31,612.74",
+		style=solid];
+	10	[fillcolor=palegreen,
+		height=1.1528,
+		label="PPP\ngini = 0.023\nsamples = 694\nvalue = [686, 1, 0, 6, 1]\nclass = 1",
+		pos="820.5,562.5",
+		width=2.5694];
+	0 -> 10	[label="> 0.5",
+		labelangle=-45,
+		labeldistance=2.5,
+		lp="794.5,629.5",
+		op=">",
+		param=0.5,
+		pos="e,790.23,604.27 752.7,654.82 762.67,641.39 773.86,626.32 784.23,612.35",
+		style=solid];
+	2	[fillcolor=honeydew,
+		height=1.1528,
+		label="RENAL\ngini = 0.314\nsamples = 11\nvalue = [0, 9, 1, 1, 0]\nclass = 2",
+		pos="443.5,428.5",
+		width=2.3194];
+	1 -> 2	[label="<= 182.333",
+		lp="579.5,495.5",
+		op="<=",
+		param=182.333,
+		pos="e,492.43,470.12 561.33,520.76 552.55,514.94 543.74,508.92 535.5,503 523.9,494.67 511.77,485.41 500.28,476.35",
+		style=dashed];
+	9	[fillcolor=lightyellow,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 5\nvalue = [0, 0, 5, 0, 0]\nclass = 3",
+		pos="628.5,428.5",
+		width=2.3194];
+	1 -> 9	[label="> 182.333",
+		lp="666.5,495.5",
+		op=">",
+		param=182.333,
+		pos="e,628,462.74 627.12,520.82 627.35,505.68 627.61,488.44 627.84,473.05",
+		style=solid];
+	3	[fillcolor=honeydew,
+		height=1.1528,
+		label="CABG\ngini = 0.18\nsamples = 10\nvalue = [0, 9, 1, 0, 0]\nclass = 2",
+		pos="259.5,294.5",
+		width=2.3194];
+	2 -> 3	[label="<= 0.5",
+		lp="383.5,361.5",
+		op="<=",
+		param=0.5,
+		pos="e,316.17,336.15 387.04,387 367.27,372.81 344.9,356.77 324.48,342.12",
+		style=solid];
+	8	[fillcolor=mistyrose,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 0, 1, 0]\nclass = 4",
+		pos="444.5,294.5",
+		width=2.3194];
+	2 -> 8	[label="> 0.5",
+		lp="464.5,361.5",
+		op=">",
+		param=0.5,
+		pos="e,444.25,328.74 443.81,386.82 443.92,371.68 444.05,354.44 444.17,339.05",
+		style=solid];
+	4	[fillcolor=honeydew,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 8\nvalue = [0, 8, 0, 0, 0]\nclass = 2",
+		pos="83.5,160.5",
+		width=2.3194];
+	3 -> 4	[label="<= 0.5",
+		lp="203.5,227.5",
+		op="<=",
+		param=0.5,
+		pos="e,127.54,194.53 205.26,252.82 183.14,236.23 157.66,217.12 135.75,200.69",
+		style=solid];
+	5	[fillcolor=honeydew,
+		height=1.1528,
+		label="BPSYS\ngini = 0.5\nsamples = 2\nvalue = [0, 1, 1, 0, 0]\nclass = 2",
+		pos="268.5,160.5",
+		width=2.3194];
+	3 -> 5	[label="> 0.5",
+		lp="284.5,227.5",
+		op=">",
+		param=0.5,
+		pos="e,265.72,202.27 262.27,252.82 263.15,240.02 264.12,225.73 265.04,212.32",
+		style=solid];
+	6	[fillcolor=lightyellow,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 1, 0, 0]\nclass = 3",
+		pos="83.5,34",
+		width=2.3194];
+	5 -> 6	[label="<= 114.5",
+		lp="217.5,93.5",
+		op="<=",
+		param=114.5,
+		pos="e,132.63,68.065 208.18,118.91 186.58,104.37 162.31,88.04 140.97,73.673",
+		style=solid];
+	7	[fillcolor=honeydew,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [0, 1, 0, 0, 0]\nclass = 2",
+		pos="268.5,34",
+		width=2.3194];
+	5 -> 7	[label="> 114.5",
+		lp="297.5,93.5",
+		op=">",
+		param=114.5,
+		pos="e,268.5,68.379 268.5,118.73 268.5,105.86 268.5,91.597 268.5,78.541",
+		style=solid];
+	11	[fillcolor=palegreen,
+		height=1.1528,
+		label="ACE\ngini = 0.422\nsamples = 25\nvalue = [18, 0, 0, 6, 1]\nclass = 1",
+		pos="820.5,428.5",
+		width=2.4444];
+	10 -> 11	[label="<= 0.042",
+		lp="855.5,495.5",
+		op="<=",
+		param=0.042,
+		pos="e,820.5,470.27 820.5,520.82 820.5,508.02 820.5,493.73 820.5,480.32",
+		style=solid];
+	18	[fillcolor=palegreen,
+		height=1.1528,
+		label="DIUR\ngini = 0.003\nsamples = 669\nvalue = [668, 1, 0, 0, 0]\nclass = 1",
+		pos="1018.5,428.5",
+		width=2.5694];
+	10 -> 18	[label="> 0.042",
+		lp="954.5,495.5",
+		op=">",
+		param=0.042,
+		pos="e,957.52,470.15 881.25,521 902.72,506.68 927.03,490.48 949.16,475.73",
+		style=solid];
+	12	[fillcolor=palegreen,
+		height=1.1528,
+		label="MLHFS\ngini = 0.568\nsamples = 13\nvalue = [6, 0, 0, 6, 1]\nclass = 1",
+		pos="633.5,294.5",
+		width=2.3194];
+	11 -> 12	[label="<= 0.5",
+		lp="759.5,361.5",
+		op="<=",
+		param=0.5,
+		pos="e,691.09,336.15 763.12,387 742.93,372.75 720.09,356.62 699.27,341.92",
+		style=solid];
+	17	[fillcolor=palegreen,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 12\nvalue = [12, 0, 0, 0, 0]\nclass = 1",
+		pos="822.5,294.5",
+		width=2.4444];
+	11 -> 17	[label="> 0.5",
+		lp="842.5,361.5",
+		op=">",
+		param=0.5,
+		pos="e,822,328.74 821.12,386.82 821.35,371.68 821.61,354.44 821.84,339.05",
+		style=solid];
+	13	[fillcolor=mistyrose,
+		height=1.1528,
+		label="MLHFS\ngini = 0.245\nsamples = 7\nvalue = [0, 0, 0, 6, 1]\nclass = 4",
+		pos="520.5,160.5",
+		width=2.3194];
+	12 -> 13	[label="<= 87.0",
+		lp="611,227.5",
+		op="<=",
+		param=87.0,
+		pos="e,555.41,202.27 598.67,252.82 587.07,239.27 574.04,224.04 561.99,209.96",
+		style=solid];
+	16	[fillcolor=palegreen,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 6\nvalue = [6, 0, 0, 0, 0]\nclass = 1",
+		pos="705.5,160.5",
+		width=2.3194];
+	12 -> 16	[label="> 87.0",
+		lp="697,227.5",
+		op=">",
+		param=87.0,
+		pos="e,687.37,194.74 655.69,252.82 664.19,237.24 673.89,219.45 682.47,203.73",
+		style=solid];
+	14	[fillcolor=lightcoral,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [0, 0, 0, 0, 1]\nclass = 5",
+		pos="457.5,34",
+		width=2.3194];
+	13 -> 14	[label="<= 20.5",
+		lp="522,93.5",
+		op="<=",
+		param=20.5,
+		pos="e,474.39,68.379 499.87,118.73 493.17,105.48 485.71,90.748 478.95,77.38",
+		style=solid];
+	15	[fillcolor=mistyrose,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 6\nvalue = [0, 0, 0, 6, 0]\nclass = 4",
+		pos="642.5,34",
+		width=2.3194];
+	13 -> 15	[label="> 20.5",
+		lp="617,93.5",
+		op=">",
+		param=20.5,
+		pos="e,609.79,68.379 560.45,118.73 573.93,104.97 588.98,89.613 602.48,75.844",
+		style=solid];
+	19	[fillcolor=palegreen,
+		height=1.1528,
+		label="PPP\ngini = 0.111\nsamples = 17\nvalue = [16, 1, 0, 0, 0]\nclass = 1",
+		pos="1017.5,294.5",
+		width=2.4444];
+	18 -> 19	[label="<= 0.5",
+		lp="1044.5,361.5",
+		op="<=",
+		param=0.5,
+		pos="e,1017.8,336.27 1018.2,386.82 1018.1,374.02 1018,359.73 1017.9,346.32",
+		style=solid];
+	22	[fillcolor=palegreen,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 652\nvalue = [652, 0, 0, 0, 0]\nclass = 1",
+		pos="1215.5,294.5",
+		width=2.5694];
+	18 -> 22	[label="> 0.5",
+		lp="1143.5,361.5",
+		op=">",
+		param=0.5,
+		pos="e,1166.1,328.62 1078.9,387 1103.9,370.25 1132.8,350.92 1157.5,334.35",
+		style=solid];
+	20	[fillcolor=honeydew,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 1\nvalue = [0, 1, 0, 0, 0]\nclass = 2",
+		pos="890.5,160.5",
+		width=2.3194];
+	19 -> 20	[label="<= 0.298",
+		lp="993.5,227.5",
+		op="<=",
+		param=0.298,
+		pos="e,922.48,194.74 978.36,252.82 962.81,236.66 944.97,218.11 929.44,201.97",
+		style=solid];
+	21	[fillcolor=palegreen,
+		height=0.94444,
+		label="gini = 0.0\nsamples = 16\nvalue = [16, 0, 0, 0, 0]\nclass = 1",
+		pos="1079.5,160.5",
+		width=2.4444];
+	19 -> 21	[label="> 0.298",
+		lp="1079.5,227.5",
+		op=">",
+		param=0.298,
+		pos="e,1063.9,194.74 1036.6,252.82 1043.9,237.39 1052.1,219.78 1059.5,204.17",
+		style=solid];
+}
