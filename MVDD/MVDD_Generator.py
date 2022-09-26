@@ -309,7 +309,7 @@ def getBestMVDD(dt, xData, yData, classes, learningCriteria):
     # was 10000 and 5000
 
     #was 3000 and 2000
-    # was 1000 and 700 for all data death --> now trying 500 500
+    # was 1000 and 700 for all data death --> now trying 500 500. 700 500
     edgeOptions = genEdgeCombos(percentReqdMin, percentReqdMax, totalEdges, combinationSize=500, sampleSize=350)#combinationSize=500, sampleSize=350) #combinationSize=100000, sampleSize=50000) #changing stuff here
 
     #Exhaustive sample of MVDD edges to try, and get best resulting MVDD
