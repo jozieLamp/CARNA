@@ -18,6 +18,7 @@ from itertools import cycle, zip_longest, chain
 import pickle
 from MVDD.MVDD import MVDD
 import MVDD.MVDD_Generator as mvGen
+from sklearn.calibration import calibration_curve
 
 
 
@@ -208,7 +209,7 @@ def performValidation(model, data, labels, modelName):
                  np.nanmean(ACC), np.nanstd(ACC) * 2, CI(np.nanmean(ACC), n),
                  np.nanmean(aucVal), np.nanstd(aucVal) * 2, CI(np.nanmean(aucVal), n)]
 
-    return metricLst
+    return metricLst, y_pred
 
 
 # Helper functions
@@ -323,3 +324,36 @@ def getAverageROCGraph(fpr, tpr, roc_auc, modelName):
     plt.legend(loc="lower right")
     plt.savefig("Graphs/" + modelName + "Averaged_ROC.png")
 #     plt.show()
+
+#For calibration plots
+def makeBinaryLabels(labels, preds):
+    labels = labels.sort_index()
+    preds = preds.sort_index()
+
+    labs = []
+    for i in preds.index:
+        lab = labels.loc[i]
+        labs.append(lab)
+
+    return labs
+
+def getProbs(predScores, groundTruthProbs):
+    probs = []
+    for r in predScores.values.tolist():
+        if type(r) == list:
+            r = r[0]
+        p = groundTruthProbs[r - 1]
+        probs.append(p)
+
+    return probs
+
+def getCalibrationCurve(binaryLabels, predScores, groundTruthProbs, n_bins=10):
+    binaryLabels = binaryLabels.sort_index()
+    predScores = predScores.sort_index()
+
+    labels = makeBinaryLabels(binaryLabels, predScores)  # get binary labels for each score
+    probs = getProbs(predScores, groundTruthProbs)  # convert scores to probs
+
+    assert len(labels) == len(probs)
+
+    return calibration_curve(labels, probs, n_bins=n_bins)
