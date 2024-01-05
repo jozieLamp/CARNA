@@ -510,9 +510,9 @@ def getClassROC(y_test, y_score):
 # INPUT = averaged false positive rates, true positvie rates and model name
 # OUTPUT = saves an roc graph
 def getAverageROCGraph(fpr, tpr, roc_auc, modelName):
+    plt.rcParams.update({'font.size': 22})
     plt.figure(figsize=(10, 8))
     # plt.rc('font', size=14)
-    plt.rcParams.update({'font.size': 18})
     # colors = cycle(['aqua', 'darkorange', 'cornflowerblue', 'palegreen', 'mistyrose'])
     colors = cycle(['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple'])
     for i, color in zip(range(5), colors):
@@ -527,7 +527,7 @@ def getAverageROCGraph(fpr, tpr, roc_auc, modelName):
     plt.ylabel('Sensitivity (True Positive Rate)')
     # plt.title('Averaged ROC Curve for Each Score Classification')
     plt.legend(loc="lower right")
-    plt.savefig("Graphs/"+ modelName + "Averaged_ROC.png")
+    plt.savefig("Graphs/"+ modelName + "Averaged_ROC.png",bbox_inches='tight', dpi=400)
     # plt.show()
 
 # Get the individual ROC curves for each class
