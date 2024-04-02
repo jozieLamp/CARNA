@@ -7,7 +7,8 @@
 
 -------
 **Core Code Repository: https://github.com/jozieLamp/CARNA  
-Live Web Server with Risk Prediction: http://hemopheno.pythonanywhere.com/**
+Live Web Server with Risk Prediction: http://hemopheno.pythonanywhere.com/  
+Paper: https://doi.org/10.1016/j.ahj.2024.02.001**
 
 ## Project Description:  
 CARNA is an open source risk stratification and phenotyping tool for hemodynamic phenotypes in advanced heart failure.
