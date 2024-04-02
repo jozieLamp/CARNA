@@ -1,9 +1,7 @@
 # <img src="CARNA Logo.png" width="150"> CARNA
 ### Characterizing Advanced heart failure Risk and hemodyNAmic phenotypes using learned multi valued decision diagrams  
 
-*Josephine Lamp<sup>1</sup>, Yuxin Wu<sup>1</sup>, Steven Lamp<sup>1</sup>, Lu Feng<sup>1</sup>, Sula Mazimba<sup>2</sup>*  
-<sup>1</sup>Department of Computer Science, University of Virginia, Charlottesville, VA, USA  
-<sup>2</sup>Department of Cardiovascular Medicine, University of Virginia, Charlottesville, VA, USA  
+*Josephine Lamp, Yuxin Wu, Steven Lamp, Prince Afriyie, Nicholas Ashur, Kenneth Bilchick, Khadijah Breathett, Younghoon Kwon, Song Li, Nishaki Mehta, Edward Rojas Pena, Lu Feng, Sula Mazimba*
 
 -------
 **Core Code Repository: https://github.com/jozieLamp/CARNA  
